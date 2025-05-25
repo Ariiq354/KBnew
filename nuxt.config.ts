@@ -1,0 +1,40 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+  compatibilityDate: "2025-05-15",
+  devtools: { enabled: true },
+  future: {
+    compatibilityVersion: 4,
+  },
+  modules: [
+    "@nuxt/ui",
+    "@nuxt/image",
+    "@nuxt/fonts",
+    "@vueuse/nuxt",
+    "nuxt-security",
+    "@nuxt/eslint",
+  ],
+
+  css: ["~/assets/css/main.css"],
+
+  pages: {
+    pattern: ["**/*.vue", "!**/*.ts"],
+  },
+
+  security: {
+    headers: {
+      permissionsPolicy: {
+        camera: false,
+      },
+      crossOriginEmbedderPolicy: false,
+      contentSecurityPolicy: {
+        "img-src": ["'self'", "data:", "https://res.cloudinary.com"],
+      },
+    },
+  },
+
+  nitro: {
+    prerender: {
+      routes: ["/", "/contact", "/product", "/about"],
+    },
+  },
+});
