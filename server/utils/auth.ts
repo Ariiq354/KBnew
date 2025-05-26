@@ -25,6 +25,14 @@ export const auth = betterAuth({
         type: "string",
         required: true,
       },
+      isAvailable: {
+        type: "boolean",
+        required: false,
+      },
+      isActive: {
+        type: "boolean",
+        required: false,
+      },
     },
   },
   plugins: [

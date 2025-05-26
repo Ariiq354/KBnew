@@ -9,7 +9,10 @@ export default defineEventHandler(async (event) => {
     await sendRedirect(event, "/", 302);
   }
 
-  if (session?.user && (event.path === "/" || event.path === "/register")) {
+  if (
+    session?.user &&
+    (event.path === "/login" || event.path === "/register")
+  ) {
     await sendRedirect(event, "/dashboard", 302);
   }
 

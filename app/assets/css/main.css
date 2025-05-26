@@ -20,12 +20,10 @@
   --color-eastern-blue-950: #192d33;
 }
 
-html.layout-auth {
+html {
   font-family: Poppins, sans-serif;
-  font-size: 14px;
 }
 
-html.layout-default {
-  font-family: Poppins, sans-serif;
+html.layout-auth {
   font-size: 14px;
 }
