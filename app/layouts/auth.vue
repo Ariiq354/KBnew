@@ -1,7 +1,7 @@
 <script setup lang="ts">
   useHead({
     htmlAttrs: {
-      class: "layout-auth",
+      class: "layout-small",
     },
   });
 </script>
