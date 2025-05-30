@@ -100,7 +100,7 @@
               Kontak
             </NuxtLink>
             <NuxtLink
-              v-if="!user"
+              v-if="!authStore.session"
               href="/login"
               class="border-b border-black/20 pb-2"
               @click="open = false"

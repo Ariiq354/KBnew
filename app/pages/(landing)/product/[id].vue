@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { formatRupiah } from "~/utils";
+
   definePageMeta({
     layout: "landing",
   });

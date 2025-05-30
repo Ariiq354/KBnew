@@ -27,6 +27,36 @@ export const user = sqliteTable(
   (table) => [uniqueIndex("email_idx").on(table.email)]
 );
 
+export const userDtlTable = sqliteTable("user_dtl", {
+  id: int().primaryKey({ autoIncrement: true }),
+  kodeUser: text().notNull(),
+  userId: int()
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  statusKawin: text().notNull(),
+  tanggalLahir: text().notNull(),
+  kelurahan: text().notNull(),
+  gender: text({ enum: ["laki", "perempuan"] }).notNull(),
+  kecamatan: text().notNull(),
+  kota: text().notNull(),
+  provinsi: text().notNull(),
+  namaAyah: text().notNull(),
+  anakKe: int().notNull(),
+  dariBersaudara: int().notNull(),
+  suku: text().notNull(),
+  pendidikan: text().notNull(),
+  pekerjaan: text().notNull(),
+  jurusan: text().notNull(),
+  tinggi: int().notNull(),
+  berat: int().notNull(),
+  hobi: text().notNull(),
+  instagram: text().notNull(),
+  kriteria: text().notNull(),
+  deskripsi: text().notNull().default(""),
+  foto: text().notNull(),
+  ...timestamp,
+});
+
 export const session = sqliteTable(
   "session",
   {

@@ -101,20 +101,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     });
   }
 
-  async function impersonateUser(userId: string) {
-    await authClient.admin.impersonateUser({ userId });
-    reloadNuxtApp({
-      force: true,
-    });
-  }
-
-  async function stopImpersonate() {
-    await authClient.admin.stopImpersonating();
-    reloadNuxtApp({
-      force: true,
-    });
-  }
-
   return {
     loading,
     signIn,
@@ -123,8 +109,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     signOut,
     hasPermission,
     updateUser,
-    impersonateUser,
-    stopImpersonate,
     session,
   };
 });

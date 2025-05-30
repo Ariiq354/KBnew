@@ -18,12 +18,12 @@
             icon: "i-heroicons-home",
           },
           {
-            label: "User",
-            to: "/dashboard/user",
+            label: "Daftar Anggota",
+            to: "/dashboard/anggota",
             icon: "i-heroicons-user",
           },
           {
-            label: "Bootcamp",
+            label: "Daftar Bootcamp",
             to: "/dashboard/bootcamp",
             icon: "i-heroicons-computer-desktop",
           },

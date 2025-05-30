@@ -46,17 +46,6 @@ export const auth = betterAuth({
   ],
 });
 
-export type UserWithId = {
+export type UserWithId = Omit<typeof auth.$Infer.Session.user, "id"> & {
   id: number;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  image?: string | null | undefined | undefined;
-  banned: boolean | null | undefined;
-  role?: string | null | undefined;
-  banReason?: string | null | undefined;
-  banExpires?: Date | null | undefined;
-  noTelepon: string;
 };

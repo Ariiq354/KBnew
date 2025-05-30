@@ -42,3 +42,5 @@ export const formatRupiah = (value: number) => {
     currency: "IDR",
   }).format(value);
 };
+
+export const APIBASE = "/api/v1";
