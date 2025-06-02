@@ -1,14 +1,15 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 
-export const loginSchema = v.object({
-  name: v.pipe(v.string(), v.minLength(1, "Required")),
-  noTelepon: v.pipe(v.string(), v.minLength(1, "Required")),
-  email: v.pipe(v.string(), v.minLength(1, "Required"), v.email()),
-  password: v.pipe(
-    v.string(),
-    v.minLength(1, "Required"),
-    v.minLength(8, "Password must be 8 character or more")
-  ),
+export const loginSchema = z.object({
+  name: z.string().check(z.minLength(1, "Required")),
+  noTelepon: z.string().check(z.minLength(1, "Required")),
+  email: z.string().check(z.minLength(1, "Required"), z.email()),
+  password: z
+    .string()
+    .check(
+      z.minLength(1, "Required"),
+      z.minLength(8, "Password must be 8 character or more")
+    ),
 });
 
 export const getInitialFormData = (): Schema => ({
@@ -18,4 +19,4 @@ export const getInitialFormData = (): Schema => ({
   name: "",
 });
 
-export type Schema = v.InferOutput<typeof loginSchema>;
+export type Schema = z.infer<typeof loginSchema>;

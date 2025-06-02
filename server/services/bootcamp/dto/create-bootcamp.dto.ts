@@ -1,15 +1,15 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 
-export const OBootcampCreate = v.object({
-  judul: v.string(),
-  deskripsi: v.string(),
-  status: v.boolean(),
-  harga: v.number(),
-  googleMap: v.string(),
-  tempat: v.string(),
-  waktu: v.string(),
-  foto: v.string(),
-  pembicara: v.string(),
+export const OBootcampCreate = z.object({
+  judul: z.string(),
+  deskripsi: z.string(),
+  status: z.boolean(),
+  harga: z.number(),
+  googleMap: z.string(),
+  tempat: z.string(),
+  waktu: z.string(),
+  foto: z.string(),
+  pembicara: z.string(),
 });
 
-export type TBootcampCreate = v.InferOutput<typeof OBootcampCreate>;
+export type TBootcampCreate = z.infer<typeof OBootcampCreate>;

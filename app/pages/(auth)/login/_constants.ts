@@ -1,9 +1,9 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 
-export const loginSchema = v.object({
-  email: v.pipe(v.string(), v.minLength(1, "Required"), v.email()),
-  password: v.pipe(v.string(), v.minLength(1, "Required")),
-  rememberMe: v.boolean(),
+export const loginSchema = z.object({
+  email: z.string().check(z.minLength(1, "Required"), z.email()),
+  password: z.string().check(z.minLength(1, "Required")),
+  rememberMe: z.boolean(),
 });
 
 export const getInitialFormData = (): Schema => ({
@@ -12,4 +12,4 @@ export const getInitialFormData = (): Schema => ({
   rememberMe: false,
 });
 
-export type Schema = v.InferOutput<typeof loginSchema>;
+export type Schema = z.infer<typeof loginSchema>;

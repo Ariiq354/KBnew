@@ -1,11 +1,11 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 
-export const OPagination = v.object({
-  page: v.optional(v.pipe(v.string(), v.transform(Number)), "1"),
-  limit: v.optional(v.pipe(v.string(), v.transform(Number)), "10"),
+export const OPagination = z.object({
+  page: z._default(z.coerce.number(), 1),
+  limit: z._default(z.coerce.number(), 10),
 });
 
-export type TPagination = v.InferOutput<typeof OPagination>;
+export type TPagination = z.infer<typeof OPagination>;
 
 export type TPaginationMetadata = {
   page: number;

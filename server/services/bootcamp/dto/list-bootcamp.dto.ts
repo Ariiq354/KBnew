@@ -1,9 +1,8 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 import { OPagination } from "../../common/pagination";
 
-export const OBootcampList = v.object({
-  ...OPagination.entries,
-  search: v.optional(v.string()),
+export const OBootcampList = z.extend(OPagination, {
+  search: z.optional(z.string()),
 });
 
-export type TBootcampList = v.InferOutput<typeof OBootcampList>;
+export type TBootcampList = z.infer<typeof OBootcampList>;

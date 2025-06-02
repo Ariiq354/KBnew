@@ -1,6 +1,6 @@
 import { UBadge } from "#components";
 import type { TableColumn } from "@nuxt/ui";
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 
 export const columns: TableColumn<any>[] = [
   {
@@ -35,17 +35,17 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const schema = v.object({
-  id: v.optional(v.number()),
-  judul: v.pipe(v.string(), v.minLength(1, "Required")),
-  deskripsi: v.pipe(v.string(), v.minLength(1, "Required")),
-  harga: v.number(),
-  googleMap: v.pipe(v.string(), v.minLength(1, "Required")),
-  tempat: v.pipe(v.string(), v.minLength(1, "Required")),
-  waktu: v.pipe(v.string(), v.minLength(1, "Required")),
-  foto: v.string(),
-  pembicara: v.pipe(v.string(), v.minLength(1, "Required")),
-  status: v.boolean(),
+export const schema = z.object({
+  id: z.optional(z.number()),
+  judul: z.string().check(z.minLength(1, "Required")),
+  deskripsi: z.string().check(z.minLength(1, "Required")),
+  harga: z.number(),
+  googleMap: z.string().check(z.minLength(1, "Required")),
+  tempat: z.string().check(z.minLength(1, "Required")),
+  waktu: z.string().check(z.minLength(1, "Required")),
+  foto: z.string(),
+  pembicara: z.string().check(z.minLength(1, "Required")),
+  status: z.boolean(),
 });
 
 export const getInitialFormData = (): Schema => ({
@@ -61,4 +61,4 @@ export const getInitialFormData = (): Schema => ({
   status: false,
 });
 
-export type Schema = v.InferOutput<typeof schema>;
+export type Schema = z.infer<typeof schema>;

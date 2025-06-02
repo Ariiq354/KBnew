@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import * as v from "valibot";
+  import { z } from "zod/v4-mini";
   import type { FormSubmitEvent } from "#ui/types";
 
   const authStore = useAuthStore();
 
   const modalOpen = defineModel<boolean>();
-  const schema = v.object({
-    name: v.optional(v.string()),
-    noTelepon: v.optional(v.string()),
+  const schema = z.object({
+    name: z.optional(z.string()),
+    noTelepon: z.optional(z.string()),
   });
   const initialFormData = (): Schema => ({
     name: authStore.user?.name,
@@ -19,7 +19,7 @@
     state.value = initialFormData();
   });
 
-  type Schema = v.InferOutput<typeof schema>;
+  type Schema = z.infer<typeof schema>;
 
   const modalLoading = ref(false);
   async function onSubmit(event: FormSubmitEvent<Schema>) {

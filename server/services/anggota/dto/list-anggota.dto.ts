@@ -1,9 +1,8 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 import { OPagination } from "../../common/pagination";
 
-export const OAnggotaList = v.object({
-  ...OPagination.entries,
-  search: v.optional(v.string()),
+export const OAnggotaList = z.extend(OPagination, {
+  search: z.optional(z.string()),
 });
 
-export type TAnggotaList = v.InferOutput<typeof OAnggotaList>;
+export type TAnggotaList = z.infer<typeof OAnggotaList>;

@@ -1,11 +1,11 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 import { OBootcampList } from "~~/server/services/bootcamp/dto/list-bootcamp.dto";
 import { listAllBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    v.parse(OBootcampList, query)
+    z.parse(OBootcampList, query)
   );
 
   const data = await listAllBootcamp(query);

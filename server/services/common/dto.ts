@@ -1,7 +1,7 @@
-import * as v from "valibot";
+import { z } from "zod/v4-mini";
 
-export const ODeleteSchema = v.object({
-  id: v.array(v.number()),
+export const ODeleteSchema = z.object({
+  id: z.array(z.number()),
 });
 
-export type TDeleteDto = v.InferOutput<typeof ODeleteSchema>;
+export type TDeleteDto = z.infer<typeof ODeleteSchema>;
