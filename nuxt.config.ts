@@ -33,7 +33,13 @@ export default defineNuxtConfig({
       },
       crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
-        "img-src": ["'self'", "data:", "https://res.cloudinary.com"],
+        "img-src": [
+          "'self'",
+          "data:",
+          "https://res.cloudinary.com",
+          "https://maps.googleapis.com",
+          "https://maps.gstatic.com",
+        ],
       },
     },
   },
