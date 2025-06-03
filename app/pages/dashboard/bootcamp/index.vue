@@ -27,9 +27,19 @@
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {
     const basePath = `${APIBASE}/bootcamp`;
+    const formData = new FormData();
+
+    for (const key in event.data) {
+      formData.append(key, (event.data as any)[key]);
+    }
+
+    if (file.value) {
+      formData.append("file", file.value);
+    }
+
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
-      body: event.data,
+      body: formData,
       method: state.value.id ? "PUT" : "POST",
       onSuccess() {
         modalOpen.value = false;
@@ -44,6 +54,11 @@
   function clickAdd() {
     state.value = getInitialFormData();
     modalOpen.value = true;
+    if (imageUrl.value) {
+      URL.revokeObjectURL(imageUrl.value);
+      imageUrl.value = undefined;
+      file.value = undefined;
+    }
   }
 
   const selected = ref<Record<string, boolean>>({});
@@ -67,6 +82,25 @@
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     state.value = itemData;
+    if (imageUrl.value) {
+      URL.revokeObjectURL(imageUrl.value);
+      imageUrl.value = undefined;
+      file.value = undefined;
+    }
+  }
+
+  const imageUrl = ref();
+  const file = ref();
+  function uploadFile(event: any) {
+    file.value = event.target.files[0];
+    if (file.value && file.value.type.startsWith("image/")) {
+      if (imageUrl.value) {
+        URL.revokeObjectURL(imageUrl.value);
+      }
+      imageUrl.value = URL.createObjectURL(file.value);
+    } else {
+      imageUrl.value = undefined;
+    }
   }
 </script>
 
@@ -79,7 +113,6 @@
       class="min-w-4xl"
     >
       <template #body>
-        {{ state }}
         <UForm
           id="bootcamp-form"
           :schema="schema"
@@ -115,6 +148,30 @@
           </UFormField>
           <UFormField label="Status" name="status">
             <USwitch v-model="state.status" :disabled="isLoading" />
+          </UFormField>
+          <UFormField label="Foto" name="foto">
+            <UInput
+              type="file"
+              accept="image/*"
+              :disabled="isLoading"
+              @change="uploadFile"
+            />
+            <div v-if="state.foto">
+              <img
+                class=""
+                :src="state.foto"
+                alt="Preview"
+                style="max-width: 300px"
+              />
+            </div>
+            <div v-if="imageUrl">
+              <img
+                class=""
+                :src="imageUrl"
+                alt="Preview"
+                style="max-width: 300px"
+              />
+            </div>
           </UFormField>
         </UForm>
       </template>

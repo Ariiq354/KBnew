@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: false },
@@ -20,6 +19,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: process.env.DATABASE_URL,
     databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
+    bootcampPreset: process.env.BOOTCAMP_PRESET,
+    userPreset: process.env.USER_PRESET,
   },
 
   pages: {
@@ -28,14 +29,12 @@ export default defineNuxtConfig({
 
   security: {
     headers: {
-      permissionsPolicy: {
-        camera: false,
-      },
       crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         "img-src": [
           "'self'",
           "data:",
+          "blob:",
           "https://res.cloudinary.com",
           "https://maps.googleapis.com",
           "https://maps.gstatic.com",

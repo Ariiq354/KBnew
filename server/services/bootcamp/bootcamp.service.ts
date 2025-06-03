@@ -55,6 +55,29 @@ export async function listAllBootcamp({ limit, page, search }: TBootcampList) {
   }
 }
 
+export async function getBootcampById(id: number) {
+  try {
+    return await db.query.bootcampTable.findFirst({
+      where: eq(bootcampTable.id, id),
+      columns: {
+        id: true,
+        deskripsi: true,
+        foto: true,
+        googleMap: true,
+        harga: true,
+        judul: true,
+        pembicara: true,
+        status: true,
+        tempat: true,
+        waktu: true,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to get Bootcamp", error);
+    throw InternalError;
+  }
+}
+
 export async function createBootcamp(body: TBootcampCreate) {
   try {
     await db.insert(bootcampTable).values({
