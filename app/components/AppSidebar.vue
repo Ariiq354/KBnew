@@ -32,28 +32,28 @@
             to: "/dashboard/list-taaruf",
             icon: "i-heroicons-users",
           },
-          {
-            label: "Opsi Form",
-            icon: "i-heroicons-adjustments-horizontal",
-            children: [
-              {
-                label: "Jurusan",
-                to: "/dashboard/jurusan",
-              },
-              {
-                label: "Pekerjaan",
-                to: "/dashboard/pekerjaan",
-              },
-              {
-                label: "Pendidikan",
-                to: "/dashboard/pendidikan",
-              },
-              {
-                label: "Suku",
-                to: "/dashboard/suku",
-              },
-            ],
-          },
+          // {
+          //   label: "Opsi Form",
+          //   icon: "i-heroicons-adjustments-horizontal",
+          //   children: [
+          //     {
+          //       label: "Jurusan",
+          //       to: "/dashboard/jurusan",
+          //     },
+          //     {
+          //       label: "Pekerjaan",
+          //       to: "/dashboard/pekerjaan",
+          //     },
+          //     {
+          //       label: "Pendidikan",
+          //       to: "/dashboard/pendidikan",
+          //     },
+          //     {
+          //       label: "Suku",
+          //       to: "/dashboard/suku",
+          //     },
+          //   ],
+          // },
         ] as NavigationMenuItem[])
       : [],
     [
@@ -94,13 +94,13 @@
     :class="constantStore.sidebarShow ? 'left-0' : '-left-72'"
   >
     <div class="flex items-center justify-center pt-8 pb-6 text-(--ui-primary)">
-      <div class="flex items-center gap-4 text-2xl tracking-widest">
+      <NuxtLink to="/" class="flex items-center gap-4 text-2xl tracking-widest">
         <NuxtImg src="/logo.webp" class="h-14 w-14" />
         <span>
           Keluarga <br />
           Bahagia
         </span>
-      </div>
+      </NuxtLink>
     </div>
     <ClientOnly>
       <UNavigationMenu

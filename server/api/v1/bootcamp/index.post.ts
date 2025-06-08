@@ -1,6 +1,5 @@
 import { createBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
 import { OBootcampCreate } from "~~/server/services/bootcamp/dto/create-bootcamp.dto";
-import { uploadCloudinary } from "~~/server/utils/cloudinary";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];

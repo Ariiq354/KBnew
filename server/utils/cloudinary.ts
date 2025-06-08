@@ -56,6 +56,6 @@ export async function deleteCloudinary(
   }
 }
 
-export function getPublicIdFromUrl(url: string) {
-  return url.split("/").slice(7).join("/").split(".")[0];
+export function getPublicIdFromUrl(url: string): string {
+  return url.split("/").slice(7).join("/").split(".")[0]!;
 }

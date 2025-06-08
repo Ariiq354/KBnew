@@ -1,18 +1,14 @@
-import { z } from "zod/v4-mini";
-import { updateBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
-import { OBootcampCreate } from "~~/server/services/bootcamp/dto/create-bootcamp.dto";
-import { uploadCloudinary } from "~~/server/utils/cloudinary";
+import { createAnggotaDetail } from "~~/server/services/anggota/anggota.service";
+import { OAnggotaDetailCreate } from "~~/server/services/anggota/dto/create-anggota.dto";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-const paramsSchema = z.coerce.number();
-
 export default defineEventHandler(async (event) => {
-  adminGuard(event);
+  const user = authGuard(event);
+
   const result = await readMultipartFormData(event);
-  const id = paramsSchema.parse(getRouterParam(event, "id"));
-  const { bootcampPreset } = useRuntimeConfig();
+  const { userPreset } = useRuntimeConfig();
 
   if (!result) {
     throw createError({
@@ -22,7 +18,6 @@ export default defineEventHandler(async (event) => {
   }
 
   let fields: Record<string, string> = {};
-  let newFileUrl = "";
 
   for (const part of result) {
     if (part.filename) {
@@ -40,25 +35,17 @@ export default defineEventHandler(async (event) => {
         });
       }
 
-      const uploadResult = await uploadCloudinary(bootcampPreset, part.data);
+      const uploadResult = await uploadCloudinary(userPreset, part.data);
 
-      newFileUrl = uploadResult.secure_url;
+      fields["foto"] = uploadResult.secure_url;
     } else {
       fields[part.name as string] = part.data.toString();
     }
   }
 
-  const parsed = OBootcampCreate.parse(fields);
+  const parsed = OAnggotaDetailCreate.parse(fields);
 
-  if (newFileUrl) {
-    if (parsed.foto) {
-      const publicId = getPublicIdFromUrl(parsed.foto);
-      await deleteCloudinary(publicId);
-    }
-    parsed.foto = newFileUrl;
-  }
-
-  await updateBootcamp(id, parsed);
+  await createAnggotaDetail(user.id, parsed);
 
   return HttpResponse();
 });

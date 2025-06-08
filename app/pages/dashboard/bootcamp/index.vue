@@ -156,21 +156,24 @@
               :disabled="isLoading"
               @change="uploadFile"
             />
-            <div v-if="state.foto">
-              <img
-                class=""
-                :src="state.foto"
-                alt="Preview"
-                style="max-width: 300px"
-              />
-            </div>
-            <div v-if="imageUrl">
-              <img
-                class=""
-                :src="imageUrl"
-                alt="Preview"
-                style="max-width: 300px"
-              />
+            <div class="flex gap-2 mt-2 items-center">
+              <div v-if="state.foto">
+                <img
+                  class=""
+                  :src="state.foto"
+                  alt="Preview"
+                  style="max-width: 300px"
+                />
+              </div>
+              <div v-if="state.foto && imageUrl">-></div>
+              <div v-if="imageUrl">
+                <img
+                  class=""
+                  :src="imageUrl"
+                  alt="Preview"
+                  style="max-width: 300px"
+                />
+              </div>
             </div>
           </UFormField>
         </UForm>

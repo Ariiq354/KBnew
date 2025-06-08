@@ -1,8 +1,5 @@
 <script setup lang="ts">
   import { z } from "zod/v4-mini";
-  import id from "zod/v4/locales/id.js";
-
-  z.config(id());
 
   useSeoMeta({
     description: "Keluarga Bahagia",
