@@ -1,8 +1,8 @@
-import { and, desc, eq, like, ne, or, type SQL } from "drizzle-orm";
-import type { TAnggotaList } from "./dto/list-anggota.dto";
+import { and, desc, eq, gte, like, lte, ne, or, type SQL } from "drizzle-orm";
+import type { TAnggotaList, TAnggotaPasangan } from "./dto/list-anggota.dto";
 import { user, userDtlTable } from "~~/server/database/schema/auth";
 import { db } from "~~/server/database";
-import { TAnggotaDetailCreate } from "./dto/create-anggota.dto";
+import type { TAnggotaDetailCreate } from "./dto/create-anggota.dto";
 
 export async function listAllAnggota({ limit, page, search }: TAnggotaList) {
   const offset = (page - 1) * limit;
@@ -139,8 +139,90 @@ export async function createAnggotaDetail(
         target: userDtlTable.userId,
         set: body,
       });
+
+    await db.update(user).set({ isActive: true }).where(eq(user.id, id));
   } catch (error) {
     console.error("Failed to insert Bootcamp", error);
+    throw InternalError;
+  }
+}
+
+export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
+  const offset = (param.page - 1) * param.limit;
+  const today = new Date();
+  const conditions: (SQL<unknown> | undefined)[] = [
+    ne(user.email, "admin@gmail.com"),
+    ne(user.id, id),
+    eq(user.isActive, true),
+    eq(user.isAvailable, true),
+  ];
+
+  if (param.suku) conditions.push(eq(userDtlTable.suku, param.suku));
+  if (param.statusKawin)
+    conditions.push(eq(userDtlTable.statusKawin, param.statusKawin));
+  if (param.pendidikan)
+    conditions.push(eq(userDtlTable.pendidikan, param.pendidikan));
+  if (param.provinsi)
+    conditions.push(eq(userDtlTable.provinsi, param.provinsi));
+  if (param.kecamatan)
+    conditions.push(eq(userDtlTable.kecamatan, param.kecamatan));
+  if (param.kota) conditions.push(eq(userDtlTable.kota, param.kota));
+  if (param.kelurahan)
+    conditions.push(eq(userDtlTable.kelurahan, param.kelurahan));
+  if (param.umurMin) {
+    const maxBirthDate = subtractYears(today, param.umurMin);
+    const maxDateStr = formatDateToYMD(maxBirthDate);
+    conditions.push(lte(userDtlTable.tanggalLahir, maxDateStr));
+  }
+  if (param.umurMax) {
+    const minBirthDate = subtractYears(today, param.umurMax);
+    const minDateStr = formatDateToYMD(minBirthDate);
+    conditions.push(gte(userDtlTable.tanggalLahir, minDateStr));
+  }
+
+  const query = db
+    .select({
+      id: user.id,
+      namaAnggota: user.name,
+      kodeUser: userDtlTable.kodeUser,
+      statusKawin: userDtlTable.statusKawin,
+      tanggalLahir: userDtlTable.tanggalLahir,
+      kelurahan: userDtlTable.kelurahan,
+      kecamatan: userDtlTable.kecamatan,
+      kota: userDtlTable.kota,
+      provinsi: userDtlTable.provinsi,
+      gender: userDtlTable.gender,
+      namaAyah: userDtlTable.namaAyah,
+      anakKe: userDtlTable.anakKe,
+      dariBersaudara: userDtlTable.dariBersaudara,
+      suku: userDtlTable.suku,
+      pendidikan: userDtlTable.pendidikan,
+      pekerjaan: userDtlTable.pekerjaan,
+      jurusan: userDtlTable.jurusan,
+      tinggi: userDtlTable.tinggi,
+      berat: userDtlTable.berat,
+      hobi: userDtlTable.hobi,
+      instagram: userDtlTable.instagram,
+      kriteria: userDtlTable.kriteria,
+      deskripsi: userDtlTable.deskripsi,
+      foto: userDtlTable.foto,
+    })
+    .from(user)
+    .where(and(...conditions))
+    .leftJoin(userDtlTable, eq(user.id, userDtlTable.userId))
+    .orderBy(desc(user.createdAt))
+    .$dynamic();
+
+  try {
+    const total = await getTotalQuery(query);
+    const data = await query.limit(param.limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Pasangan", error);
     throw InternalError;
   }
 }

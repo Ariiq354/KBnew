@@ -4,7 +4,6 @@ import type { auth } from "~~/server/utils/auth";
 import { ac, admin, user, type TStatement } from "~~/shared/permission";
 
 const authClient = createAuthClient({
-  basePath: "/api/v1/auth",
   plugins: [
     inferAdditionalFields<typeof auth>(),
     adminClient({
@@ -31,10 +30,17 @@ type TSignUp = {
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
-  const sessionRef = authClient.useSession();
-  const user = computed(() => sessionRef.value.data?.user);
-  const session = computed(() => sessionRef.value.data?.session);
-  const loading = computed(() => sessionRef.value.isPending);
+  const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
+    null
+  );
+
+  async function init() {
+    const data = await authClient.useSession(useFetch);
+    session.value = data;
+  }
+
+  const user = computed(() => session.value?.data?.user);
+  const loading = computed(() => session.value?.isPending);
 
   async function signIn(body: TSignIn) {
     await authClient.signIn.email({
@@ -43,8 +49,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Login Failed", body.error.message);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
           useToastSuccess("Login Success", "Selamat datang di Berkah Amanah");
+          await init();
+
           navigateTo("/dashboard");
         },
       },
@@ -72,7 +80,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Logout Failed", body.error.message);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
+          await init();
           navigateTo("/");
         },
       },
@@ -102,6 +111,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   return {
+    init,
     loading,
     signIn,
     signUp,

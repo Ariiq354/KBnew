@@ -19,7 +19,7 @@ export const schema = z.object({
   hobi: z.string().check(z.minLength(1, "Required")),
   kriteria: z.string().check(z.minLength(1, "Required")),
   deskripsi: z.string().check(z.minLength(1, "Required")),
-  foto: z.string().check(z.minLength(1, "Required")),
+  foto: z.string(),
   instagram: z.string().check(z.minLength(1, "Required")),
   gender: z.enum(["laki", "perempuan"]),
 });

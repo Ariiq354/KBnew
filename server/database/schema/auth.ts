@@ -32,7 +32,8 @@ export const userDtlTable = sqliteTable("user_dtl", {
   kodeUser: text().notNull(),
   userId: int()
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" })
+    .unique(),
   statusKawin: text().notNull(),
   tanggalLahir: text().notNull(),
   kelurahan: text().notNull(),

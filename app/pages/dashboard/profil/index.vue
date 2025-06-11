@@ -3,6 +3,7 @@
   import {
     genderOptions,
     getInitialFormData,
+    pendidikanOptions,
     schema,
     statusKawinOptions,
     type Schema,
@@ -14,33 +15,56 @@
 
   const { data } = useFetch(`${APIBASE}/anggota/current`);
   const state = ref(getInitialFormData());
-  if (data.value?.data?.detail) {
-    state.value = data.value.data?.detail;
+
+  watchEffect(() => {
+    if (data.value?.data?.detail) {
+      state.value = data.value.data?.detail;
+    }
+  });
+
+  const { isLoading, execute } = useSubmit();
+  async function onSubmit(event: FormSubmitEvent<Schema>) {
+    const formData = new FormData();
+
+    for (const key in event.data) {
+      formData.append(key, (event.data as any)[key]);
+    }
+
+    if (file.value) {
+      formData.append("file", file.value);
+    }
+
+    await execute({
+      path: `${APIBASE}/anggota/current`,
+      body: formData,
+      method: "POST",
+      onSuccess() {
+        useToastSuccess("Update Sukses", "Profil anda sudah di update");
+        reloadNuxtApp({ force: true });
+      },
+      onError(error) {
+        useToastError("Submit Failed", error.data.message);
+      },
+    });
   }
 
-  const isLoading = ref(false);
-  async function onSubmit(event: FormSubmitEvent<Schema>) {
-    isLoading.value = true;
-    try {
-      await $fetch(`${APIBASE}/anggota/current`, {
-        method: "POST",
-        body: event.data,
-      });
-
-      useToastSuccess(
-        "Pengisian Data Diri Berhasil",
-        "Selamat datang di Keluarga Bahagia"
-      );
-    } catch (error: any) {
-      useToastError(String(error.statusCode), error.data.message);
-    } finally {
-      isLoading.value = false;
+  const imageUrl = ref();
+  const file = ref();
+  function uploadFile(event: any) {
+    file.value = event.target.files[0];
+    if (file.value && file.value.type.startsWith("image/")) {
+      if (imageUrl.value) {
+        URL.revokeObjectURL(imageUrl.value);
+      }
+      imageUrl.value = URL.createObjectURL(file.value);
+    } else {
+      imageUrl.value = undefined;
     }
   }
 </script>
 
 <template>
-  <Title>Daftar Diri</Title>
+  <Title>Profil</Title>
   <main>
     <UCard v-if="!data?.data?.detail">
       <div class="flex items-center gap-4">
@@ -49,24 +73,46 @@
       </div>
     </UCard>
     <UCard class="mt-4">
+      <template #header>
+        <h1 class="font-bold">Profil Anda</h1>
+      </template>
       <UForm
         :schema="schema"
         :state="state"
+        id="form-profil"
         class="space-y-4"
         @submit="onSubmit"
       >
-        <h1 class="font-bold">Data Diri</h1>
-        <UFormField label="Upload Foto diri" name="foto">
-          <ImageUpload
-            :disabled="false"
-            :url="state.foto ? state.foto : ''"
-            @change="(url) => (state.foto = url)"
-            @remove="() => (state.foto = '')"
+        <UFormField label="Foto diri" name="foto">
+          <UInput
+            type="file"
+            accept="image/*"
+            :disabled="isLoading"
+            @change="uploadFile"
           />
+          <div class="flex gap-2 mt-2 items-center">
+            <div v-if="state.foto">
+              <img
+                class=""
+                :src="state.foto"
+                alt="Preview"
+                style="max-width: 300px"
+              />
+            </div>
+            <div v-if="state.foto && imageUrl">-></div>
+            <div v-if="imageUrl">
+              <img
+                class=""
+                :src="imageUrl"
+                alt="Preview"
+                style="max-width: 300px"
+              />
+            </div>
+          </div>
         </UFormField>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <UFormField label="Nama Lengkap">
-            <UInput :model-value="user?.namaLengkap" disabled />
+            <UInput :model-value="authStore.user?.name" disabled />
           </UFormField>
           <UFormField label="Jenis Kelamin" name="gender">
             <USelectMenu
@@ -78,7 +124,7 @@
             />
           </UFormField>
           <UFormField label="No. Telepon">
-            <UInput :model-value="user?.noTelepon" disabled />
+            <UInput :model-value="authStore.user?.noTelepon" disabled />
           </UFormField>
           <UFormField label="Status Kawin" name="statusKawin">
             <USelectMenu
@@ -115,87 +161,32 @@
             </UFormField>
           </div>
           <UFormField label="Provinsi" name="provinsi">
-            <USelectMenu
-              v-model="state.provinsi"
-              :items="dataProvinsi ? dataProvinsi.result : []"
-              :disabled="isLoading"
-              label-key="text"
-              value-key="id"
-              searchable
-              @change="provinsiId = state.provinsi"
-            />
+            <UInput v-model="state.provinsi" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Kabupaten / Kota" name="kota">
-            <USelectMenu
-              v-model="state.kota"
-              :items="dataKota ? dataKota.result : []"
-              :disabled="isLoading"
-              label-key="text"
-              value-key="id"
-              searchable
-              @change="kotaId = state.kota"
-            />
+            <UInput v-model="state.kota" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Kecamatan" name="kecamatan">
-            <USelectMenu
-              v-model="state.kecamatan"
-              :items="dataKecamatan ? dataKecamatan.result : []"
-              :disabled="isLoading"
-              label-key="text"
-              value-key="id"
-              searchable
-              @change="kecamatanId = state.kecamatan"
-            />
+            <UInput v-model="state.kecamatan" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Kelurahan / Desa" name="kelurahan">
-            <USelectMenu
-              v-model="state.kelurahan"
-              :items="dataKelurahan ? dataKelurahan.result : []"
-              :disabled="isLoading"
-              label-key="text"
-              value-key="id"
-              searchable
-            />
+            <UInput v-model="state.kelurahan" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Suku" name="suku">
-            <USelectMenu
-              v-model="state.suku"
-              :items="dataSuku"
-              :disabled="isLoading"
-              label-key="name"
-              value-key="name"
-              searchable
-            />
+            <UInput v-model="state.suku" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Pendidikan Terakhir" name="pendidikan">
             <USelectMenu
               v-model="state.pendidikan"
-              :items="dataPendidikan"
+              :items="pendidikanOptions"
               :disabled="isLoading"
-              label-key="name"
-              value-key="name"
-              searchable
             />
           </UFormField>
           <UFormField label="Jurusan" name="jurusan">
-            <USelectMenu
-              v-model="state.jurusan"
-              :items="dataJurusan"
-              :disabled="isLoading"
-              label-key="name"
-              value-key="name"
-              searchable
-            />
+            <UInput v-model="state.jurusan" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Pekerjaan" name="pekerjaan">
-            <USelectMenu
-              v-model="state.pekerjaan"
-              :items="dataPekerjaan"
-              :disabled="isLoading"
-              label-key="name"
-              value-key="name"
-              searchable
-            />
+            <UInput v-model="state.pekerjaan" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Tinggi Badan" name="tinggi">
             <UInput
@@ -224,44 +215,19 @@
             />
           </UFormField>
         </div>
-
+      </UForm>
+      <template #footer>
         <div class="flex w-full justify-end gap-2">
           <UButton
             type="submit"
+            form="form-profil"
             icon="i-heroicons-check-16-solid"
             :loading="isLoading"
           >
             Simpan
           </UButton>
         </div>
-      </UForm>
-    </UCard>
-    <UCard class="mt-4">
-      <UForm
-        :schema="resetSchema"
-        :state="resetState"
-        class="space-y-4"
-        @submit="onSubmitReset"
-      >
-        <h1 class="font-bold">Reset Password</h1>
-        <UFormField label="Password Baru" name="password">
-          <UInput
-            v-model="resetState.password"
-            type="password"
-            :disabled="isLoading"
-          />
-        </UFormField>
-
-        <div class="flex w-full justify-end gap-2">
-          <UButton
-            type="submit"
-            icon="i-heroicons-check-16-solid"
-            :loading="isLoading"
-          >
-            Simpan
-          </UButton>
-        </div>
-      </UForm>
+      </template>
     </UCard>
   </main>
 </template>

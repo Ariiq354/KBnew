@@ -8,7 +8,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "sqlite",
   }),
-  basePath: "/api/v1/auth",
+  session: {
+    expiresIn: 30,
+  },
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,

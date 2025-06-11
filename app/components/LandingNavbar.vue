@@ -41,13 +41,19 @@
         </NuxtLink>
       </nav>
       <UButton
-        v-if="!authStore.session"
+        v-if="!authStore.user"
         to="/login"
         class="hidden text-white md:block"
       >
         Daftar
       </UButton>
-      <UButton v-else to="/dashboard" class="hidden text-white md:block">
+      <UButton
+        v-else
+        :to="
+          authStore.user?.role === 'admin' ? '/dashboard' : '/dashboard/profil'
+        "
+        class="hidden text-white md:block"
+      >
         Dashboard
       </UButton>
       <USlideover v-model:open="open" class="md:hidden" title="Menu">
@@ -100,7 +106,7 @@
               Kontak
             </NuxtLink>
             <NuxtLink
-              v-if="!authStore.session"
+              v-if="!authStore.user"
               href="/login"
               class="border-b border-black/20 pb-2"
               @click="open = false"
@@ -109,7 +115,7 @@
             </NuxtLink>
             <NuxtLink
               v-else
-              href="/dashboard"
+              href="/dashboard/profil"
               class="border-b border-black/20 pb-2"
               @click="open = false"
             >

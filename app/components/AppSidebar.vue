@@ -4,6 +4,7 @@
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isActive = computed(() => authStore.user?.isActive);
 
   const sidebarItems: NavigationMenuItem[] | NavigationMenuItem[][] = [
     (await authStore.hasPermission({ sidebar: ["admin"] }))
@@ -32,28 +33,6 @@
             to: "/dashboard/list-taaruf",
             icon: "i-heroicons-users",
           },
-          // {
-          //   label: "Opsi Form",
-          //   icon: "i-heroicons-adjustments-horizontal",
-          //   children: [
-          //     {
-          //       label: "Jurusan",
-          //       to: "/dashboard/jurusan",
-          //     },
-          //     {
-          //       label: "Pekerjaan",
-          //       to: "/dashboard/pekerjaan",
-          //     },
-          //     {
-          //       label: "Pendidikan",
-          //       to: "/dashboard/pendidikan",
-          //     },
-          //     {
-          //       label: "Suku",
-          //       to: "/dashboard/suku",
-          //     },
-          //   ],
-          // },
         ] as NavigationMenuItem[])
       : [],
     [
@@ -61,19 +40,23 @@
         label: "Main",
         type: "label",
       },
-      {
-        label: "Pencarian Pasangan",
-        to: "/dashboard/member",
-        icon: "i-heroicons-user",
-      },
-      {
-        label: "Pengajuan Taaruf",
-        to: "/dashboard/pengajuan",
-        icon: "i-heroicons-heart",
-      },
+      ...(isActive
+        ? ([
+            {
+              label: "Pencarian Pasangan",
+              to: "/dashboard/member",
+              icon: "i-heroicons-user",
+            },
+            {
+              label: "Pengajuan Taaruf",
+              to: "/dashboard/pengajuan",
+              icon: "i-heroicons-heart",
+            },
+          ] as NavigationMenuItem[])
+        : []),
       {
         label: "Identitas Diri",
-        to: "/dashboard/daftar",
+        to: "/dashboard/profil",
         icon: "i-heroicons-user-circle",
       },
       {

@@ -30,7 +30,7 @@
           </div>
           <div class="mt-2 text-center">
             Sudah Punya Akun?
-            <NuxtLink href="/" class="text-primary"> Login! </NuxtLink>
+            <NuxtLink href="/login" class="text-primary"> Login! </NuxtLink>
           </div>
         </div>
         <UForm
