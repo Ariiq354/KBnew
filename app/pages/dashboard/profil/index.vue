@@ -188,14 +188,14 @@
           <UFormField label="Pekerjaan" name="pekerjaan">
             <UInput v-model="state.pekerjaan" :disabled="isLoading" />
           </UFormField>
-          <UFormField label="Tinggi Badan" name="tinggi">
+          <UFormField label="Tinggi Badan (cm)" name="tinggi">
             <UInput
               v-model="state.tinggi"
               type="number"
               :disabled="isLoading"
             />
           </UFormField>
-          <UFormField label="Berat Badan" name="berat">
+          <UFormField label="Berat Badan (kg)" name="berat">
             <UInput v-model="state.berat" type="number" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Hobi" name="hobi">
