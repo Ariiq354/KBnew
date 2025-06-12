@@ -82,6 +82,7 @@ export async function getAnggotaById(id: number) {
       noTelepon: user.noTelepon,
       email: user.email,
       role: user.role,
+      isAvailable: user.isAvailable,
       detail: {
         kodeUser: userDtlTable.kodeUser,
         statusKawin: userDtlTable.statusKawin,
