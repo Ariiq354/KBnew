@@ -1,6 +1,6 @@
 import { getAnggotaById } from "~~/server/services/anggota/anggota.service";
-import { createTaaruf } from "~~/server/services/taaruf/bootcamp.taaruf";
 import { OTaarufCreate } from "~~/server/services/taaruf/dto/create-taaruf.dto";
+import { createTaaruf } from "~~/server/services/taaruf/taaruf.service";
 
 export default defineEventHandler(async (event) => {
   const user = adminGuard(event);

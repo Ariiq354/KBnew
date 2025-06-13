@@ -1,12 +1,12 @@
-import { listAllBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
-import { OBootcampList } from "~~/server/services/bootcamp/dto/list-bootcamp.dto";
+import { listAllTaaruf } from "~~/server/services/taaruf/taaruf.service";
+import { OTaarufList } from "~~/server/services/taaruf/dto/list-taaruf.dto";
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, (query) =>
-    OBootcampList.parse(query)
+    OTaarufList.parse(query)
   );
 
-  const data = await listAllBootcamp(query);
+  const data = await listAllTaaruf(query);
 
   const metadata = {
     page: query.page,
