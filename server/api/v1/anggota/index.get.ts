@@ -1,11 +1,10 @@
-import { z } from "zod/v4-mini";
 import { listAllAnggota } from "~~/server/services/anggota/anggota.service";
 import { OAnggotaList } from "~~/server/services/anggota/dto/list-anggota.dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    z.parse(OAnggotaList, query)
+    OAnggotaList.parse(query)
   );
 
   const data = await listAllAnggota(query);

@@ -1,11 +1,10 @@
-import { z } from "zod/v4-mini";
 import { listAnggotaPasangan } from "~~/server/services/anggota/anggota.service";
 import { OAnggotaPasangan } from "~~/server/services/anggota/dto/list-anggota.dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    z.parse(OAnggotaPasangan, query)
+    OAnggotaPasangan.parse(query)
   );
 
   const data = await listAnggotaPasangan(user.id, query);
