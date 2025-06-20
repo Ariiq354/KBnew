@@ -204,6 +204,19 @@ export async function updateTaaruf(id: number, body: TTaarufUpdate) {
         ...body,
       })
       .where(eq(taarufTable.id, id));
+
+    if (body.status === "ditolak") {
+      const taaruf = await db.query.taarufTable.findFirst({
+        where: eq(taarufTable.id, id),
+      });
+
+      if (taaruf) {
+        await db
+          .update(user)
+          .set({ isAvailable: true })
+          .where(inArray(user.id, [taaruf.idDituju, taaruf.idPenuju]));
+      }
+    }
   } catch (error) {
     console.error("Failed to update Taaruf", error);
     throw InternalError;

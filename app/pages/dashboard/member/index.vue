@@ -1,8 +1,35 @@
 <script setup lang="ts">
+  import { pendidikanOptions, statusKawinOptions } from "./_constants";
+
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Member");
 
-  const { data, refresh } = useFetch(`${APIBASE}/anggota/pasangan`);
+  const query = ref({
+    statusKawin: undefined,
+    pendidikan: undefined,
+    provinsi: undefined,
+    kota: undefined,
+    kecamatan: undefined,
+    kelurahan: undefined,
+    suku: undefined,
+    umurMin: 0,
+    umurMax: 100,
+  });
+
+  const umurRange = computed({
+    get() {
+      return [query.value.umurMin, query.value.umurMax];
+    },
+    set([min, max]: [number, number]) {
+      query.value.umurMin = min;
+      query.value.umurMax = max;
+    },
+  });
+
+  const { data, refresh, status } = useFetch(`${APIBASE}/anggota/pasangan`, {
+    query,
+    watch: false,
+  });
 
   const modalState = ref<ExtractObjectType<typeof data.value>>();
   const modalOpen = ref(false);
@@ -144,6 +171,42 @@
         </div>
       </template>
     </UModal>
+    <UCard>
+      <div class="grid grid-cols-4 gap-4 mb-4">
+        <UFormField label="Status Kawin">
+          <USelectMenu
+            v-model="query.statusKawin"
+            :items="statusKawinOptions"
+          />
+        </UFormField>
+        <UFormField label="Pendidikan">
+          <USelectMenu v-model="query.pendidikan" :items="pendidikanOptions" />
+        </UFormField>
+        <UFormField label="Provinsi">
+          <UInput v-model="query.provinsi" />
+        </UFormField>
+        <UFormField label="Kabupaten / Kota">
+          <UInput v-model="query.kota" />
+        </UFormField>
+        <UFormField label="Kecamatan">
+          <UInput v-model="query.kecamatan" />
+        </UFormField>
+        <UFormField label="Kelurahan / Desa">
+          <UInput v-model="query.kelurahan" />
+        </UFormField>
+        <UFormField label="Suku">
+          <UInput v-model="query.suku" />
+        </UFormField>
+      </div>
+      <UFormField label="Umur">
+        <USlider v-model="umurRange" :tooltip="{ delayDuration: 100 }" />
+      </UFormField>
+      <div class="w-full flex mt-4 justify-end">
+        <UButton @click="() => refresh()" :loading="status == 'pending'">
+          Filter
+        </UButton>
+      </div>
+    </UCard>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       <UCard v-for="(item, index) in data?.data" :key="index">
         <div class="flex flex-col">

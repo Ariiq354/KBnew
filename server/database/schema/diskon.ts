@@ -7,6 +7,6 @@ export const diskonTable = sqliteTable("diskon", {
   kode: text().notNull(),
   batasWaktu: text().notNull(),
   batasPemakai: int().notNull(),
-  jumlahDipakai: int().notNull(),
+  jumlahDipakai: int().notNull().default(0),
   ...timestamp,
 });

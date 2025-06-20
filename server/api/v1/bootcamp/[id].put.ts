@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const parsed = OBootcampCreate.parse(fields);
+  const parsed = z.partial(OBootcampCreate).parse(fields);
 
   if (newFileUrl) {
     if (parsed.foto) {

@@ -158,18 +158,26 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
     eq(user.isAvailable, true),
   ];
 
-  if (param.suku) conditions.push(eq(userDtlTable.suku, param.suku));
+  if (param.suku)
+    conditions.push(eq(userDtlTable.suku, `%${param.suku.toLowerCase()}%`));
   if (param.statusKawin)
     conditions.push(eq(userDtlTable.statusKawin, param.statusKawin));
   if (param.pendidikan)
     conditions.push(eq(userDtlTable.pendidikan, param.pendidikan));
   if (param.provinsi)
-    conditions.push(eq(userDtlTable.provinsi, param.provinsi));
+    conditions.push(
+      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`)
+    );
   if (param.kecamatan)
-    conditions.push(eq(userDtlTable.kecamatan, param.kecamatan));
-  if (param.kota) conditions.push(eq(userDtlTable.kota, param.kota));
+    conditions.push(
+      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`)
+    );
+  if (param.kota)
+    conditions.push(eq(userDtlTable.kota, `%${param.kota.toLowerCase()}%`));
   if (param.kelurahan)
-    conditions.push(eq(userDtlTable.kelurahan, param.kelurahan));
+    conditions.push(
+      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`)
+    );
   if (param.umurMin) {
     const maxBirthDate = subtractYears(today, param.umurMin);
     const maxDateStr = formatDateToYMD(maxBirthDate);

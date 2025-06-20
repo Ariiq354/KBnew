@@ -1,5 +1,5 @@
 import { ODeleteSchema } from "~~/server/services/common/dto";
-import { deleteTaaruf } from "~~/server/services/taaruf/taaruf.service";
+import { deleteDiskon } from "~~/server/services/diskon/diskon.service";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
@@ -7,6 +7,6 @@ export default defineEventHandler(async (event) => {
     ODeleteSchema.parse(query)
   );
 
-  await deleteTaaruf(query);
+  await deleteDiskon(query);
   return HttpResponse();
 });

@@ -13,8 +13,8 @@ export const OAnggotaPasangan = z.extend(OPagination, {
   kecamatan: z.optional(z.string()),
   kelurahan: z.optional(z.string()),
   suku: z.optional(z.string()),
-  umurMin: z.optional(z.number()),
-  umurMax: z.optional(z.number()),
+  umurMin: z.optional(z.coerce.number()),
+  umurMax: z.optional(z.coerce.number()),
 });
 
 export type TAnggotaList = z.infer<typeof OAnggotaList>;

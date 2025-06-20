@@ -89,7 +89,10 @@ export async function createBootcamp(body: TBootcampCreate) {
   }
 }
 
-export async function updateBootcamp(id: number, body: TBootcampCreate) {
+export async function updateBootcamp(
+  id: number,
+  body: Partial<TBootcampCreate>
+) {
   try {
     await db
       .update(bootcampTable)
