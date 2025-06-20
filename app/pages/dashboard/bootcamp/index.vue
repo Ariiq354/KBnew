@@ -9,7 +9,7 @@
   } from "./_constants";
 
   const constantStore = useConstantStore();
-  constantStore.setTitle("Daftar Bootcamp");
+  constantStore.setTitle("Dashboard / Daftar Bootcamp");
 
   const state = ref(getInitialFormData());
   const query = reactive({

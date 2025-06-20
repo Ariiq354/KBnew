@@ -11,7 +11,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  constantStore.setTitle("Profil");
+  constantStore.setTitle("Dashboard / Profil");
 
   const { data } = useFetch(`${APIBASE}/anggota/current`);
   const state = ref(getInitialFormData());

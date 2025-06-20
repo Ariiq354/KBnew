@@ -17,16 +17,29 @@
           <div class="text-4xl font-bold">Kontak Kami</div>
           <div class="text-justify font-semibold">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-              consectetur odio vel nibh maximus, et aliquet arcu cursus. Cras
-              euismod erat dolor, at venenatis orci congue sed. In at varius
-              leo. Etiam pharetra metus laoreet, lobortis turpis at, scelerisque
-              sem. Mauris porttitor mattis ante, ut porta nisi tempor eu. Nulla
-              a ex venenatis, egestas augue quis, facilisis ipsum. Nulla
-              rhoncus, lectus eget porttitor sodales, orci massa sagittis urna,
-              non sodales nunc tellus ac arcu. Sed tempor iaculis est, non
-              aliquam velit fringilla at. Aliquam eu finibus metus. Donec turpis
-              ligula, egestas sit amet posuere eget, dignissim vitae metus.
+              <b class="font-bold">
+                Bingung Soal Cinta? Punya Keluhan Tentang Hubungan? Kami Siap
+                Mendengar!
+              </b>
+              <br />
+              <br />
+              Perjalanan cinta dan menemukan pasangan hidup bisa jadi rumit,
+              penuh tantangan, atau bahkan terkadang terasa berat. Jika Anda
+              sedang menghadapi kebuntuan dalam hubungan, mencari panduan untuk
+              menemukan jodoh, atau memiliki keluhan seputar percintaan, kami
+              ada untuk Anda.
+              <br />
+              <br />
+              Kami memahami setiap hati memiliki kisahnya sendiri. Jangan pendam
+              keresahan Anda! Bagikan pengalaman, pertanyaan, atau keluhan Anda
+              melalui formulir di bawah ini. Untuk respons yang lebih cepat dan
+              pribadi, gunakan fitur chat langsung kami.
+              <br />
+              <br />
+              <b class="font-bold italic">
+                Ceritakan kisah cinta Anda kepada kami, dan mari kita wujudkan
+                kebahagiaan yang Anda impikan.
+              </b>
             </p>
           </div>
           <div>

@@ -7,6 +7,17 @@
   const route = useRoute();
   const id = Number(route.params.id);
 
+  const { data } = useFetch(`${APIBASE}/bootcamp/${id}`);
+
+  onMounted(() => {
+    if (!data.value?.data) {
+      throw createError({
+        statusCode: 404,
+      });
+    }
+  });
+
+  const item = computed(() => data.value!.data!);
   const carouselItem = [
     {
       image: "/1.webp",
@@ -43,43 +54,27 @@
   <div
     class="container my-8 grid h-full items-center justify-center gap-12 md:grid-cols-2"
   >
-    <NuxtImg
-      :src="carouselItem[id]!.image"
-      alt="produk"
-      class="max-h-[640px] rounded-md"
-    />
+    <NuxtImg :src="item.foto" alt="produk" class="max-h-[640px] rounded-md" />
     <div class="flex h-full flex-col gap-6">
       <div>
         <h1 class="text-center text-5xl font-bold md:text-6xl">
-          Seminar Pranikah
+          {{ item.judul }}
         </h1>
         <h2 class="mt-4 text-3xl font-semibold text-amber-500">
-          {{ formatRupiah(Number(carouselItem[id]!.harga)) }}
+          {{ formatRupiah(Number(item.harga)) }}
         </h2>
       </div>
       <div>
         <h2 class="mt-2 text-2xl font-semibold">Deskripsi</h2>
-        <ul class="ml-2 flex list-disc flex-col gap-4 px-4 text-xl">
-          <li>
-            Membantu Anda memahami esensi pernikahan sebagai ibadah dan separuh
-            agama yang sempurna
-          </li>
-          <li>
-            Mempersiapkan Anda untuk membangun rumah tangga yang kokoh dan
-            bahagia
-          </li>
-          <li>
-            Memberikan bekal ilmu dan keterampilan praktis untuk menghadapi
-            berbagai tantangan dalam pernikahan
-          </li>
-          <li>Memperkuat komitmen dan komunikasi dengan pasangan</li>
-        </ul>
+        <div class="ml-2 flex list-disc flex-col gap-4 px-4 text-xl">
+          {{ item.deskripsi }}
+        </div>
       </div>
       <div>
         <h2 class="mt-2 text-2xl font-semibold">Waktu & Tempat</h2>
         <ul class="ml-2 flex list-disc flex-col gap-4 px-4 text-xl">
-          <li>Kecamatan Kebun Kacang, Kota Bogor</li>
-          <li>28 Oktober 2024: 22.00 - 02.00</li>
+          <li>{{ item.tempat }}</li>
+          <li>{{ item.waktu }}</li>
         </ul>
       </div>
       <div>

@@ -5,6 +5,12 @@
     layout: "landing",
   });
 
+  const { data } = useFetch(`${APIBASE}/bootcamp`, {
+    query: {
+      limit: 100,
+    },
+  });
+
   const carouselItem = [
     {
       image: "/1.webp",
@@ -41,37 +47,36 @@
   <div class="bg-eastern-blue-200 bg-cover px-12 py-12">
     <div class="px-8 text-4xl font-semibold">Daftar Bootcamp</div>
   </div>
-  <main class="mb-8 px-12">
-    <div class="mt-8 mb-4 px-8">Menampilkan 1-4 dari 4 hasil</div>
-    <!-- UCarousel wrapper -->
+  <main class="mb-8 px-12 container">
     <UCarousel
-      class="px-4"
-      :items="carouselItem"
+      v-slot="{ item }"
+      arrows
+      class="mt-8"
+      :items="data?.data"
       :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/4 px-2' }"
     >
-      <template #default="{ item, index }">
-        <UCard
-          :key="index"
-          class="flex h-full flex-col rounded-none p-0 text-black"
-        >
-          <div class="flex h-full flex-col justify-between gap-4">
-            <NuxtLink
-              :to="`/product/${index}`"
-              class="flex flex-col gap-4 transition hover:opacity-80"
-            >
-              <NuxtImg :src="item.image" alt="produk" class="max-h-128" />
-              <h1 class="text-lg font-bold">
-                Rahasia Keluarga Bahagia: Keluarga, Anak
-              </h1>
-              <h3 class="font-semibold">{{ formatRupiah(item.harga) }}</h3>
-            </NuxtLink>
+      <UCard class="flex h-full flex-col rounded-none p-0 text-black">
+        <div class="flex h-full flex-col justify-between gap-4">
+          <NuxtLink
+            :to="`/product/${item.id}`"
+            class="flex flex-col gap-4 transition hover:opacity-80"
+          >
+            <NuxtImg
+              :src="item.foto"
+              alt="produk"
+              class="max-h-128 aspect-108/135"
+            />
+            <h1 class="text-lg font-bold">
+              {{ item.judul }}
+            </h1>
+            <h3 class="font-semibold">{{ formatRupiah(item.harga) }}</h3>
+          </NuxtLink>
 
-            <UButton class="bg-primary w-max px-4 py-2 text-black">
-              Tambahkan ke keranjang
-            </UButton>
-          </div>
-        </UCard>
-      </template>
+          <UButton class="bg-primary w-max px-4 py-2">
+            Tambahkan ke keranjang
+          </UButton>
+        </div>
+      </UCard>
     </UCarousel>
   </main>
 </template>

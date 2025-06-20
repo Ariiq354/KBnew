@@ -1,6 +1,6 @@
 <script setup lang="ts">
   const constantStore = useConstantStore();
-  constantStore.setTitle("Member");
+  constantStore.setTitle("Dashboard / Member");
 
   const { data, refresh } = useFetch(`${APIBASE}/anggota/pasangan`);
 
