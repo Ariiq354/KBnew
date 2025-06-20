@@ -1,13 +1,13 @@
-import { listAllTaaruf } from "~~/server/services/taaruf/taaruf.service";
 import { OTaarufList } from "~~/server/services/taaruf/dto/list-taaruf.dto";
+import { listUserTaaruf } from "~~/server/services/taaruf/taaruf.service";
 
 export default defineEventHandler(async (event) => {
-  adminGuard(event);
+  const user = authGuard(event);
   const query = await getValidatedQuery(event, (query) =>
     OTaarufList.parse(query)
   );
 
-  const data = await listAllTaaruf(query);
+  const data = await listUserTaaruf(user.id, query);
 
   const metadata = {
     page: query.page,

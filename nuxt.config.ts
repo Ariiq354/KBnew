@@ -47,5 +47,8 @@ export default defineNuxtConfig({
     prerender: {
       routes: ["/", "/contact", "/product", "/about"],
     },
+    experimental: {
+      openAPI: true,
+    },
   },
 });

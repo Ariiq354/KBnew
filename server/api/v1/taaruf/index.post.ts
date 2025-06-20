@@ -3,14 +3,14 @@ import { OTaarufCreate } from "~~/server/services/taaruf/dto/create-taaruf.dto";
 import { createTaaruf } from "~~/server/services/taaruf/taaruf.service";
 
 export default defineEventHandler(async (event) => {
-  const user = adminGuard(event);
+  const user = authGuard(event);
   const result = await readValidatedBody(event, (b) => OTaarufCreate.parse(b));
 
   const dituju = await getAnggotaById(result.idDituju);
   if (!user?.isAvailable || !dituju.isAvailable) {
     throw createError({
       statusCode: 400,
-      message: "Anggota sudah tidak available",
+      message: "Anggota atau Anda sudah tidak available",
     });
   }
 

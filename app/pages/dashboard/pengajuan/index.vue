@@ -1,40 +1,31 @@
 <script setup lang="ts">
+  import { columns } from "./_constants";
+
   const constantStore = useConstantStore();
-  constantStore.setTitle("Member");
+  constantStore.setTitle("Dashboard / Pengajuan Taaruf");
 
-  const { data, refresh } = useFetch(`${APIBASE}/anggota/pasangan`);
+  const query = reactive({
+    search: "",
+    page: 1,
+  });
+  const searchDebounced = useDebounceFn((v) => {
+    query.search = v;
+  }, 300);
+  const { data, status } = await useFetch(`${APIBASE}/taaruf/user`, {
+    query,
+  });
 
-  const modalState = ref<ExtractObjectType<typeof data.value>>();
-  const modalOpen = ref(false);
+  const modalState = ref<ExtractObjectType<typeof data.value>["dituju"]>();
 
-  function handleClick(id: number) {
-    modalState.value = data.value?.data.find((item) => item.id === id);
+  const modalOpen = ref();
+  function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
-  }
-
-  const isLoading = ref(false);
-  async function handleSubmit(id: number) {
-    isLoading.value = true;
-    try {
-      await $fetch(`${APIBASE}/taaruf`, {
-        method: "POST",
-        body: {
-          idDituju: id,
-        },
-      });
-      modalOpen.value = false;
-      await refresh();
-      useToastSuccess("Permohonan Berhasil", "Proses akan segera diurus admin");
-    } catch (error: any) {
-      useToastError(String(error.statusCode), error.data.message);
-    } finally {
-      isLoading.value = false;
-    }
+    modalState.value = itemData.dituju;
   }
 </script>
 
 <template>
-  <Title>Pencarian Member</Title>
+  <Title>Dashboard | Pengajuan</Title>
   <main>
     <UModal v-model:open="modalOpen" title="Detail Member">
       <template #body>
@@ -138,80 +129,40 @@
       <template #footer>
         <div class="flex w-full justify-end gap-2">
           <UButton variant="soft" @click="modalOpen = false"> Tutup </UButton>
-          <UButton :loading="isLoading" @click="handleSubmit(modalState!.id)">
-            Ajukan Taaruf
-          </UButton>
         </div>
       </template>
     </UModal>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-      <UCard v-for="(item, index) in data?.data" :key="index">
-        <div class="flex flex-col">
-          <div class="flex gap-4">
-            <div>
-              <div
-                class="flex aspect-square w-32 items-center justify-center overflow-hidden bg-gray-300 dark:bg-gray-700"
-              >
-                <NuxtImg :src="item.foto!" />
-              </div>
-              <p
-                class="bg-eastern-blue-100 mt-4 rounded-md p-2 text-center text-lg font-bold shadow-lg"
-              >
-                {{ item.kodeUser }}
-              </p>
-            </div>
-            <div class="flex flex-col justify-center">
-              <h1 class="text-lg font-bold">{{ item.namaAnggota }}</h1>
-              <h2 class="text-primary">{{ item.deskripsi }}</h2>
-            </div>
-          </div>
-          <div class="mt-4">
-            <table class="w-full">
-              <tbody>
-                <tr class="border-y border-gray-200 dark:border-gray-700">
-                  <td>Status</td>
-                  <td>:</td>
-                  <td class="py-2 pl-4">{{ item.statusKawin }}</td>
-                </tr>
-                <tr class="border-y border-gray-200 dark:border-gray-700">
-                  <td>Tanggal Lahir</td>
-                  <td>:</td>
-                  <td class="py-2 pl-4">{{ item.tanggalLahir }}</td>
-                </tr>
-                <tr class="border-y border-gray-200 dark:border-gray-700">
-                  <td>Suku</td>
-                  <td>:</td>
-                  <td class="py-2 pl-4">{{ item.suku }}</td>
-                </tr>
-                <tr class="border-y border-gray-200 dark:border-gray-700">
-                  <td>Pendidikan</td>
-                  <td>:</td>
-                  <td class="py-2 pl-4">{{ item.pendidikan }}</td>
-                </tr>
-                <tr class="border-y border-gray-200 dark:border-gray-700">
-                  <td>Pekerjaan</td>
-                  <td>:</td>
-                  <td class="py-2 pl-4">{{ item.pekerjaan }}</td>
-                </tr>
-                <tr class="border-y border-gray-200 dark:border-gray-700">
-                  <td>TB / BB</td>
-                  <td>:</td>
-                  <td class="py-2 pl-4">
-                    {{ item.tinggi + " cm" }} / {{ item.berat + " kg" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <UButton
-            variant="soft"
-            class="mt-12 flex w-full justify-center"
-            @click="handleClick(item.id)"
+    <UCard>
+      <div
+        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
+      >
+        <UInput
+          class="max-w-xs"
+          leading-icon="i-heroicons-magnifying-glass"
+          placeholder="Search..."
+          @update:model-value="searchDebounced"
+        />
+      </div>
+      <AppTable
+        v-model:page="query.page"
+        :columns="columns"
+        :data="data?.data"
+        :loading="status === 'pending'"
+        :total="data?.metadata.total"
+        enumerate
+        pagination
+        action
+        @edit-click="clickUpdate"
+      >
+        <template #noTelepon-cell="{ row }">
+          <NuxtLink
+            :href="`https://wa.me/${row.original.noTelepon}`"
+            target="_blank"
           >
-            Lihat Detail
-          </UButton>
-        </div>
-      </UCard>
-    </div>
+            {{ row.original.noTelepon }}
+          </NuxtLink>
+        </template>
+      </AppTable>
+    </UCard>
   </main>
 </template>

@@ -33,6 +33,56 @@ export async function listAllTaaruf({ limit, page, search }: TTaarufList) {
       status: taarufTable.status,
       idPenuju: taarufTable.idPenuju,
       idDituju: taarufTable.idDituju,
+      dituju: {
+        namaAnggota: userAsDituju.name,
+        kodeUser: userDtlAsDituju.kodeUser,
+        statusKawin: userDtlAsDituju.statusKawin,
+        tanggalLahir: userDtlAsDituju.tanggalLahir,
+        kelurahan: userDtlAsDituju.kelurahan,
+        kecamatan: userDtlAsDituju.kecamatan,
+        kota: userDtlAsDituju.kota,
+        provinsi: userDtlAsDituju.provinsi,
+        gender: userDtlAsDituju.gender,
+        namaAyah: userDtlAsDituju.namaAyah,
+        anakKe: userDtlAsDituju.anakKe,
+        dariBersaudara: userDtlAsDituju.dariBersaudara,
+        suku: userDtlAsDituju.suku,
+        pendidikan: userDtlAsDituju.pendidikan,
+        pekerjaan: userDtlAsDituju.pekerjaan,
+        jurusan: userDtlAsDituju.jurusan,
+        tinggi: userDtlAsDituju.tinggi,
+        berat: userDtlAsDituju.berat,
+        hobi: userDtlAsDituju.hobi,
+        instagram: userDtlAsDituju.instagram,
+        kriteria: userDtlAsDituju.kriteria,
+        deskripsi: userDtlAsDituju.deskripsi,
+        foto: userDtlAsDituju.foto,
+      },
+      penuju: {
+        namaAnggota: userAsPenuju.name,
+        kodeUser: userDtlAsPenuju.kodeUser,
+        statusKawin: userDtlAsPenuju.statusKawin,
+        tanggalLahir: userDtlAsPenuju.tanggalLahir,
+        kelurahan: userDtlAsPenuju.kelurahan,
+        kecamatan: userDtlAsPenuju.kecamatan,
+        kota: userDtlAsPenuju.kota,
+        provinsi: userDtlAsPenuju.provinsi,
+        gender: userDtlAsPenuju.gender,
+        namaAyah: userDtlAsPenuju.namaAyah,
+        anakKe: userDtlAsPenuju.anakKe,
+        dariBersaudara: userDtlAsPenuju.dariBersaudara,
+        suku: userDtlAsPenuju.suku,
+        pendidikan: userDtlAsPenuju.pendidikan,
+        pekerjaan: userDtlAsPenuju.pekerjaan,
+        jurusan: userDtlAsPenuju.jurusan,
+        tinggi: userDtlAsPenuju.tinggi,
+        berat: userDtlAsPenuju.berat,
+        hobi: userDtlAsPenuju.hobi,
+        instagram: userDtlAsPenuju.instagram,
+        kriteria: userDtlAsPenuju.kriteria,
+        deskripsi: userDtlAsPenuju.deskripsi,
+        foto: userDtlAsPenuju.foto,
+      },
     })
     .from(taarufTable)
     .leftJoin(userAsPenuju, eq(taarufTable.idPenuju, userAsPenuju.id))
@@ -53,6 +103,76 @@ export async function listAllTaaruf({ limit, page, search }: TTaarufList) {
     };
   } catch (error) {
     console.error("Failed to get List Taaruf", error);
+    throw InternalError;
+  }
+}
+
+export async function listUserTaaruf(
+  userId: number,
+  { limit, page, search }: TTaarufList
+) {
+  const offset = (page - 1) * limit;
+  const userAsDituju = alias(user, "user_dituju");
+  const userDtlAsDituju = alias(userDtlTable, "detail_dituju");
+
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(taarufTable.idPenuju, userId),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+
+    conditions.push(or(like(userAsDituju.name, searchCondition)));
+  }
+
+  const query = db
+    .select({
+      id: taarufTable.id,
+      status: taarufTable.status,
+      idDituju: taarufTable.idDituju,
+      dituju: {
+        namaAnggota: userAsDituju.name,
+        kodeUser: userDtlAsDituju.kodeUser,
+        statusKawin: userDtlAsDituju.statusKawin,
+        tanggalLahir: userDtlAsDituju.tanggalLahir,
+        kelurahan: userDtlAsDituju.kelurahan,
+        kecamatan: userDtlAsDituju.kecamatan,
+        kota: userDtlAsDituju.kota,
+        provinsi: userDtlAsDituju.provinsi,
+        gender: userDtlAsDituju.gender,
+        namaAyah: userDtlAsDituju.namaAyah,
+        anakKe: userDtlAsDituju.anakKe,
+        dariBersaudara: userDtlAsDituju.dariBersaudara,
+        suku: userDtlAsDituju.suku,
+        pendidikan: userDtlAsDituju.pendidikan,
+        pekerjaan: userDtlAsDituju.pekerjaan,
+        jurusan: userDtlAsDituju.jurusan,
+        tinggi: userDtlAsDituju.tinggi,
+        berat: userDtlAsDituju.berat,
+        hobi: userDtlAsDituju.hobi,
+        instagram: userDtlAsDituju.instagram,
+        kriteria: userDtlAsDituju.kriteria,
+        deskripsi: userDtlAsDituju.deskripsi,
+        foto: userDtlAsDituju.foto,
+      },
+    })
+    .from(taarufTable)
+    .leftJoin(userAsDituju, eq(taarufTable.idDituju, userAsDituju.id))
+    .leftJoin(userDtlAsDituju, eq(userAsDituju.id, userDtlAsDituju.userId))
+    .where(and(...conditions))
+    .orderBy(desc(taarufTable.createdAt))
+    .$dynamic();
+
+  try {
+    const total = await getTotalQuery(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List User Taaruf", error);
     throw InternalError;
   }
 }
