@@ -35,14 +35,17 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   );
 
   async function init() {
+    loading.value = true;
     const data = await authClient.useSession(useFetch);
     session.value = data;
+    loading.value = false;
   }
 
   const user = computed(() => session.value?.data?.user);
-  const loading = computed(() => session.value?.isPending);
+  const loading = ref(false);
 
   async function signIn(body: TSignIn) {
+    loading.value = true;
     await authClient.signIn.email({
       ...body,
       fetchOptions: {
@@ -57,9 +60,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         },
       },
     });
+    loading.value = false;
   }
 
   async function signUp(body: TSignUp) {
+    loading.value = true;
     await authClient.signUp.email({
       ...body,
       fetchOptions: {
@@ -72,9 +77,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         },
       },
     });
+    loading.value = false;
   }
 
   async function signOut() {
+    loading.value = true;
     await authClient.signOut({
       fetchOptions: {
         onError: (body) => {
@@ -86,6 +93,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         },
       },
     });
+    loading.value = false;
   }
 
   async function hasPermission(body: TStatement) {
@@ -97,6 +105,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function updateUser(body: { name?: string; noTelepon?: string }) {
+    loading.value = true;
     await authClient.updateUser({
       ...body,
       fetchOptions: {
@@ -108,6 +117,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         },
       },
     });
+    loading.value = false;
   }
 
   return {
