@@ -18,36 +18,6 @@
   });
 
   const item = computed(() => data.value!.data!);
-  const carouselItem = [
-    {
-      image: "/1.webp",
-      title: "lorem ipsum",
-      harga: "200000",
-      waktu: "30 Juni 2024",
-      tempat: "bogor",
-    },
-    {
-      image: "/2.webp",
-      title: "lorem ipsum",
-      harga: "200000",
-      waktu: "30 Juni 2024",
-      tempat: "bogor",
-    },
-    {
-      image: "/3.webp",
-      title: "lorem ipsum",
-      harga: "200000",
-      waktu: "30 Juni 2024",
-      tempat: "bogor",
-    },
-    {
-      image: "/4.webp",
-      title: "lorem ipsum",
-      harga: "200000",
-      waktu: "30 Juni 2024",
-      tempat: "bogor",
-    },
-  ];
 </script>
 
 <template>

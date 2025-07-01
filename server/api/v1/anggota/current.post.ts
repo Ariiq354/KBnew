@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  let fields: Record<string, string> = {};
+  const fields: Record<string, string> = {};
 
   for (const part of result) {
     if (part.filename) {

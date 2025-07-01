@@ -76,7 +76,7 @@
     <LazyUModal
       v-model:open="modalOpen"
       :title="(state.id ? 'Edit' : 'Tambah') + ' Diskon'"
-      class="min-w-4xl"
+      class="min-w-2xl"
     >
       <template #body>
         <UForm
@@ -97,7 +97,11 @@
             />
           </UFormField>
           <UFormField label="Batas Waktu" name="batasWaktu">
-            <UInput v-model="state.batasWaktu" :disabled="isLoading" />
+            <UInput
+              v-model="state.batasWaktu"
+              :disabled="isLoading"
+              type="date"
+            />
           </UFormField>
           <UFormField label="Batas Pemakai" name="batasPemakai">
             <UInput

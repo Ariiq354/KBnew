@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  let fields: Record<string, string> = {};
+  const fields: Record<string, string> = {};
   let newFileUrl = "";
 
   for (const part of result) {

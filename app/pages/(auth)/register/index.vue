@@ -25,8 +25,8 @@
           <div
             class="text-primary-500 dark:text-primary-400 text-2xl font-bold tracking-widest"
           >
-            BERKAH
-            <span class="text-black dark:text-white">AMANAH</span>
+            KELUARGA
+            <span class="text-black dark:text-white">BAHAGIA</span>
           </div>
           <div class="mt-2 text-center">
             Sudah Punya Akun?

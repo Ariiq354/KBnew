@@ -29,6 +29,11 @@
             icon: "i-heroicons-computer-desktop",
           },
           {
+            label: "Daftar Diskon",
+            to: "/dashboard/diskon",
+            icon: "i-heroicons-percent-badge",
+          },
+          {
             label: "Pengajuan Taaruf",
             to: "/dashboard/list-taaruf",
             icon: "i-heroicons-users",
@@ -40,7 +45,7 @@
         label: "Main",
         type: "label",
       },
-      ...(isActive
+      ...(isActive.value
         ? ([
             {
               label: "Pencarian Pasangan",

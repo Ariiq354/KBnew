@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { z } from "zod/v4-mini";
-
   useSeoMeta({
     description: "Keluarga Bahagia",
   });

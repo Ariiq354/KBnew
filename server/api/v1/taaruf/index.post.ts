@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const result = await readValidatedBody(event, (b) => OTaarufCreate.parse(b));
 
   const dituju = await getAnggotaById(result.idDituju);
-  if (!user?.isAvailable || !dituju.isAvailable) {
+  if (!user?.isAvailable || !dituju?.isAvailable) {
     throw createError({
       statusCode: 400,
       message: "Anggota atau Anda sudah tidak available",

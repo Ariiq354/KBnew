@@ -53,8 +53,8 @@
       :center="center"
       :zoom="14"
       style="width: 100%; height: 100%"
-      @click="onMapClick"
       class="rounded-md"
+      @click="onMapClick"
     >
       <AdvancedMarker v-if="marker" :options="{ position: marker }" />
     </GoogleMap>

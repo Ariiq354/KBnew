@@ -77,9 +77,9 @@
         <h1 class="font-bold">Profil Anda</h1>
       </template>
       <UForm
+        id="form-profil"
         :schema="schema"
         :state="state"
-        id="form-profil"
         class="space-y-4"
         @submit="onSubmit"
       >
@@ -117,6 +117,7 @@
           <UFormField label="Jenis Kelamin" name="gender">
             <USelectMenu
               v-model="state.gender"
+              placeholder="Select Jenis Kelamin"
               :disabled="isLoading"
               :items="genderOptions"
               label-key="name"
@@ -178,6 +179,7 @@
           <UFormField label="Pendidikan Terakhir" name="pendidikan">
             <USelectMenu
               v-model="state.pendidikan"
+              placeholder="Select Pendidikan"
               :items="pendidikanOptions"
               :disabled="isLoading"
             />

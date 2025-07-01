@@ -202,7 +202,7 @@
         <USlider v-model="umurRange" :tooltip="{ delayDuration: 100 }" />
       </UFormField>
       <div class="w-full flex mt-4 justify-end">
-        <UButton @click="() => refresh()" :loading="status == 'pending'">
+        <UButton :loading="status == 'pending'" @click="() => refresh()">
           Filter
         </UButton>
       </div>

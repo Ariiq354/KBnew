@@ -1,4 +1,3 @@
-import { z } from "zod/v4-mini";
 import {
   deleteBootcamp,
   getBootcampById,
