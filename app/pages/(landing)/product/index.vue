@@ -5,7 +5,7 @@
     layout: "landing",
   });
 
-  const { data } = useFetch(`${APIBASE}/bootcamp`, {
+  const { data } = await useFetch(`${APIBASE}/bootcamp`, {
     query: {
       limit: 100,
     },

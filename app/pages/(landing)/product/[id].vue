@@ -7,7 +7,7 @@
   const route = useRoute();
   const id = Number(route.params.id);
 
-  const { data } = useFetch(`${APIBASE}/bootcamp/${id}`);
+  const { data } = await useFetch(`${APIBASE}/bootcamp/${id}`);
 
   onMounted(() => {
     if (!data.value?.data) {

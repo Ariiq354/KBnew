@@ -6,15 +6,26 @@
     pendidikanOptions,
     schema,
     statusKawinOptions,
-    type Schema,
   } from "./_constants";
+  import type { Schema } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   constantStore.setTitle("Dashboard / Profil");
 
-  const { data } = useFetch(`${APIBASE}/anggota/current`);
+  const { data } = await useFetch(`${APIBASE}/anggota/current`);
   const state = ref(getInitialFormData());
+
+  const {
+    dataKabupaten,
+    dataKecamatan,
+    dataKelurahan,
+    dataProvinsi,
+    statusKabupaten,
+    statusKecamatan,
+    statusKelurahan,
+    statusProvinsi,
+  } = useWilayahOptions(state);
 
   watchEffect(() => {
     if (data.value?.data?.detail) {
@@ -130,7 +141,10 @@
           <UFormField label="Status Kawin" name="statusKawin">
             <USelectMenu
               v-model="state.statusKawin"
+              placeholder="Select Status Kawin"
               :items="statusKawinOptions"
+              value-key="name"
+              label-key="name"
               :disabled="isLoading"
             />
           </UFormField>
@@ -162,16 +176,48 @@
             </UFormField>
           </div>
           <UFormField label="Provinsi" name="provinsi">
-            <UInput v-model="state.provinsi" :disabled="isLoading" />
+            <USelectMenu
+              v-model="state.provinsi"
+              placeholder="Select Provinsi"
+              :items="dataProvinsi?.data"
+              value-key="name"
+              label-key="name"
+              :loading="statusProvinsi === 'pending'"
+              :disabled="isLoading"
+            />
           </UFormField>
           <UFormField label="Kabupaten / Kota" name="kota">
-            <UInput v-model="state.kota" :disabled="isLoading" />
+            <USelectMenu
+              v-model="state.kota"
+              placeholder="Select Kabupaten / Kota"
+              :items="dataKabupaten?.data"
+              value-key="name"
+              label-key="name"
+              :loading="statusKabupaten === 'pending'"
+              :disabled="isLoading"
+            />
           </UFormField>
           <UFormField label="Kecamatan" name="kecamatan">
-            <UInput v-model="state.kecamatan" :disabled="isLoading" />
+            <USelectMenu
+              v-model="state.kecamatan"
+              placeholder="Select Kecamatan"
+              :items="dataKecamatan?.data"
+              value-key="name"
+              label-key="name"
+              :loading="statusKecamatan === 'pending'"
+              :disabled="isLoading"
+            />
           </UFormField>
           <UFormField label="Kelurahan / Desa" name="kelurahan">
-            <UInput v-model="state.kelurahan" :disabled="isLoading" />
+            <USelectMenu
+              v-model="state.kelurahan"
+              placeholder="Select Kelurahan / Desa"
+              :items="dataKelurahan?.data"
+              value-key="name"
+              label-key="name"
+              :loading="statusKelurahan === 'pending'"
+              :disabled="isLoading"
+            />
           </UFormField>
           <UFormField label="Suku" name="suku">
             <UInput v-model="state.suku" :disabled="isLoading" />
@@ -180,6 +226,8 @@
             <USelectMenu
               v-model="state.pendidikan"
               placeholder="Select Pendidikan"
+              value-key="name"
+              label-key="name"
               :items="pendidikanOptions"
               :disabled="isLoading"
             />

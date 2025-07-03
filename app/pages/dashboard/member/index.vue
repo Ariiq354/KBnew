@@ -14,6 +14,8 @@
     suku: undefined,
     umurMin: 0,
     umurMax: 100,
+    page: 1,
+    limit: 3,
   });
 
   const umurRange = computed({
@@ -26,10 +28,24 @@
     },
   });
 
-  const { data, refresh, status } = useFetch(`${APIBASE}/anggota/pasangan`, {
-    query,
-    watch: false,
-  });
+  const { data, refresh, status } = await useFetch(
+    `${APIBASE}/anggota/pasangan`,
+    {
+      query,
+      watch: false,
+    }
+  );
+
+  const {
+    dataKabupaten,
+    dataKecamatan,
+    dataKelurahan,
+    dataProvinsi,
+    statusKabupaten,
+    statusKecamatan,
+    statusProvinsi,
+    statusKelurahan,
+  } = useWilayahOptions(query);
 
   const modalState = ref<ExtractObjectType<typeof data.value>>();
   const modalOpen = ref(false);
@@ -62,7 +78,7 @@
 
 <template>
   <Title>Pencarian Member</Title>
-  <main>
+  <main class="flex flex-col gap-4 items-center">
     <UModal v-model:open="modalOpen" title="Detail Member">
       <template #body>
         <div class="flex gap-4">
@@ -171,28 +187,65 @@
         </div>
       </template>
     </UModal>
-    <UCard>
+    <UCard class="w-full">
       <div class="grid grid-cols-4 gap-4 mb-4">
         <UFormField label="Status Kawin">
           <USelectMenu
             v-model="query.statusKawin"
+            placeholder="Select Status Kawin"
             :items="statusKawinOptions"
           />
         </UFormField>
         <UFormField label="Pendidikan">
-          <USelectMenu v-model="query.pendidikan" :items="pendidikanOptions" />
+          <USelectMenu
+            v-model="query.pendidikan"
+            placeholder="Select Pendidikan"
+            :items="pendidikanOptions"
+          />
         </UFormField>
         <UFormField label="Provinsi">
-          <UInput v-model="query.provinsi" />
+          <USelectMenu
+            v-model="query.provinsi"
+            placeholder="Select Provinsi"
+            :items="dataProvinsi?.data"
+            value-key="name"
+            label-key="name"
+            :loading="statusProvinsi === 'pending'"
+            :disabled="isLoading"
+          />
         </UFormField>
         <UFormField label="Kabupaten / Kota">
-          <UInput v-model="query.kota" />
+          <USelectMenu
+            v-model="query.kota"
+            placeholder="Select Kota"
+            :items="dataKabupaten?.data"
+            value-key="name"
+            label-key="name"
+            :loading="statusKabupaten === 'pending'"
+            :disabled="isLoading"
+          />
         </UFormField>
         <UFormField label="Kecamatan">
-          <UInput v-model="query.kecamatan" />
+          <USelectMenu
+            v-model="query.kecamatan"
+            placeholder="Select Kecamatan"
+            :items="dataKecamatan?.data"
+            value-key="name"
+            label-key="name"
+            :loading="statusKecamatan === 'pending'"
+            :disabled="isLoading"
+          />
         </UFormField>
         <UFormField label="Kelurahan / Desa">
-          <UInput v-model="query.kelurahan" />
+          <USelectMenu
+            v-model="query.kelurahan"
+            placeholder="Select Kelurahan"
+            :items="dataKelurahan?.data"
+            value-key="name"
+            label-key="name"
+            :loading="statusKelurahan === 'pending'"
+            :disabled="isLoading"
+          />
         </UFormField>
         <UFormField label="Suku">
           <UInput v-model="query.suku" />
@@ -207,7 +260,7 @@
         </UButton>
       </div>
     </UCard>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 w-full">
       <UCard v-for="(item, index) in data?.data" :key="index">
         <div class="flex flex-col">
           <div class="flex gap-4">
@@ -276,5 +329,11 @@
         </div>
       </UCard>
     </div>
+    <UPagination
+      v-model:page="query.page"
+      :total="data?.metadata.total"
+      :items-per-page="query.limit"
+      @update:page="async () => await refresh()"
+    />
   </main>
 </template>

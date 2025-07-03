@@ -104,18 +104,12 @@
       />
     </ClientOnly>
   </aside>
-  <div
-    v-if="!constantStore.sidebarShow"
-    class="fixed top-0 left-0 z-10 h-full w-full bg-black/20 md:hidden"
-    @click="constantStore.toggleSidebar"
-  />
   <ClientOnly>
     <USlideover
       v-if="!isDesktop"
+      v-model:open="constantStore.sidebarShow"
       side="left"
-      :open="constantStore.sidebarShow"
       title="Menu"
-      @update:open="() => constantStore.toggleSidebar"
     >
       <template #body>
         <aside class="overflow-auto">

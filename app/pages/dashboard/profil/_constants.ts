@@ -25,20 +25,20 @@ export const schema = z.object({
 });
 
 export const statusKawinOptions = [
-  "Belum Pernah Menikah",
-  "Janda / Duda",
-  "Sudah Menikah",
+  { name: "Belum Pernah Menikah" },
+  { name: "Janda / Duda" },
+  { name: "Sudah Menikah" },
 ];
 
 export const pendidikanOptions = [
-  "Tidak Sekolah",
-  "SD/Sederajat",
-  "SMP/Sederajat",
-  "SMA/SMK/Sederajat",
-  "Diploma (D1/D2/D3)",
-  "Sarjana (S1)",
-  "Magister (S2)",
-  "Doktor (S3)",
+  { name: "Tidak Sekolah" },
+  { name: "SD/Sederajat" },
+  { name: "SMP/Sederajat" },
+  { name: "SMA/SMK/Sederajat" },
+  { name: "Diploma (D1/D2/D3)" },
+  { name: "Sarjana (S1)" },
+  { name: "Magister (S2)" },
+  { name: "Doktor (S3)" },
 ];
 
 export const genderOptions = [
@@ -64,10 +64,10 @@ export const getInitialFormData = (): Schema => ({
   namaAyah: "",
   anakKe: 0,
   dariBersaudara: 0,
-  jurusan: "-",
+  jurusan: "",
   suku: "",
   pendidikan: "",
-  pekerjaan: "-",
+  pekerjaan: "",
   tinggi: 0,
   berat: 0,
   hobi: "",
