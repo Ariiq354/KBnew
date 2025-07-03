@@ -16,6 +16,12 @@
   const { data } = await useFetch(`${APIBASE}/anggota/current`);
   const state = ref(getInitialFormData());
 
+  watchEffect(() => {
+    if (data.value?.data?.detail) {
+      state.value = data.value.data?.detail;
+    }
+  });
+
   const {
     dataKabupaten,
     dataKecamatan,
@@ -26,12 +32,6 @@
     statusKelurahan,
     statusProvinsi,
   } = useWilayahOptions(state);
-
-  watchEffect(() => {
-    if (data.value?.data?.detail) {
-      state.value = data.value.data?.detail;
-    }
-  });
 
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {

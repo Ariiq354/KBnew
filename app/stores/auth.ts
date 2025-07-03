@@ -1,7 +1,8 @@
 import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/vue";
 import type { auth } from "~~/server/utils/auth";
-import { ac, admin, user, type TStatement } from "~~/shared/permission";
+import { ac, admin, user  } from "~~/shared/permission";
+import type {TStatement} from "~~/shared/permission";
 
 const authClient = createAuthClient({
   plugins: [

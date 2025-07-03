@@ -4,9 +4,10 @@
   import {
     columns,
     getInitialFormData,
-    schema,
-    type Schema,
+    schema
+    
   } from "./_constants";
+import type {Schema} from "./_constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Daftar Bootcamp");

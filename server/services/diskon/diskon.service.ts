@@ -1,4 +1,5 @@
-import { and, desc, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, desc, eq, inArray, like, or  } from "drizzle-orm";
+import type {SQL} from "drizzle-orm";
 import { db } from "~~/server/database";
 import { diskonTable } from "~~/server/database/schema/diskon";
 import type { TDeleteDto } from "../common/dto";

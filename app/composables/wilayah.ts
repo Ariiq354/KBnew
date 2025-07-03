@@ -1,13 +1,17 @@
 export function useWilayahOptions(state: Ref<any>) {
+  const safeProvinsi = computed(() => state.value?.provinsi || "");
+  const safeKota = computed(() => state.value?.kota || "");
+  const safeKecamatan = computed(() => state.value?.kecamatan || "");
+
   // --- Provinsi ---
   const { data: dataProvinsi, status: statusProvinsi } = useFetch(
     `${APIBASE}/options/provinsi`
   );
+
   const provinsiId = computed(
     () =>
-      dataProvinsi.value?.data.find(
-        (item) => item.name === state.value.provinsi
-      )?.code
+      dataProvinsi.value?.data.find((item) => item.name === safeProvinsi.value)
+        ?.code
   );
 
   // --- Kabupaten ---
@@ -22,7 +26,7 @@ export function useWilayahOptions(state: Ref<any>) {
 
   const kabupatenId = computed(
     () =>
-      dataKabupaten.value?.data.find((item) => item.name === state.value.kota)
+      dataKabupaten.value?.data.find((item) => item.name === safeKota.value)
         ?.code
   );
 
@@ -39,7 +43,7 @@ export function useWilayahOptions(state: Ref<any>) {
   const kecamatanId = computed(
     () =>
       dataKecamatan.value?.data.find(
-        (item) => item.name === state.value.kecamatan
+        (item) => item.name === safeKecamatan.value
       )?.code
   );
 

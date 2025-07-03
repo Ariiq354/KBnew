@@ -1,4 +1,5 @@
-import { and, desc, eq, gte, like, lte, ne, or, type SQL } from "drizzle-orm";
+import { and, desc, eq, gte, like, lte, ne, or } from "drizzle-orm";
+import type { SQL } from "drizzle-orm";
 import type { TAnggotaList, TAnggotaPasangan } from "./dto/list-anggota.dto";
 import { user, userDtlTable } from "~~/server/database/schema/auth";
 import { db } from "~~/server/database";
@@ -151,9 +152,15 @@ export async function createAnggotaDetail(
 export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
   const offset = (param.page - 1) * param.limit;
   const today = new Date();
+
+  const reqUser = await db.query.userDtlTable.findFirst({
+    where: eq(userDtlTable.userId, id),
+  });
+
   const conditions: (SQL<unknown> | undefined)[] = [
     ne(user.email, "admin@gmail.com"),
     ne(user.id, id),
+    ne(userDtlTable.gender, reqUser!.gender),
     eq(user.isActive, true),
     eq(user.isAvailable, true),
   ];
