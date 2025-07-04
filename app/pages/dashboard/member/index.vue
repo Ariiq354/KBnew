@@ -14,6 +14,7 @@
     suku: undefined,
     umurMin: 0,
     umurMax: 100,
+    kodeUser: undefined,
     page: 1,
     limit: 3,
   });
@@ -35,6 +36,8 @@
       watch: false,
     }
   );
+
+  const { data: dataTaaruf } = await useFetch(`${APIBASE}/taaruf/user`);
 
   const {
     dataKabupaten,
@@ -181,7 +184,13 @@
       <template #footer>
         <div class="flex w-full justify-end gap-2">
           <UButton variant="soft" @click="modalOpen = false"> Tutup </UButton>
-          <UButton :loading="isLoading" @click="handleSubmit(modalState!.id)">
+          <UButton
+            v-if="
+              !dataTaaruf?.data.find((item) => item.idDituju === modalState?.id)
+            "
+            :loading="isLoading"
+            @click="handleSubmit(modalState!.id)"
+          >
             Ajukan Taaruf
           </UButton>
         </div>
@@ -249,6 +258,9 @@
         </UFormField>
         <UFormField label="Suku">
           <UInput v-model="query.suku" />
+        </UFormField>
+        <UFormField label="KodeUser">
+          <UInput v-model="query.kodeUser" />
         </UFormField>
       </div>
       <UFormField label="Umur">
@@ -322,6 +334,7 @@
           <UButton
             variant="soft"
             class="mt-12 flex w-full justify-center"
+            :loading="status == 'pending'"
             @click="handleClick(item.id)"
           >
             Lihat Detail

@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, like, lte, ne, or } from "drizzle-orm";
+import { and, desc, eq, gte, like, lte, ne, or, sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import type { TAnggotaList, TAnggotaPasangan } from "./dto/list-anggota.dto";
 import { user, userDtlTable } from "~~/server/database/schema/auth";
@@ -166,7 +166,16 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
   ];
 
   if (param.suku)
-    conditions.push(eq(userDtlTable.suku, `%${param.suku.toLowerCase()}%`));
+    conditions.push(
+      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`)
+    );
+  if (param.kodeUser)
+    conditions.push(
+      like(
+        sql`LOWER(${userDtlTable.kodeUser})`,
+        `%${param.kodeUser.toLowerCase()}%`
+      )
+    );
   if (param.statusKawin)
     conditions.push(eq(userDtlTable.statusKawin, param.statusKawin));
   if (param.pendidikan)

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { columns } from "./_constants";
+  import { columns, columnsPenuju } from "./_constants";
 
   const constantStore = useConstantStore();
+  const authStore = useAuthStore();
   constantStore.setTitle("Dashboard / Pengajuan Taaruf");
 
   const query = reactive({
@@ -15,6 +16,18 @@
     query,
   });
 
+  const dataDituju = computed(() =>
+    data.value?.data.filter(
+      (item) => item.idPenuju === Number(authStore.session!.data!.user.id)
+    )
+  );
+
+  const dataPenuju = computed(() =>
+    data.value?.data.filter(
+      (item) => item.idDituju === Number(authStore.session!.data!.user.id)
+    )
+  );
+
   const modalState = ref<ExtractObjectType<typeof data.value>["dituju"]>();
 
   const modalOpen = ref();
@@ -26,7 +39,7 @@
 
 <template>
   <Title>Dashboard | Pengajuan</Title>
-  <main>
+  <main class="flex flex-col gap-4">
     <UModal v-model:open="modalOpen" title="Detail Member">
       <template #body>
         <div class="flex gap-4">
@@ -132,21 +145,43 @@
         </div>
       </template>
     </UModal>
-    <UCard>
+    <UCard class="w-full">
       <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
+        class="flex justify-between border-b border-(--ui-border-accented) py-3.5"
       >
-        <UInput
-          class="max-w-xs"
-          leading-icon="i-heroicons-magnifying-glass"
-          placeholder="Search..."
-          @update:model-value="searchDebounced"
-        />
+        <h1 class="font-bold">Tabel Dituju</h1>
       </div>
       <AppTable
         v-model:page="query.page"
         :columns="columns"
-        :data="data?.data"
+        :data="dataDituju"
+        :loading="status === 'pending'"
+        :total="data?.metadata.total"
+        enumerate
+        pagination
+        action
+        @edit-click="clickUpdate"
+      >
+        <template #noTelepon-cell="{ row }">
+          <NuxtLink
+            :href="`https://wa.me/${row.original.noTelepon}`"
+            target="_blank"
+          >
+            {{ row.original.noTelepon }}
+          </NuxtLink>
+        </template>
+      </AppTable>
+    </UCard>
+    <UCard class="w-full">
+      <div
+        class="flex justify-between border-b border-(--ui-border-accented) py-3.5"
+      >
+        <h1 class="font-bold">Tabel Penuju</h1>
+      </div>
+      <AppTable
+        v-model:page="query.page"
+        :columns="columnsPenuju"
+        :data="dataPenuju"
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate

@@ -15,6 +15,7 @@ export const OAnggotaPasangan = z.extend(OPagination, {
   suku: z.optional(z.string()),
   umurMin: z.optional(z.coerce.number()),
   umurMax: z.optional(z.coerce.number()),
+  kodeUser: z.optional(z.string()),
 });
 
 export type TAnggotaList = z.infer<typeof OAnggotaList>;

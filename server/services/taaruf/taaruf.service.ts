@@ -1,5 +1,5 @@
-import { and, desc, eq, inArray, like, or  } from "drizzle-orm";
-import type {SQL} from "drizzle-orm";
+import { and, desc, eq, inArray, like, or } from "drizzle-orm";
+import type { SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { taarufTable } from "~~/server/database/schema/taaruf";
 import type { TDeleteDto } from "../common/dto";
@@ -113,17 +113,20 @@ export async function listUserTaaruf(
   { limit, page, search }: TTaarufList
 ) {
   const offset = (page - 1) * limit;
+  const userAsPenuju = alias(user, "user_penuju");
+  const userDtlAsPenuju = alias(userDtlTable, "detail_penuju");
   const userAsDituju = alias(user, "user_dituju");
   const userDtlAsDituju = alias(userDtlTable, "detail_dituju");
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(taarufTable.idPenuju, userId),
+    or(eq(taarufTable.idPenuju, userId), eq(taarufTable.idDituju, userId)),
   ];
 
   if (search) {
     const searchCondition = `%${search}%`;
 
     conditions.push(or(like(userAsDituju.name, searchCondition)));
+    conditions.push(or(like(userAsPenuju.name, searchCondition)));
   }
 
   const query = db
@@ -156,10 +159,38 @@ export async function listUserTaaruf(
         deskripsi: userDtlAsDituju.deskripsi,
         foto: userDtlAsDituju.foto,
       },
+      idPenuju: taarufTable.idPenuju,
+      penuju: {
+        namaAnggota: userAsPenuju.name,
+        kodeUser: userDtlAsPenuju.kodeUser,
+        statusKawin: userDtlAsPenuju.statusKawin,
+        tanggalLahir: userDtlAsPenuju.tanggalLahir,
+        kelurahan: userDtlAsPenuju.kelurahan,
+        kecamatan: userDtlAsPenuju.kecamatan,
+        kota: userDtlAsPenuju.kota,
+        provinsi: userDtlAsPenuju.provinsi,
+        gender: userDtlAsPenuju.gender,
+        namaAyah: userDtlAsPenuju.namaAyah,
+        anakKe: userDtlAsPenuju.anakKe,
+        dariBersaudara: userDtlAsPenuju.dariBersaudara,
+        suku: userDtlAsPenuju.suku,
+        pendidikan: userDtlAsPenuju.pendidikan,
+        pekerjaan: userDtlAsPenuju.pekerjaan,
+        jurusan: userDtlAsPenuju.jurusan,
+        tinggi: userDtlAsPenuju.tinggi,
+        berat: userDtlAsPenuju.berat,
+        hobi: userDtlAsPenuju.hobi,
+        instagram: userDtlAsPenuju.instagram,
+        kriteria: userDtlAsPenuju.kriteria,
+        deskripsi: userDtlAsPenuju.deskripsi,
+        foto: userDtlAsPenuju.foto,
+      },
     })
     .from(taarufTable)
     .leftJoin(userAsDituju, eq(taarufTable.idDituju, userAsDituju.id))
     .leftJoin(userDtlAsDituju, eq(userAsDituju.id, userDtlAsDituju.userId))
+    .leftJoin(userAsPenuju, eq(taarufTable.idPenuju, userAsPenuju.id))
+    .leftJoin(userDtlAsPenuju, eq(userAsPenuju.id, userDtlAsPenuju.userId))
     .where(and(...conditions))
     .orderBy(desc(taarufTable.createdAt))
     .$dynamic();
@@ -185,12 +216,18 @@ export async function createTaaruf(idPenuju: number, body: TTaarufCreate) {
       ...body,
     });
 
-    await db
-      .update(user)
-      .set({
-        isAvailable: false,
-      })
-      .where(inArray(user.id, [idPenuju, body.idDituju]));
+    const taaruf = await db.query.taarufTable.findMany({
+      where: eq(taarufTable.idDituju, body.idDituju),
+    });
+
+    if (taaruf.length === 3) {
+      await db
+        .update(user)
+        .set({
+          isAvailable: false,
+        })
+        .where(inArray(user.id, [idPenuju, body.idDituju]));
+    }
   } catch (error) {
     console.error("Failed to insert Taaruf", error);
     throw InternalError;
