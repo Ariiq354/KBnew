@@ -259,7 +259,7 @@
         <UFormField label="Suku">
           <UInput v-model="query.suku" />
         </UFormField>
-        <UFormField label="KodeUser">
+        <UFormField label="Kode User">
           <UInput v-model="query.kodeUser" />
         </UFormField>
       </div>
