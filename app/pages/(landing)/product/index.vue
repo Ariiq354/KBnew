@@ -22,14 +22,11 @@
       arrows
       class="mt-8"
       :items="data?.data"
-      :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/4 px-2' }"
+      :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3 px-2' }"
     >
       <UCard class="flex h-full flex-col rounded-none p-0 text-black">
         <div class="flex h-full flex-col justify-between gap-4">
-          <NuxtLink
-            :to="`/product/${item.id}`"
-            class="flex flex-col gap-4 transition hover:opacity-80"
-          >
+          <div class="flex flex-col gap-4 transition hover:opacity-80">
             <NuxtImg
               :src="item.foto"
               alt="produk"
@@ -39,10 +36,13 @@
               {{ item.judul }}
             </h1>
             <h3 class="font-semibold">{{ formatRupiah(item.harga) }}</h3>
-          </NuxtLink>
+          </div>
 
-          <UButton class="bg-primary w-max px-4 py-2">
-            Tambahkan ke keranjang
+          <UButton
+            :to="`/product/${item.id}`"
+            class="bg-primary w-max px-4 py-2"
+          >
+            Lihat Detail
           </UButton>
         </div>
       </UCard>

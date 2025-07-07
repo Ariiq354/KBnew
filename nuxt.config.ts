@@ -45,10 +45,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ["/", "/contact", "/product", "/about"],
-    },
-    experimental: {
-      openAPI: true,
+      routes: ["/", "/contact", "/about"],
     },
   },
 });

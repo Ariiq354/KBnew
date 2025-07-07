@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { formatRupiah } from "~/utils";
+  import DOMPurify from "dompurify";
 
   definePageMeta({
     layout: "landing",
@@ -18,6 +19,9 @@
   });
 
   const item = computed(() => data.value!.data!);
+  const sanitizedDeskripsi = computed(() => {
+    return DOMPurify.sanitize(item.value.deskripsi);
+  });
 </script>
 
 <template>
@@ -36,9 +40,8 @@
       </div>
       <div>
         <h2 class="mt-2 text-2xl font-semibold">Deskripsi</h2>
-        <div class="ml-2 flex list-disc flex-col gap-4 px-4 text-xl">
-          {{ item.deskripsi }}
-        </div>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div class="ml-2 prose prose-sm" v-html="sanitizedDeskripsi" />
       </div>
       <div>
         <h2 class="mt-2 text-2xl font-semibold">Waktu & Tempat</h2>

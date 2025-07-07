@@ -6,7 +6,7 @@
 
 <template>
   <main>
-    <div class="bg-[url('/kontakback.jpg')] bg-cover bg-center">
+    <div class="bg-[url('/kontakback.webp')] bg-cover bg-center">
       <div
         class="flex min-h-[90vh] w-full flex-col items-center gap-8 px-12 py-8 md:flex-row"
       >
