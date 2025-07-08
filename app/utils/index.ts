@@ -43,4 +43,12 @@ export const formatRupiah = (value: number) => {
   }).format(value);
 };
 
+export const capitalizeWord = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 export const APIBASE = "/api/v1";

@@ -1,5 +1,5 @@
-import { and, desc, eq, inArray, like, or  } from "drizzle-orm";
-import type {SQL} from "drizzle-orm";
+import { and, desc, eq, inArray, like, or } from "drizzle-orm";
+import type { SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { diskonTable } from "~~/server/database/schema/diskon";
 import type { TDeleteDto } from "../common/dto";
@@ -47,6 +47,24 @@ export async function getDiskonById(id: number) {
   try {
     return await db.query.diskonTable.findFirst({
       where: eq(diskonTable.id, id),
+      columns: {
+        batasPemakai: true,
+        batasWaktu: true,
+        jumlahDipakai: true,
+        kode: true,
+        persen: true,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to get Diskon", error);
+    throw InternalError;
+  }
+}
+
+export async function getDiskonByCode(kode: string) {
+  try {
+    return await db.query.diskonTable.findFirst({
+      where: eq(diskonTable.kode, kode),
       columns: {
         batasPemakai: true,
         batasWaktu: true,

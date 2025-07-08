@@ -10,6 +10,23 @@
 
   const { data } = await useFetch(`${APIBASE}/bootcamp/${id}`);
 
+  const ticketCode = ref();
+  const {
+    data: diskon,
+    status,
+    refresh,
+  } = await useFetch(() => `${APIBASE}/diskon/${ticketCode.value}`, {
+    immediate: false,
+    watch: false,
+    onResponse(item) {
+      if (!item.response._data.data) {
+        useToastError("Diskon Tidak Ada", "Diskon tidak ditemukan");
+      } else {
+        useToastSuccess("Diskon Ada", "Diskon berhasil ditambahkan");
+      }
+    },
+  });
+
   onMounted(() => {
     if (!data.value?.data) {
       throw createError({
@@ -18,45 +35,90 @@
     }
   });
 
+  const ticketCount = ref(1);
+
   const item = computed(() => data.value!.data!);
-  const sanitizedDeskripsi = computed(() => {
-    return DOMPurify.sanitize(item.value.deskripsi);
+  const sanitizedDeskripsi = ref("");
+  onMounted(() => {
+    sanitizedDeskripsi.value = DOMPurify.sanitize(item.value.deskripsi);
   });
 </script>
 
 <template>
-  <div
-    class="container my-8 grid h-full items-center justify-center gap-12 md:grid-cols-2"
-  >
-    <NuxtImg :src="item.foto" alt="produk" class="max-h-[640px] rounded-md" />
-    <div class="flex h-full flex-col gap-6">
-      <div>
-        <h1 class="text-center text-5xl font-bold md:text-6xl">
-          {{ item.judul }}
-        </h1>
-        <h2 class="mt-4 text-3xl font-semibold text-amber-500">
-          {{ formatRupiah(Number(item.harga)) }}
-        </h2>
+  <main class="bg-[url('/kontakback.webp')] bg-cover bg-center h-full py-4">
+    <div class="container flex flex-col gap-4">
+      <h1 class="text-center text-5xl font-bold md:text-6xl my-4">
+        {{ capitalizeWord(item.judul) }}
+      </h1>
+      <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
+        <NuxtImg
+          :src="item.foto"
+          alt="produk"
+          class="max-h-[640px] rounded-md border-2"
+        />
+        <div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div class="ml-2 prose prose-base" v-html="sanitizedDeskripsi" />
+        </div>
       </div>
-      <div>
-        <h2 class="mt-2 text-2xl font-semibold">Deskripsi</h2>
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="ml-2 prose prose-sm" v-html="sanitizedDeskripsi" />
+      <div class="border-2 rounded-2xl bg-eastern-blue-50 p-4 flex gap-4">
+        <div class="flex flex-col gap-1 shrink-0 border-r-2 pr-4">
+          <h2 class="text-2xl font-semibold">Waktu</h2>
+          <p class="text-xl">{{ item.waktu }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-2xl font-semibold">Tempat</h2>
+          <p class="text-xl">{{ item.tempat }}</p>
+        </div>
       </div>
-      <div>
-        <h2 class="mt-2 text-2xl font-semibold">Waktu & Tempat</h2>
-        <ul class="ml-2 flex list-disc flex-col gap-4 px-4 text-xl">
-          <li>{{ item.tempat }}</li>
-          <li>{{ item.waktu }}</li>
-        </ul>
-      </div>
-      <div>
-        <h2 class="mt-2 text-2xl font-semibold">Pemateri</h2>
-        <ul class="ml-2 flex list-disc flex-col gap-4 px-4 text-xl">
-          <li>- [ Rino Amri, SE, M.Pd, chc] Konsultan Jelajah Diri</li>
-          <li>- [ Andri setiawan ] Guru Besar ponpes Dahlan ikhsan</li>
-        </ul>
+      <div class="flex justify-end">
+        <div class="flex flex-col border rounded-xl py-2 px-4 min-w-sm gap-4">
+          <div class="flex justify-between">
+            <div class="flex justify-between text-xl font-bold">Jumlah</div>
+            <div class="flex gap-4 items-center">
+              <div class="cursor-pointer select-none" @click="ticketCount--">
+                -
+              </div>
+              {{ ticketCount }}
+              <div class="cursor-pointer select-none" @click="ticketCount++">
+                +
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="flex gap-2">
+            <UInput
+              v-model="ticketCode"
+              type="text"
+              placeholder="Kode Diskon"
+            />
+            <UButton
+              :loading="status === 'pending'"
+              @click="async () => await refresh()"
+            >
+              Pakai
+            </UButton>
+          </div>
+          <div class="flex justify-between font-bold">
+            <p>Harga</p>
+            <p>{{ formatRupiah(Number(item.harga)) }}</p>
+          </div>
+          <div class="flex justify-between font-bold">
+            <p>
+              Total <span v-if="diskon?.data">- {{ diskon.data.persen }}%</span>
+            </p>
+            <p v-if="diskon?.data">
+              {{
+                formatRupiah(
+                  Number((item.harga * ticketCount * diskon.data.persen) / 100)
+                )
+              }}
+            </p>
+            <p v-else>{{ formatRupiah(Number(item.harga * ticketCount)) }}</p>
+          </div>
+          <UButton class="flex justify-center">Pesan Tiket</UButton>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
