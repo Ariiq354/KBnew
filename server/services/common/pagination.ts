@@ -1,4 +1,4 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 
 export const OPagination = z.object({
   page: z._default(z.coerce.number(), 1),

@@ -5,12 +5,14 @@
   definePageMeta({
     layout: "landing",
   });
+  const authStore = useAuthStore();
+
   const route = useRoute();
   const id = Number(route.params.id);
 
   const { data } = await useFetch(`${APIBASE}/bootcamp/${id}`);
 
-  const ticketCode = ref();
+  const ticketCode = ref("");
   const {
     data: diskon,
     status,
@@ -22,6 +24,7 @@
       if (!item.response._data.data) {
         useToastError("Diskon Tidak Ada", "Diskon tidak ditemukan");
       } else {
+        ticketCount.value = 1;
         useToastSuccess("Diskon Ada", "Diskon berhasil ditambahkan");
       }
     },
@@ -42,10 +45,48 @@
   onMounted(() => {
     sanitizedDeskripsi.value = DOMPurify.sanitize(item.value.deskripsi);
   });
+
+  const modalOpen = ref(false);
+  const price = ref(0);
+  const isLoading = ref(false);
+  async function onSubmit() {
+    isLoading.value = true;
+    const result = await $fetch(`${APIBASE}/bootcamp/user`, {
+      body: {
+        idBootcamp: id,
+        harga: item.value.harga * ticketCount.value,
+        diskon: ticketCode.value,
+      },
+      method: "POST",
+      onSuccess() {
+        modalOpen.value = true;
+      },
+      onError(error: any) {
+        useToastError("Submit Failed", error.data.message);
+      },
+    });
+    price.value = result.data.price;
+    isLoading.value = true;
+  }
 </script>
 
 <template>
-  <main class="bg-[url('/kontakback.webp')] bg-cover bg-center h-full py-4">
+  <LazyUModal
+    v-model:open="modalOpen"
+    title="Pembayaran"
+    class="min-w-2xl"
+    :dismissible="false"
+  >
+    <template #body>
+      <div class="flex">
+        <NuxtImg src="/contohqris.png" />
+        <div class="flex items-center justify-center w-full">
+          Total Harga: {{ price.toLocaleString("id-ID") }}
+        </div>
+      </div>
+    </template>
+  </LazyUModal>
+  <main class="bg-[url('/landingbg1.webp')] bg-center h-full py-4">
     <div class="container flex flex-col gap-4">
       <h1 class="text-center text-5xl font-bold md:text-6xl my-4">
         {{ capitalizeWord(item.judul) }}
@@ -76,11 +117,19 @@
           <div class="flex justify-between">
             <div class="flex justify-between text-xl font-bold">Jumlah</div>
             <div class="flex gap-4 items-center">
-              <div class="cursor-pointer select-none" @click="ticketCount--">
+              <div
+                v-if="!diskon?.data"
+                class="cursor-pointer select-none"
+                @click="ticketCount--"
+              >
                 -
               </div>
               {{ ticketCount }}
-              <div class="cursor-pointer select-none" @click="ticketCount++">
+              <div
+                v-if="!diskon?.data"
+                class="cursor-pointer select-none"
+                @click="ticketCount++"
+              >
                 +
               </div>
             </div>
@@ -116,7 +165,12 @@
             </p>
             <p v-else>{{ formatRupiah(Number(item.harga * ticketCount)) }}</p>
           </div>
-          <UButton class="flex justify-center">Pesan Tiket</UButton>
+          <UButton v-if="authStore.user" class="flex justify-center">
+            Pesan Tiket
+          </UButton>
+          <div v-else class="text-center py-4 text-eastern-blue-500">
+            Login terlebih dahulu untuk memesan
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 import { getDiskonByCode } from "~~/server/services/diskon/diskon.service";
 
 const paramsSchema = z.string();

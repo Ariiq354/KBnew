@@ -1,6 +1,6 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { timestamp } from "./common";
 import { user } from "./auth";
+import { timestamp } from "./common";
 
 export const bootcampTable = sqliteTable("bootcamp", {
   id: int().primaryKey({ autoIncrement: true }),
@@ -24,6 +24,8 @@ export const pemilikBootcampTable = sqliteTable("pemilikBootcamp", {
   idBootcamp: int()
     .notNull()
     .references(() => bootcampTable.id, { onDelete: "cascade" }),
+  harga: int().notNull(),
+  diskon: text().notNull(),
   status: int({ mode: "boolean" }).notNull().default(false),
   ...timestamp,
 });

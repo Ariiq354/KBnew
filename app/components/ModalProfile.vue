@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { z } from "zod/v4-mini";
+  import { z } from "zod/mini";
   import type { FormSubmitEvent } from "#ui/types";
 
   const authStore = useAuthStore();

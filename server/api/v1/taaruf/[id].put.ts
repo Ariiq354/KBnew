@@ -1,4 +1,4 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 import { OTaarufUpdate } from "~~/server/services/taaruf/dto/create-taaruf.dto";
 import { updateTaaruf } from "~~/server/services/taaruf/taaruf.service";
 

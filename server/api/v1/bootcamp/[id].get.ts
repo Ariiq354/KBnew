@@ -1,4 +1,4 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 import { getBootcampById } from "~~/server/services/bootcamp/bootcamp.service";
 
 const paramsSchema = z.coerce.number();

@@ -1,13 +1,8 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE } from "~/utils";
-  import {
-    columns,
-    getInitialFormData,
-    schema
-    
-  } from "./_constants";
-import type {Schema} from "./_constants";
+  import { columns, getInitialFormData, schema } from "./_constants";
+  import type { Schema } from "./_constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Daftar Diskon");
@@ -110,6 +105,9 @@ import type {Schema} from "./_constants";
               type="number"
               :disabled="isLoading"
             />
+          </UFormField>
+          <UFormField label="Status" name="status">
+            <USwitch v-model="state.status" :disabled="isLoading" />
           </UFormField>
         </UForm>
       </template>

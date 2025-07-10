@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, like, or } from "drizzle-orm";
+import { and, desc, eq, inArray, like, lte, or } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { diskonTable } from "~~/server/database/schema/diskon";
@@ -23,6 +23,7 @@ export async function listAllDiskon({ limit, page, search }: TDiskonList) {
       jumlahDipakai: diskonTable.jumlahDipakai,
       kode: diskonTable.kode,
       persen: diskonTable.persen,
+      status: diskonTable.status,
     })
     .from(diskonTable)
     .where(and(...conditions))
@@ -62,9 +63,17 @@ export async function getDiskonById(id: number) {
 }
 
 export async function getDiskonByCode(kode: string) {
+  const today = new Date().toISOString().slice(0, 10);
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(diskonTable.kode, kode),
+    eq(diskonTable.status, true),
+    lte(diskonTable.jumlahDipakai, diskonTable.batasPemakai),
+    lte(diskonTable.batasWaktu, today),
+  ];
+
   try {
     return await db.query.diskonTable.findFirst({
-      where: eq(diskonTable.kode, kode),
+      where: and(...conditions),
       columns: {
         batasPemakai: true,
         batasWaktu: true,

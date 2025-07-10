@@ -1,13 +1,13 @@
-import { listAnggotaPasangan } from "~~/server/services/anggota/anggota.service";
-import { OAnggotaPasangan } from "~~/server/services/anggota/dto/list-anggota.dto";
+import { listUserCurrentBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
+import { OPagination } from "~~/server/services/common/pagination";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OAnggotaPasangan.parse(query)
+    OPagination.parse(query)
   );
 
-  const data = await listAnggotaPasangan(user.id, query);
+  const data = await listUserCurrentBootcamp(user.id, query);
 
   const metadata = {
     page: query.page,

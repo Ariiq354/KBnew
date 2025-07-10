@@ -1,7 +1,8 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 import { OPagination } from "../../common/pagination";
 
-export const OTaarufList = z.extend(OPagination, {
+export const OTaarufList = z.object({
+  ...OPagination.def.shape,
   search: z.optional(z.string()),
 });
 

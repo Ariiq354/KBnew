@@ -1,11 +1,13 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 import { OPagination } from "../../common/pagination";
 
-export const OAnggotaList = z.extend(OPagination, {
+export const OAnggotaList = z.object({
+  ...OPagination.def.shape,
   search: z.optional(z.string()),
 });
 
-export const OAnggotaPasangan = z.extend(OPagination, {
+export const OAnggotaPasangan = z.object({
+  ...OPagination.def.shape,
   statusKawin: z.optional(z.string()),
   pendidikan: z.optional(z.string()),
   provinsi: z.optional(z.string()),

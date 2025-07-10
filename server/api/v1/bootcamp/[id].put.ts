@@ -1,4 +1,4 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 import { updateBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
 import { OBootcampCreate } from "~~/server/services/bootcamp/dto/create-bootcamp.dto";
 import { uploadCloudinary } from "~~/server/utils/cloudinary";

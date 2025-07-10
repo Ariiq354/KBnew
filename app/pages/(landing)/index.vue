@@ -21,12 +21,7 @@
             Temukan Rahasia
             <span class="text-eastern-blue-500">Keluarga </span>Bahagia
           </h1>
-          <NuxtImg
-            src="/landingimg1.webp"
-            class="block w-full md:hidden"
-            width="1600"
-            height="1630"
-          />
+          <NuxtImg src="/landingimg1.webp" class="block w-full md:hidden" />
           <p
             class="text-eastern-blue-700 text-center text-xl font-semibold md:mt-0 md:text-left"
           >
