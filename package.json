@@ -42,12 +42,12 @@
     "vue-router": "^4.5.1",
     "vue3-google-map": "^0.23.0",
     "xlsx": "^0.18.5",
-    "zod": "^3.25.75"
+    "zod": "^4.0.2"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
     "@iconify-json/ic": "^1.2.2",
-    "@iconify-json/lucide": "^1.2.56",
+    "@iconify-json/lucide": "^1.2.57",
     "@iconify-json/mdi": "^1.2.3",
     "@nuxt/eslint": "^1.5.2",
     "@tailwindcss/typography": "^0.5.16",
