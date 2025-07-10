@@ -11,7 +11,7 @@
       <div
         class="container grid h-full items-center justify-center gap-12 md:grid-cols-2"
       >
-        <NuxtImg src="/tentangimg1.webp" />
+        <NuxtImg src="/tentangimg1.webp" width="1920" height="1732" />
         <div class="flex flex-col gap-12">
           <h1 class="text-5xl font-bold">Tentang Kami</h1>
           <p class="text-justify">

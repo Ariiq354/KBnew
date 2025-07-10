@@ -68,7 +68,12 @@
         </div>
 
         <div class="flex w-full justify-center md:w-1/2">
-          <NuxtImg src="/kontakimage2.webp" class="w-full object-contain" />
+          <NuxtImg
+            src="/kontakimage2.webp"
+            class="w-full object-contain"
+            width="1647"
+            height="1647"
+          />
         </div>
       </div>
     </div>
