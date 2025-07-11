@@ -6,26 +6,22 @@
   constantStore.setTitle("Dashboard / Pengajuan Taaruf");
 
   const query = reactive({
-    search: "",
     page: 1,
   });
-  const searchDebounced = useDebounceFn((v) => {
-    query.search = v;
-  }, 300);
   const { data, status } = await useFetch(`${APIBASE}/taaruf/user`, {
     query,
   });
 
   const dataDituju = computed(() =>
     data.value?.data.filter(
-      (item) => item.idPenuju === Number(authStore.session!.data!.user.id)
-    )
+      (item) => item.idPenuju === Number(authStore.session!.data!.user.id),
+    ),
   );
 
   const dataPenuju = computed(() =>
     data.value?.data.filter(
-      (item) => item.idDituju === Number(authStore.session!.data!.user.id)
-    )
+      (item) => item.idDituju === Number(authStore.session!.data!.user.id),
+    ),
   );
 
   const modalState = ref<ExtractObjectType<typeof data.value>["dituju"]>();

@@ -52,12 +52,12 @@
   async function onSubmit() {
     isLoading.value = true;
     const result = await $fetch(`${APIBASE}/bootcamp/user`, {
+      method: "POST",
       body: {
         idBootcamp: id,
         harga: item.value.harga * ticketCount.value,
         diskon: ticketCode.value,
       },
-      method: "POST",
       onSuccess() {
         modalOpen.value = true;
       },
@@ -65,7 +65,7 @@
         useToastError("Submit Failed", error.data.message);
       },
     });
-    price.value = result.data.price;
+    price.value = result.data!.price;
     isLoading.value = true;
   }
 </script>
@@ -159,13 +159,17 @@
             <p v-if="diskon?.data">
               {{
                 formatRupiah(
-                  Number((item.harga * ticketCount * diskon.data.persen) / 100)
+                  Number((item.harga * ticketCount * diskon.data.persen) / 100),
                 )
               }}
             </p>
             <p v-else>{{ formatRupiah(Number(item.harga * ticketCount)) }}</p>
           </div>
-          <UButton v-if="authStore.user" class="flex justify-center">
+          <UButton
+            v-if="authStore.user"
+            class="flex justify-center"
+            @click="onSubmit"
+          >
             Pesan Tiket
           </UButton>
           <div v-else class="text-center py-4 text-eastern-blue-500">
