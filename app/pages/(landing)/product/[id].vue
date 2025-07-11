@@ -51,22 +51,23 @@
   const isLoading = ref(false);
   async function onSubmit() {
     isLoading.value = true;
-    const result = await $fetch(`${APIBASE}/bootcamp/user`, {
-      method: "POST",
-      body: {
-        idBootcamp: id,
-        harga: item.value.harga * ticketCount.value,
-        diskon: ticketCode.value,
-      },
-      onSuccess() {
-        modalOpen.value = true;
-      },
-      onError(error: any) {
-        useToastError("Submit Failed", error.data.message);
-      },
-    });
-    price.value = result.data!.price;
-    isLoading.value = true;
+    try {
+      const result = await $fetch(`${APIBASE}/bootcamp/user`, {
+        method: "POST",
+        body: {
+          idBootcamp: id,
+          harga: item.value.harga * ticketCount.value,
+          diskon: ticketCode.value,
+        },
+      });
+
+      price.value = result.data!.price;
+      modalOpen.value = true;
+    } catch (err: any) {
+      useToastError("Submit Failed", err);
+    } finally {
+      isLoading.value = false;
+    }
   }
 </script>
 
@@ -78,7 +79,7 @@
     :dismissible="false"
   >
     <template #body>
-      <div class="flex">
+      <div class="grid grid-cols-2">
         <NuxtImg src="/contohqris.png" />
         <div class="flex items-center justify-center w-full">
           Total Harga: {{ price.toLocaleString("id-ID") }}
@@ -87,6 +88,7 @@
     </template>
   </LazyUModal>
   <main class="bg-[url('/landingbg1.webp')] bg-center h-full py-4">
+    {{ modalOpen }}
     <div class="container flex flex-col gap-4">
       <h1 class="text-center text-5xl font-bold md:text-6xl my-4">
         {{ capitalizeWord(item.judul) }}
@@ -167,8 +169,9 @@
           </div>
           <UButton
             v-if="authStore.user"
-            class="flex justify-center"
-            @click="onSubmit"
+            class="flex justify-center cursor-pointer"
+            :loading="isLoading"
+            @click="async () => await onSubmit()"
           >
             Pesan Tiket
           </UButton>

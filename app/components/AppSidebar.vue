@@ -38,6 +38,11 @@
             to: "/dashboard/list-taaruf",
             icon: "i-heroicons-users",
           },
+          {
+            label: "Daftar Transaksi",
+            to: "/dashboard/transaksi",
+            icon: "i-heroicons-shopping-cart",
+          },
         ] as NavigationMenuItem[])
       : [],
     [
@@ -65,11 +70,8 @@
         icon: "i-heroicons-user-circle",
       },
       {
-        label: "Transaksi",
-        icon: "i-heroicons-credit-card",
-      },
-      {
         label: "Paket Saya",
+        to: "/dashboard/paket-saya",
         icon: "i-heroicons-cube",
       },
     ],
