@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
-  import {  getInitialFormData, loginSchema } from "./_constants";
-import type {Schema} from "./_constants";
+  import { getInitialFormData, loginSchema } from "./_constants";
+  import type { Schema } from "./_constants";
 
   definePageMeta({
     layout: "auth",
