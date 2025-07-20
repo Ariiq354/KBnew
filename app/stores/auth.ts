@@ -31,13 +31,13 @@ type TSignUp = {
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
-  const session = ref<Awaited<ReturnType<typeof authClient.getSession>> | null>(
-    null,
+  const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
+    null
   );
 
   async function init() {
     loading.value = true;
-    const { data } = await authClient.getSession();
+    const data = await authClient.useSession(useFetch);
     session.value = data;
     loading.value = false;
   }
@@ -47,17 +47,14 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
   async function signIn(body: TSignIn) {
     loading.value = true;
+    const headers = new Headers();
     await authClient.signIn.email({
       ...body,
+      callbackURL: "/dashboard",
       fetchOptions: {
+        headers,
         onError: (body) => {
           useToastError("Login Failed", body.error.message);
-        },
-        onSuccess: async () => {
-          useToastSuccess("Login Success", "Selamat datang di Berkah Amanah");
-          await init();
-
-          window.location.href = "/dashboard";
         },
       },
     });
@@ -66,34 +63,35 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
   async function signUp(body: TSignUp) {
     loading.value = true;
+    const headers = new Headers();
     await authClient.signUp.email({
       ...body,
       fetchOptions: {
+        headers,
         onError: (body) => {
           useToastError("Register Failed", body.error.message);
         },
-        onSuccess: async () => {
-          useToastSuccess("Register Success", "Silahkan login untuk masuk");
-          await navigateTo("/login");
+        onSuccess: () => {
+          useToastSuccess("Register Sukses", "Silahkan login untuk masuk");
         },
       },
     });
+    navigateTo("/login");
     loading.value = false;
   }
 
   async function signOut() {
     loading.value = true;
+    const headers = new Headers();
     await authClient.signOut({
       fetchOptions: {
+        headers,
         onError: (body) => {
           useToastError("Logout Failed", body.error.message);
         },
-        onSuccess: async () => {
-          await init();
-          await navigateTo("/");
-        },
       },
     });
+    navigateTo("/");
     loading.value = false;
   }
 
