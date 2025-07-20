@@ -18,15 +18,14 @@
           <h1
             class="text-center text-4xl font-bold text-black md:text-left md:text-6xl"
           >
-            Temukan Rahasia
+            Welcome To
             <span class="text-eastern-blue-500">Keluarga </span>Bahagia
           </h1>
           <NuxtImg src="/landingimg1.webp" class="block w-full md:hidden" />
           <p
             class="text-eastern-blue-700 text-center text-xl font-semibold md:mt-0 md:text-left"
           >
-            اْلأَرْوَاحُ جُنُوْدٌ مُجَنَّدَةٌ فَمَا تَعَارَفَ مِنْهَا اىٔتَلَفَ
-            وَمَا تَنَاكَرَ مِنْهَا اخْتَلَفَ # رواه البخاري
+            Make Yourself a Good Quality Person
           </p>
           <div class="flex justify-center gap-4 md:justify-normal">
             <UButton class="shadow-lg" href="/about">Learn More</UButton>
