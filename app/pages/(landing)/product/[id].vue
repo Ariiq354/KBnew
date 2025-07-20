@@ -88,7 +88,6 @@
     </template>
   </LazyUModal>
   <main class="bg-[url('/landingbg1.webp')] bg-center h-full py-4">
-    {{ modalOpen }}
     <div class="container flex flex-col gap-4">
       <h1 class="text-center text-5xl font-bold md:text-6xl my-4">
         {{ capitalizeWord(item.judul) }}
@@ -104,8 +103,10 @@
           <div class="ml-2 prose prose-base" v-html="sanitizedDeskripsi" />
         </div>
       </div>
-      <div class="border-2 rounded-2xl bg-eastern-blue-50 p-4 flex gap-4">
-        <div class="flex flex-col gap-1 shrink-0 border-r-2 pr-4">
+      <div
+        class="border-2 rounded-2xl bg-eastern-blue-50 p-4 flex md:flex-row flex-col gap-4"
+      >
+        <div class="flex flex-col gap-1 shrink-0 md:border-r-2 pr-4">
           <h2 class="text-2xl font-semibold">Waktu</h2>
           <p class="text-xl">{{ item.waktu }}</p>
         </div>
@@ -115,7 +116,9 @@
         </div>
       </div>
       <div class="flex justify-end">
-        <div class="flex flex-col border rounded-xl py-2 px-4 min-w-sm gap-4">
+        <div
+          class="flex flex-col border rounded-xl py-2 px-4 max-w-sm w-full gap-4"
+        >
           <div class="flex justify-between">
             <div class="flex justify-between text-xl font-bold">Jumlah</div>
             <div class="flex gap-4 items-center">

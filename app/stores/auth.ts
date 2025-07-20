@@ -31,13 +31,13 @@ type TSignUp = {
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
-  const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
-    null
+  const session = ref<Awaited<ReturnType<typeof authClient.getSession>> | null>(
+    null,
   );
 
   async function init() {
     loading.value = true;
-    const data = await authClient.useSession(useFetch);
+    const { data } = await authClient.getSession();
     session.value = data;
     loading.value = false;
   }
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
           useToastSuccess("Login Success", "Selamat datang di Berkah Amanah");
           await init();
 
-          navigateTo("/dashboard");
+          window.location.href = "/dashboard";
         },
       },
     });
@@ -72,9 +72,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Register Failed", body.error.message);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
           useToastSuccess("Register Success", "Silahkan login untuk masuk");
-          navigateTo("/login");
+          await navigateTo("/login");
         },
       },
     });
@@ -90,7 +90,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         },
         onSuccess: async () => {
           await init();
-          navigateTo("/");
+          await navigateTo("/");
         },
       },
     });
