@@ -23,7 +23,7 @@
 
   const marker = ref<{ lat: number; lng: number } | null>(null);
 
-  function onMapClick(e: google.maps.MapMouseEvent) {
+  function onMapClick(e: any) {
     if (e.latLng) {
       const lat = e.latLng.lat();
       const lng = e.latLng.lng();

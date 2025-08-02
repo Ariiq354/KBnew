@@ -21,6 +21,8 @@ export const schema = z.object({
   deskripsi: z.string().check(z.minLength(1, "Required")),
   foto: z.string(),
   instagram: z.string().check(z.minLength(1, "Required")),
+  perokok: z.boolean(),
+  gaji: z.number(),
   gender: z.enum(["laki", "perempuan"]),
 });
 
@@ -76,4 +78,6 @@ export const getInitialFormData = (): Schema => ({
   foto: "",
   instagram: "",
   gender: "laki",
+  gaji: 0,
+  perokok: false,
 });

@@ -238,6 +238,9 @@
           <UFormField label="Pekerjaan" name="pekerjaan">
             <UInput v-model="state.pekerjaan" :disabled="isLoading" />
           </UFormField>
+          <UFormField label="Gaji per bulan" name="pekerjaan">
+            <UInput v-model="state.gaji" type="number" :disabled="isLoading" />
+          </UFormField>
           <UFormField label="Tinggi Badan (cm)" name="tinggi">
             <UInput
               v-model="state.tinggi"
@@ -247,6 +250,9 @@
           </UFormField>
           <UFormField label="Berat Badan (kg)" name="berat">
             <UInput v-model="state.berat" type="number" :disabled="isLoading" />
+          </UFormField>
+          <UFormField label="Perokok" name="perokok">
+            <UCheckbox v-model="state.perokok" :disabled="isLoading" />
           </UFormField>
           <UFormField label="Hobi" name="hobi">
             <UInput v-model="state.hobi" :disabled="isLoading" />

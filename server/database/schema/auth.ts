@@ -24,7 +24,7 @@ export const user = sqliteTable(
     isAvailable: int({ mode: "boolean" }).notNull().default(true),
     ...timestamp,
   },
-  (table) => [uniqueIndex("email_idx").on(table.email)]
+  (table) => [uniqueIndex("email_idx").on(table.email)],
 );
 
 export const userDtlTable = sqliteTable("user_dtl", {
@@ -53,6 +53,8 @@ export const userDtlTable = sqliteTable("user_dtl", {
   hobi: text().notNull(),
   instagram: text().notNull(),
   kriteria: text().notNull(),
+  perokok: int({ mode: "boolean" }).notNull().default(false),
+  gaji: int().notNull().default(0),
   deskripsi: text().notNull().default(""),
   foto: text().notNull(),
   ...timestamp,
@@ -75,7 +77,7 @@ export const session = sqliteTable(
   (table) => [
     index("userid_idx_session").on(table.userId),
     index("token_idx").on(table.token),
-  ]
+  ],
 );
 
 export const account = sqliteTable(
@@ -100,7 +102,7 @@ export const account = sqliteTable(
     password: text(),
     ...timestamp,
   },
-  (table) => [index("userid_idx").on(table.userId)]
+  (table) => [index("userid_idx").on(table.userId)],
 );
 
 export const verification = sqliteTable(
@@ -112,5 +114,5 @@ export const verification = sqliteTable(
     expiresAt: int({ mode: "timestamp" }).notNull(),
     ...timestamp,
   },
-  (table) => [index("identifier_idx").on(table.identifier)]
+  (table) => [index("identifier_idx").on(table.identifier)],
 );

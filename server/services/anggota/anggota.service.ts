@@ -18,8 +18,8 @@ export async function listAllAnggota({ limit, page, search }: TAnggotaList) {
         like(user.name, searchCondition),
         like(user.email, searchCondition),
         like(user.noTelepon, searchCondition),
-        like(user.role, searchCondition)
-      )
+        like(user.role, searchCondition),
+      ),
     );
   }
 
@@ -107,6 +107,8 @@ export async function getAnggotaById(id: number) {
         kriteria: userDtlTable.kriteria,
         deskripsi: userDtlTable.deskripsi,
         foto: userDtlTable.foto,
+        gaji: userDtlTable.gaji,
+        perokok: userDtlTable.perokok,
       },
     })
     .from(user)
@@ -125,7 +127,7 @@ export async function getAnggotaById(id: number) {
 
 export async function createAnggotaDetail(
   id: number,
-  body: TAnggotaDetailCreate
+  body: TAnggotaDetailCreate,
 ) {
   try {
     const kodeUser = generateUserCode(4);
@@ -167,14 +169,14 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
 
   if (param.suku)
     conditions.push(
-      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`)
+      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`),
     );
   if (param.kodeUser)
     conditions.push(
       like(
         sql`LOWER(${userDtlTable.kodeUser})`,
-        `%${param.kodeUser.toLowerCase()}%`
-      )
+        `%${param.kodeUser.toLowerCase()}%`,
+      ),
     );
   if (param.statusKawin)
     conditions.push(eq(userDtlTable.statusKawin, param.statusKawin));
@@ -182,17 +184,17 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
     conditions.push(eq(userDtlTable.pendidikan, param.pendidikan));
   if (param.provinsi)
     conditions.push(
-      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`)
+      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`),
     );
   if (param.kecamatan)
     conditions.push(
-      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`)
+      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`),
     );
   if (param.kota)
     conditions.push(eq(userDtlTable.kota, `%${param.kota.toLowerCase()}%`));
   if (param.kelurahan)
     conditions.push(
-      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`)
+      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`),
     );
   if (param.umurMin) {
     const maxBirthDate = subtractYears(today, param.umurMin);

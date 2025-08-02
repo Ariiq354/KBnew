@@ -21,6 +21,8 @@ export const OAnggotaDetailCreate = z.object({
   deskripsi: z.string(),
   foto: z.string(),
   instagram: z.string(),
+  perokok: z.boolean(),
+  gaji: z.number(),
   gender: z.enum(["laki", "perempuan"]),
 });
 

@@ -40,10 +40,11 @@
     >
       <div class="container flex flex-col gap-12 md:px-40">
         <h1 class="text-center text-5xl font-bold">Diajarkan Praktisi</h1>
-        <div class="grid gap-12 md:grid-cols-3">
-          <NuxtImg src="/foto1.webp" width="970" height="1600" />
-          <NuxtImg src="/foto2.webp" width="970" height="1600" />
-          <NuxtImg src="/foto3.webp" width="970" height="1600" />
+        <div class="grid gap-12 lg:grid-cols-4 md:grid-cols-2 grid-cols-1">
+          <NuxtImg src="/foto1.webp" width="1451" height="2301" />
+          <NuxtImg src="/foto2.webp" width="1451" height="2301" />
+          <NuxtImg src="/foto3.webp" width="1451" height="2301" />
+          <NuxtImg src="/foto4.webp" width="1451" height="2301" />
         </div>
       </div>
     </div>
