@@ -3,13 +3,12 @@ import * as auth from "./schema/auth";
 import * as bootcamp from "./schema/bootcamp";
 import * as taaruf from "./schema/taaruf";
 import * as diskon from "./schema/diskon";
-
-const config = useRuntimeConfig();
+import ENV from "~~/shared/env";
 
 export const db = drizzle({
   connection: {
-    url: config.databaseUrl,
-    authToken: config.databaseAuthToken,
+    url: ENV.DATABASE_URL,
+    authToken: ENV.DATABASE_AUTH_TOKEN,
   },
   schema: {
     ...auth,

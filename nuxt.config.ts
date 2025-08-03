@@ -1,3 +1,5 @@
+import "./shared/env";
+
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: false },
@@ -15,13 +17,6 @@ export default defineNuxtConfig({
   ],
 
   css: ["~/assets/css/main.css"],
-
-  runtimeConfig: {
-    databaseUrl: process.env.DATABASE_URL,
-    databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
-    bootcampPreset: process.env.BOOTCAMP_PRESET,
-    userPreset: process.env.USER_PRESET,
-  },
 
   pages: {
     pattern: ["**/*.vue", "!**/*.ts"],

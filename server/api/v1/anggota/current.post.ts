@@ -1,5 +1,6 @@
 import { createAnggotaDetail } from "~~/server/services/anggota/anggota.service";
 import { OAnggotaDetailCreate } from "~~/server/services/anggota/dto/create-anggota.dto";
+import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -8,7 +9,6 @@ export default defineEventHandler(async (event) => {
   const user = authGuard(event);
 
   const result = await readMultipartFormData(event);
-  const { userPreset } = useRuntimeConfig();
 
   if (!result) {
     throw createError({
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
         });
       }
 
-      const uploadResult = await uploadCloudinary(userPreset, part.data);
+      const uploadResult = await uploadCloudinary(ENV.USER_PRESET, part.data);
 
       fields["foto"] = uploadResult.secure_url;
     } else {

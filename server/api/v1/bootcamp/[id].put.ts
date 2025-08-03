@@ -2,6 +2,7 @@ import { z } from "zod/mini";
 import { updateBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
 import { OBootcampCreate } from "~~/server/services/bootcamp/dto/create-bootcamp.dto";
 import { uploadCloudinary } from "~~/server/utils/cloudinary";
+import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -12,7 +13,6 @@ export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readMultipartFormData(event);
   const id = paramsSchema.parse(getRouterParam(event, "id"));
-  const { bootcampPreset } = useRuntimeConfig();
 
   if (!result) {
     throw createError({
@@ -40,7 +40,10 @@ export default defineEventHandler(async (event) => {
         });
       }
 
-      const uploadResult = await uploadCloudinary(bootcampPreset, part.data);
+      const uploadResult = await uploadCloudinary(
+        ENV.BOOTCAMP_PRESET,
+        part.data
+      );
 
       newFileUrl = uploadResult.secure_url;
     } else {
