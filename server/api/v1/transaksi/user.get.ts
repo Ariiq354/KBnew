@@ -3,6 +3,7 @@ import { listAllTransaksiUser } from "~~/server/services/transaksi/transaksi.ser
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
+
   const query = await getValidatedQuery(event, (query) =>
     OTransaksiList.parse(query),
   );

@@ -27,5 +27,6 @@ export const pemilikBootcampTable = sqliteTable("pemilikBootcamp", {
   harga: int().notNull(),
   diskon: text().notNull(),
   status: int({ mode: "boolean" }).notNull().default(false),
+  kode: text().notNull().default(""),
   ...timestamp,
 });

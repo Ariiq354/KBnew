@@ -77,6 +77,9 @@ export async function listAllTransaksiUser(
       harga: pemilikBootcampTable.harga,
       diskon: pemilikBootcampTable.diskon,
       status: pemilikBootcampTable.status,
+      waktu: bootcampTable.waktu,
+      foto: bootcampTable.foto,
+      tempat: bootcampTable.tempat,
     })
     .from(pemilikBootcampTable)
     .leftJoin(user, eq(pemilikBootcampTable.idUser, user.id))

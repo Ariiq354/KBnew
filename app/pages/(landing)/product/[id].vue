@@ -52,7 +52,7 @@
   async function onSubmit() {
     isLoading.value = true;
     try {
-      const result = await $fetch(`${APIBASE}/bootcamp/user`, {
+      const result = await $fetch(`${APIBASE}/bootcamp/landing`, {
         method: "POST",
         body: {
           idBootcamp: id,

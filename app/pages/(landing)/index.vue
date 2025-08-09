@@ -110,13 +110,11 @@
       class="bg-eastern-blue-200 text-eastern-blue-700 flex w-full flex-col py-12 md:px-12"
     >
       <p class="container text-center text-2xl leading-loose md:w-2/3">
-        "اَلْخَبِيْثٰتُ لِلْخَبِيْثِيْنَ وَالْخَبِيْثُوْنَ لِلْخَبِيْثٰتِۚ
-        وَالطَّيِّبٰتُ لِلطَّيِّبِيْنَ وَالطَّيِّبُوْنَ لِلطَّيِّبٰتِۚ
-        اُولٰۤىِٕكَ مُبَرَّءُوْنَ مِمَّا يَقُوْلُوْنَۗ لَهُمْ مَّغْفِرَةٌ
-        وَّرِزْقٌ كَرِيْمٌ ࣖ"
+        Jatuh cinta itu mudah bagian tersulitnya adalah Menemukan orang yang
+        tepat untuk di cintai.
       </p>
       <p class="container text-center text-2xl leading-loose md:w-2/3">
-        "An Nur: 26"
+        - Bertrand Russell
       </p>
     </div>
   </main>
