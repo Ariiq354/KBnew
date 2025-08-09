@@ -134,22 +134,3 @@ export async function createUserBootcamp(
     throw InternalError;
   }
 }
-
-export async function updateUserBootcamp(
-  id: number,
-  body: { status: boolean },
-) {
-  try {
-    await db
-      .update(pemilikBootcampTable)
-      .set({
-        ...body,
-      })
-      .where(eq(pemilikBootcampTable, id));
-  } catch (error) {
-    console.error("Failed to insert Bootcamp", error);
-    throw InternalError;
-  }
-}
-
-// export async function listPesertaBootcamp(body){}

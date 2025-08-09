@@ -105,16 +105,21 @@ export async function listAllTransaksiUser(
   }
 }
 
-export async function updateTransaksi(
-  id: number,
-  body: Partial<TTransaksiCreate>,
-) {
+export async function updateTransaksi(id: number, body: TTransaksiCreate) {
   try {
+    const updatedData: Record<string, any> = { status: body.status };
+
+    if (body.status) {
+      updatedData["kode"] = await generateUniqueCode(
+        pemilikBootcampTable,
+        pemilikBootcampTable.kode,
+        12,
+      );
+    }
+
     await db
       .update(pemilikBootcampTable)
-      .set({
-        ...body,
-      })
+      .set(updatedData)
       .where(eq(pemilikBootcampTable.id, id));
   } catch (error) {
     console.error("Failed to update Transaksi", error);

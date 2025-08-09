@@ -4,6 +4,7 @@ import type { TAnggotaList, TAnggotaPasangan } from "./dto/list-anggota.dto";
 import { user, userDtlTable } from "~~/server/database/schema/auth";
 import { db } from "~~/server/database";
 import type { TAnggotaDetailCreate } from "./dto/create-anggota.dto";
+import { generateUniqueCode } from "~~/server/utils/generate";
 
 export async function listAllAnggota({ limit, page, search }: TAnggotaList) {
   const offset = (page - 1) * limit;
@@ -130,7 +131,11 @@ export async function createAnggotaDetail(
   body: TAnggotaDetailCreate,
 ) {
   try {
-    const kodeUser = generateUserCode(4);
+    const kodeUser = await generateUniqueCode(
+      userDtlTable,
+      userDtlTable.kodeUser,
+      4,
+    );
 
     await db
       .insert(userDtlTable)

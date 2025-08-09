@@ -7,11 +7,11 @@ const paramsSchema = z.coerce.number();
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) =>
-    z.partial(OTransaksiCreate).parse(b),
+    OTransaksiCreate.parse(b),
   );
   const id = paramsSchema.parse(getRouterParam(event, "id"));
 
-  await updateTransaksi(id, result);
+  await updateTransaksi(id, { status: result.status });
 
   return HttpResponse();
 });
