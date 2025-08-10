@@ -43,6 +43,11 @@
             to: "/dashboard/transaksi",
             icon: "i-heroicons-shopping-cart",
           },
+          {
+            label: "Daftar Tiket User",
+            to: "/dashboard/tiket-user",
+            icon: "i-heroicons-ticket",
+          },
         ] as NavigationMenuItem[])
       : [],
     [

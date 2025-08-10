@@ -1,13 +1,8 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE } from "~/utils";
-  import {
-    columns,
-    getInitialFormData,
-    schema
-    
-  } from "./_constants";
-import type {Schema} from "./_constants";
+  import { columns, getInitialFormData, schema } from "./_constants";
+  import type { Schema } from "./_constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Daftar Bootcamp");
@@ -106,7 +101,7 @@ import type {Schema} from "./_constants";
 </script>
 
 <template>
-  <Title>Transaksi | Bootcamp</Title>
+  <Title>Dashboard | Daftar Bootcamp</Title>
   <main>
     <LazyUModal
       v-model:open="modalOpen"

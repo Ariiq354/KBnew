@@ -1,6 +1,7 @@
 import type { SQL } from "drizzle-orm";
 import { and, desc, eq, inArray, like, or } from "drizzle-orm";
 import { db } from "~~/server/database";
+import { user } from "~~/server/database/schema/auth";
 import {
   bootcampTable,
   pemilikBootcampTable,
@@ -56,6 +57,98 @@ export async function listAllBootcamp({ limit, page, search }: TBootcampList) {
     };
   } catch (error) {
     console.error("Failed to get List Bootcamp", error);
+    throw InternalError;
+  }
+}
+
+export async function listAllBootcampActive({
+  limit,
+  page,
+  search,
+}: TBootcampList) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(bootcampTable.status, true),
+  ];
+  if (search) {
+    const searchCondition = `%${search}%`;
+
+    conditions.push(
+      or(
+        like(bootcampTable.deskripsi, searchCondition),
+        like(bootcampTable.judul, searchCondition),
+        like(bootcampTable.tempat, searchCondition),
+      ),
+    );
+  }
+
+  const query = db
+    .select({
+      id: bootcampTable.id,
+      judul: bootcampTable.judul,
+      tempat: bootcampTable.tempat,
+      waktu: bootcampTable.waktu,
+    })
+    .from(bootcampTable)
+    .where(and(...conditions))
+    .orderBy(desc(bootcampTable.createdAt))
+    .$dynamic();
+
+  try {
+    const total = await getTotalQuery(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Bootcamp Active", error);
+    throw InternalError;
+  }
+}
+
+export async function getUserByBootcampId(
+  bootcampId: number,
+  { page, limit, search }: TBootcampList,
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(pemilikBootcampTable.idBootcamp, bootcampId),
+    eq(pemilikBootcampTable.status, true),
+  ];
+  if (search) {
+    const searchCondition = `%${search}%`;
+
+    conditions.push(
+      or(
+        like(pemilikBootcampTable.kode, searchCondition),
+        like(user.name, searchCondition),
+      ),
+    );
+  }
+
+  const query = db
+    .select({
+      id: pemilikBootcampTable.id,
+      kode: pemilikBootcampTable.kode,
+      nama: user.name,
+    })
+    .from(pemilikBootcampTable)
+    .leftJoin(user, eq(pemilikBootcampTable.idUser, user.id))
+    .where(and(...conditions))
+    .$dynamic();
+
+  try {
+    const total = await getTotalQuery(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List User By Bootcamp Id", error);
     throw InternalError;
   }
 }
