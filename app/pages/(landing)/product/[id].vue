@@ -46,7 +46,7 @@
     sanitizedDeskripsi.value = DOMPurify.sanitize(item.value.deskripsi);
   });
 
-  const modalOpen = ref(true);
+  const modalOpen = ref(false);
   const price = ref(0);
   const isLoading = ref(false);
   async function onSubmit() {
