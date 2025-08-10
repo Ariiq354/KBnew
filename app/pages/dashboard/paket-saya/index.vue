@@ -26,10 +26,10 @@
   <LazyUModal
     v-model:open="modalOpen"
     title="Detail Bootcamp"
-    class="min-w-4xl"
+    class="md:min-w-4xl"
   >
     <template #body>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
         <NuxtImg :src="state!.foto!" />
         <div class="flex flex-col gap-4">
           <h1 class="text-4xl font-bold">{{ state?.namaBootcamp }}</h1>
