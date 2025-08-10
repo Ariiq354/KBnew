@@ -30,18 +30,18 @@
         "vue-router": "^4.5.1",
         "vue3-google-map": "^0.23.1",
         "xlsx": "^0.18.5",
-        "zod": "^4.0.14",
+        "zod": "^4.0.16",
       },
       "devDependencies": {
         "@iconify-json/heroicons": "^1.2.2",
         "@iconify-json/ic": "^1.2.2",
-        "@iconify-json/lucide": "^1.2.60",
+        "@iconify-json/lucide": "^1.2.61",
         "@iconify-json/mdi": "^1.2.3",
-        "@nuxt/eslint": "^1.7.1",
+        "@nuxt/eslint": "^1.8.0",
         "@tailwindcss/typography": "^0.5.16",
         "@types/google.maps": "^3.58.1",
         "drizzle-kit": "^0.31.4",
-        "eslint": "^9.32.0",
+        "eslint": "^9.33.0",
       },
     },
   },
@@ -2392,7 +2392,7 @@
 
     "zip-stream": ["zip-stream@6.0.1", "", { "dependencies": { "archiver-utils": "^5.0.0", "compress-commons": "^6.0.2", "readable-stream": "^4.0.0" } }, "sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA=="],
 
-    "zod": ["zod@4.0.16", "", {}, "sha512-Djo/cM339grjI7/HmN+ixYO2FzEMcWr/On50UlQ/RjrWK1I/hPpWhpC76heCptnRFpH0LMwrEbUY50HDc0V8wg=="],
+    "zod": ["zod@4.0.17", "", {}, "sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ=="],
 
     "@babel/code-frame/js-tokens": ["js-tokens@4.0.0", "", {}, "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="],
 

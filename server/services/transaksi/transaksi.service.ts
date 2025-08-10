@@ -78,6 +78,7 @@ export async function listAllTransaksiUser(
       diskon: pemilikBootcampTable.diskon,
       status: pemilikBootcampTable.status,
       waktu: bootcampTable.waktu,
+      kode: pemilikBootcampTable.kode,
       foto: bootcampTable.foto,
       tempat: bootcampTable.tempat,
     })

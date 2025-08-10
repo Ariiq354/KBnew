@@ -21,7 +21,7 @@ export async function generateUniqueCode<T extends TableConfig>(
 
   const exist = await db.select().from(table).where(eq(column, result));
 
-  if (exist) {
+  if (exist.length > 0) {
     return generateUniqueCode(table, column, length);
   }
 
