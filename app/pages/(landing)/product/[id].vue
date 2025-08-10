@@ -46,7 +46,7 @@
     sanitizedDeskripsi.value = DOMPurify.sanitize(item.value.deskripsi);
   });
 
-  const modalOpen = ref(false);
+  const modalOpen = ref(true);
   const price = ref(0);
   const isLoading = ref(false);
   async function onSubmit() {
@@ -75,12 +75,12 @@
   <LazyUModal
     v-model:open="modalOpen"
     title="Pembayaran"
-    class="min-w-2xl"
+    class="md:min-w-2xl"
     :dismissible="false"
   >
     <template #body>
-      <div class="grid grid-cols-2">
-        <NuxtImg src="/contohqris.png" />
+      <div class="grid md:grid-cols-2 grid-cols-1 items-center gap-8">
+        <NuxtImg src="/contohqris.png" class="w-full" />
         <div class="flex items-center justify-center w-full">
           Total Harga: {{ price.toLocaleString("id-ID") }}
         </div>
