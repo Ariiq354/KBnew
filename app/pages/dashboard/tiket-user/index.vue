@@ -22,7 +22,8 @@
     page: 1,
   });
   const searchDebouncedTiket = useDebounceFn((v) => {
-    query.search = v;
+    queryTiket.search = v;
+    refresh();
   }, 300);
   const {
     data: dataTiket,
