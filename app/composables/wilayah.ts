@@ -1,77 +1,108 @@
-export function useWilayahOptions(state: Ref<any>) {
-  const safeProvinsi = computed(() => state.value?.provinsi || "");
-  const safeKota = computed(() => state.value?.kota || "");
-  const safeKecamatan = computed(() => state.value?.kecamatan || "");
+export function useWilayah(
+  state: Ref<{
+    provinsi: string;
+    kota: string;
+    kecamatan: string;
+    kelurahan: string;
+  }>,
+) {
+  const { data: dP, status: sP } = useFetch(`${APIBASE}/options/provinsi`);
 
-  // --- Provinsi ---
-  const { data: dataProvinsi, status: statusProvinsi } = useFetch(
-    `${APIBASE}/options/provinsi`
+  const pId = computed(() => {
+    const found = dP.value?.data.find((i) => i.name === state.value.provinsi);
+    return found ? found.code : undefined;
+  });
+
+  watch(
+    () => state.value.provinsi,
+    (n, o) => {
+      if (n !== o) {
+        state.value.kota = "";
+        state.value.kecamatan = "";
+        state.value.kelurahan = "";
+      }
+    },
   );
 
-  const provinsiId = computed(
-    () =>
-      dataProvinsi.value?.data.find((item) => item.name === safeProvinsi.value)
-        ?.code
-  );
-
-  // --- Kabupaten ---
   const {
-    data: dataKabupaten,
-    status: statusKabupaten,
-    execute: fetchKabupaten,
-  } = useFetch(() => `${APIBASE}/options/kabupaten/${provinsiId.value}`, {
+    data: dKb,
+    status: sKb,
+    execute: eKb,
+  } = useFetch(() => `${APIBASE}/options/kabupaten/${pId.value}`, {
     immediate: false,
   });
-  watch(provinsiId, (val) => val && fetchKabupaten());
 
-  const kabupatenId = computed(
-    () =>
-      dataKabupaten.value?.data.find((item) => item.name === safeKota.value)
-        ?.code
+  watchEffect(() => {
+    if (pId.value) {
+      eKb();
+    }
+  });
+
+  const kbId = computed(() => {
+    const found = dKb.value?.data.find((i) => i.name === state.value.kota);
+    return found ? found.code : undefined;
+  });
+
+  watch(
+    () => state.value.kota,
+    (n, o) => {
+      if (n !== o) {
+        state.value.kecamatan = "";
+        state.value.kelurahan = "";
+      }
+    },
   );
 
-  // --- Kecamatan ---
   const {
-    data: dataKecamatan,
-    status: statusKecamatan,
-    execute: fetchKecamatan,
-  } = useFetch(() => `${APIBASE}/options/kecamatan/${kabupatenId.value}`, {
+    data: dK,
+    status: sK,
+    execute: eK,
+  } = useFetch(() => `${APIBASE}/options/kecamatan/${kbId.value}`, {
     immediate: false,
   });
-  watch(kabupatenId, (val) => val && fetchKecamatan());
 
-  const kecamatanId = computed(
-    () =>
-      dataKecamatan.value?.data.find(
-        (item) => item.name === safeKecamatan.value
-      )?.code
+  watchEffect(() => {
+    if (kbId.value) {
+      eK();
+    }
+  });
+
+  const kId = computed(() => {
+    const found = dK.value?.data.find((i) => i.name === state.value.kecamatan);
+    return found ? found.code : undefined;
+  });
+
+  watch(
+    () => state.value.kecamatan,
+    (n, o) => {
+      if (n !== o) {
+        state.value.kelurahan = "";
+      }
+    },
   );
 
-  // --- Kelurahan ---
   const {
-    data: dataKelurahan,
-    status: statusKelurahan,
-    execute: fetchKelurahan,
-  } = useFetch(() => `${APIBASE}/options/kelurahan/${kecamatanId.value}`, {
+    data: dKl,
+    status: sKl,
+    execute: eKl,
+  } = useFetch(() => `${APIBASE}/options/kelurahan/${kId.value}`, {
     immediate: false,
   });
-  watch(kecamatanId, (val) => val && fetchKelurahan());
+
+  watchEffect(() => {
+    if (kId.value) {
+      eKl();
+    }
+  });
 
   return {
-    // Provinsi
-    dataProvinsi,
-    statusProvinsi,
-    provinsiId,
-    // Kabupaten
-    dataKabupaten,
-    statusKabupaten,
-    kabupatenId,
-    // Kecamatan
-    dataKecamatan,
-    statusKecamatan,
-    kecamatanId,
-    // Kelurahan
-    dataKelurahan,
-    statusKelurahan,
+    dataProvinsi: dP,
+    statusProvinsi: sP,
+    dataKabupaten: dKb,
+    statusKabupaten: sKb,
+    dataKecamatan: dK,
+    statusKecamatan: sK,
+    dataKelurahan: dKl,
+    statusKelurahan: sKl,
   };
 }

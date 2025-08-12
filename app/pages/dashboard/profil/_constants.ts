@@ -21,9 +21,9 @@ export const schema = z.object({
   deskripsi: z.string().check(z.minLength(1, "Required")),
   foto: z.string(),
   instagram: z.string().check(z.minLength(1, "Required")),
+  gender: z.enum(["laki", "perempuan"]),
   perokok: z.boolean(),
   gaji: z.number(),
-  gender: z.enum(["laki", "perempuan"]),
 });
 
 export const statusKawinOptions = [
@@ -59,10 +59,10 @@ export type Schema = z.infer<typeof schema>;
 export const getInitialFormData = (): Schema => ({
   statusKawin: "",
   tanggalLahir: "",
-  kota: "",
-  kecamatan: "",
-  kelurahan: "",
-  provinsi: "",
+  provinsi: "Aceh",
+  kota: "Kabupaten Aceh Barat",
+  kecamatan: "Arongan Lambalek",
+  kelurahan: "Alue Bagok",
   namaAyah: "",
   anakKe: 0,
   dariBersaudara: 0,

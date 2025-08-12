@@ -7,10 +7,10 @@
   const query = ref({
     statusKawin: undefined,
     pendidikan: undefined,
-    provinsi: undefined,
-    kota: undefined,
-    kecamatan: undefined,
-    kelurahan: undefined,
+    provinsi: "",
+    kota: "",
+    kecamatan: "",
+    kelurahan: "",
     suku: undefined,
     umurMin: 0,
     umurMax: 100,
@@ -34,7 +34,7 @@
     {
       query,
       watch: false,
-    }
+    },
   );
 
   const { data: dataTaaruf } = await useFetch(`${APIBASE}/taaruf/user`);
@@ -48,7 +48,7 @@
     statusKecamatan,
     statusProvinsi,
     statusKelurahan,
-  } = useWilayahOptions(query);
+  } = useWilayah(query);
 
   const modalState = ref<ExtractObjectType<typeof data.value>>();
   const modalOpen = ref(false);

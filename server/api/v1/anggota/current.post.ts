@@ -43,6 +43,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  console.log(fields);
   const parsed = OAnggotaDetailCreate.parse(fields);
 
   await createAnggotaDetail(user.id, parsed);

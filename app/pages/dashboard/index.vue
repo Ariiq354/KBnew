@@ -3,4 +3,4 @@
   constantStore.setTitle("Dashboard");
 </script>
 
-<template>ini dashbaord</template>
+<template>Hello Dashboard</template>
