@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
-  import {  getInitialFormData, loginSchema } from "./_constants";
-import type {Schema} from "./_constants";
+  import { initFormData, loginSchema } from "./_constants";
+  import type { Schema } from "./_constants";
 
   definePageMeta({
     layout: "auth",
@@ -9,7 +9,7 @@ import type {Schema} from "./_constants";
 
   const authStore = useAuthStore();
 
-  const state = ref(getInitialFormData());
+  const state = ref(initFormData);
 
   async function onSubmit(event: FormSubmitEvent<Schema>) {
     await authStore.signUp(event.data);

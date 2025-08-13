@@ -55,13 +55,13 @@
         label: "Main",
         type: "label",
       },
+      {
+        label: "Pencarian Pasangan",
+        to: "/dashboard/member",
+        icon: "i-heroicons-user",
+      },
       ...(isActive.value
         ? ([
-            {
-              label: "Pencarian Pasangan",
-              to: "/dashboard/member",
-              icon: "i-heroicons-user",
-            },
             {
               label: "Pengajuan Taaruf",
               to: "/dashboard/pengajuan",
@@ -116,8 +116,15 @@
       v-if="!isDesktop"
       v-model:open="constantStore.sidebarShow"
       side="left"
-      title="Menu"
     >
+      <template #title>
+        <div class="flex items-center justify-center text-(--ui-primary)">
+          <NuxtLink to="/" class="flex items-center gap-4 text-xl">
+            <NuxtImg src="/logo.webp" class="h-10 w-10" />
+            <span> Keluarga Bahagia </span>
+          </NuxtLink>
+        </div>
+      </template>
       <template #body>
         <aside class="overflow-auto">
           <UNavigationMenu

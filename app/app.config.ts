@@ -29,6 +29,14 @@ export default defineAppConfig({
         size: "lg",
       },
     },
+    select: {
+      defaultVariants: {
+        size: "lg",
+      },
+      slots: {
+        base: "w-full",
+      },
+    },
     selectMenu: {
       defaultVariants: {
         size: "lg",

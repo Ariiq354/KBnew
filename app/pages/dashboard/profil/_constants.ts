@@ -54,6 +54,17 @@ export const genderOptions = [
   },
 ];
 
+export const perokokOptions = [
+  {
+    label: "Iya",
+    value: true,
+  },
+  {
+    label: "Tidak",
+    value: false,
+  },
+];
+
 export type Schema = z.infer<typeof schema>;
 
 export const getInitialFormData = (): Schema => ({

@@ -19,7 +19,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (
     authStore.user &&
     authStore.user.isActive === false &&
-    (to.path === "/dashboard/member" || to.path === "/dashboard/pengajuan")
+    to.path === "/dashboard/pengajuan"
   ) {
     return navigateTo("/dashboard/profil");
   }

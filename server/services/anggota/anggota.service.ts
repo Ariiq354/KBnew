@@ -167,10 +167,13 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
   const conditions: (SQL<unknown> | undefined)[] = [
     ne(user.email, "admin@gmail.com"),
     ne(user.id, id),
-    ne(userDtlTable.gender, reqUser!.gender),
     eq(user.isActive, true),
     eq(user.isAvailable, true),
   ];
+
+  if (reqUser) {
+    conditions.push(ne(userDtlTable.gender, reqUser!.gender));
+  }
 
   if (param.suku)
     conditions.push(

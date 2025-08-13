@@ -4,6 +4,7 @@
     genderOptions,
     getInitialFormData,
     pendidikanOptions,
+    perokokOptions,
     schema,
     statusKawinOptions,
   } from "./_constants";
@@ -261,7 +262,11 @@
               />
             </UFormField>
             <UFormField label="Perokok" name="perokok">
-              <UCheckbox v-model="state.perokok" :disabled="isLoading" />
+              <USelect
+                v-model="state.perokok"
+                :items="perokokOptions"
+                :disabled="isLoading"
+              />
             </UFormField>
             <UFormField label="Hobi" name="hobi">
               <UInput v-model="state.hobi" :disabled="isLoading" />

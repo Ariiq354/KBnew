@@ -40,9 +40,9 @@ export const schema = z.object({
   status: z.boolean(),
 });
 
-export const getInitialFormData = (): Schema => ({
+export const initFormData: Schema = {
   id: 0,
   status: false,
-});
+};
 
 export type Schema = z.infer<typeof schema>;

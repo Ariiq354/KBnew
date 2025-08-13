@@ -2,6 +2,7 @@
   import { pendidikanOptions, statusKawinOptions } from "./_constants";
 
   const constantStore = useConstantStore();
+  const authStore = useAuthStore();
   constantStore.setTitle("Dashboard / Member");
 
   const query = ref({
@@ -81,121 +82,127 @@
 
 <template>
   <Title>Pencarian Member</Title>
+  <UModal v-model:open="modalOpen" title="Detail Member">
+    <template #body>
+      <div class="flex gap-4">
+        <div
+          class="flex aspect-square w-32 items-center justify-center bg-gray-300"
+        >
+          <NuxtImg :src="modalState?.foto!" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <h1 class="text-lg font-bold">{{ modalState?.namaAnggota }}</h1>
+          <h2 class="text-primary">{{ modalState?.deskripsi }}</h2>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-12">
+        <div class="flex items-center gap-2">
+          <UIcon
+            name="i-heroicons-information-circle"
+            size="40"
+            class="text-primary"
+          />
+          <div class="flex flex-col">
+            <h1 class="text-primary">Status</h1>
+            <h2 class="font-bold">
+              {{ modalState?.statusKawin }}
+            </h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <UIcon
+            name="i-heroicons-calendar-date-range"
+            size="40"
+            class="text-primary"
+          />
+          <div class="flex flex-col">
+            <h1 class="text-primary">Tanggal Lahir</h1>
+            <h2 class="font-bold">
+              {{ modalState?.tanggalLahir }}
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <table class="mt-12 w-full text-sm">
+        <tbody>
+          <tr>
+            <td class="py-2 font-bold whitespace-nowrap">Nama Ayah:</td>
+            <td class="text-primary text-right capitalize">
+              {{ modalState?.namaAyah }}
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 font-bold">Suku:</td>
+            <td class="text-primary text-right capitalize">
+              {{ modalState?.suku }}
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 font-bold">Pendidikan:</td>
+            <td class="text-primary text-right capitalize">
+              {{ modalState?.pendidikan }}
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 font-bold">Pekerjaan:</td>
+            <td class="text-primary text-right capitalize">
+              {{ modalState?.pekerjaan }}
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 font-bold">TB / BB:</td>
+            <td class="text-primary text-right">
+              {{ modalState?.tinggi + " cm" }} /
+              {{ modalState?.berat + " kg" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 font-bold">Hobi:</td>
+            <td class="text-primary text-right capitalize">
+              {{ modalState?.hobi }}
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 font-bold">Daerah:</td>
+            <td class="text-primary text-right">
+              {{ modalState?.provinsi }} / {{ modalState?.kota }} /
+              {{ modalState?.kecamatan }} /
+              {{ modalState?.kelurahan }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-12 text-purple-900 dark:text-purple-200">
+        <h1 class="font-bold">Kriteria Pasangan</h1>
+        <p class="mt-2 text-sm">
+          {{ modalState?.kriteria }}
+        </p>
+      </div>
+    </template>
+    <template #footer>
+      <div class="flex w-full justify-end gap-2">
+        <UButton variant="soft" @click="modalOpen = false"> Tutup </UButton>
+        <UButton
+          v-if="
+            !dataTaaruf?.data.find((item) => item.idDituju === modalState?.id)
+          "
+          :loading="isLoading"
+          @click="handleSubmit(modalState!.id)"
+        >
+          Ajukan Taaruf
+        </UButton>
+      </div>
+    </template>
+  </UModal>
   <main class="flex flex-col gap-4 items-center">
-    <UModal v-model:open="modalOpen" title="Detail Member">
-      <template #body>
-        <div class="flex gap-4">
-          <div
-            class="flex aspect-square w-32 items-center justify-center bg-gray-300"
-          >
-            <NuxtImg :src="modalState?.foto!" />
-          </div>
-          <div class="flex flex-col justify-center">
-            <h1 class="text-lg font-bold">{{ modalState?.namaAnggota }}</h1>
-            <h2 class="text-primary">{{ modalState?.deskripsi }}</h2>
-          </div>
-        </div>
-
-        <div class="mt-6 flex gap-12">
-          <div class="flex items-center gap-2">
-            <UIcon
-              name="i-heroicons-information-circle"
-              size="40"
-              class="text-primary"
-            />
-            <div class="flex flex-col">
-              <h1 class="text-primary">Status</h1>
-              <h2 class="font-bold">
-                {{ modalState?.statusKawin }}
-              </h2>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <UIcon
-              name="i-heroicons-calendar-date-range"
-              size="40"
-              class="text-primary"
-            />
-            <div class="flex flex-col">
-              <h1 class="text-primary">Tanggal Lahir</h1>
-              <h2 class="font-bold">
-                {{ modalState?.tanggalLahir }}
-              </h2>
-            </div>
-          </div>
-        </div>
-
-        <table class="mt-12 w-full text-sm">
-          <tbody>
-            <tr>
-              <td class="py-2 font-bold whitespace-nowrap">Nama Ayah:</td>
-              <td class="text-primary text-right capitalize">
-                {{ modalState?.namaAyah }}
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 font-bold">Suku:</td>
-              <td class="text-primary text-right capitalize">
-                {{ modalState?.suku }}
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 font-bold">Pendidikan:</td>
-              <td class="text-primary text-right capitalize">
-                {{ modalState?.pendidikan }}
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 font-bold">Pekerjaan:</td>
-              <td class="text-primary text-right capitalize">
-                {{ modalState?.pekerjaan }}
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 font-bold">TB / BB:</td>
-              <td class="text-primary text-right">
-                {{ modalState?.tinggi + " cm" }} /
-                {{ modalState?.berat + " kg" }}
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 font-bold">Hobi:</td>
-              <td class="text-primary text-right capitalize">
-                {{ modalState?.hobi }}
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 font-bold">Daerah:</td>
-              <td class="text-primary text-right">
-                {{ modalState?.provinsi }} / {{ modalState?.kota }} /
-                {{ modalState?.kecamatan }} /
-                {{ modalState?.kelurahan }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="mt-12 text-purple-900 dark:text-purple-200">
-          <h1 class="font-bold">Kriteria Pasangan</h1>
-          <p class="mt-2 text-sm">
-            {{ modalState?.kriteria }}
-          </p>
-        </div>
-      </template>
-      <template #footer>
-        <div class="flex w-full justify-end gap-2">
-          <UButton variant="soft" @click="modalOpen = false"> Tutup </UButton>
-          <UButton
-            v-if="
-              !dataTaaruf?.data.find((item) => item.idDituju === modalState?.id)
-            "
-            :loading="isLoading"
-            @click="handleSubmit(modalState!.id)"
-          >
-            Ajukan Taaruf
-          </UButton>
-        </div>
-      </template>
-    </UModal>
+    <UCard v-if="!authStore.session?.data?.user.isActive" class="w-full">
+      <div class="flex items-center gap-4">
+        <UIcon name="i-heroicons-information-circle" size="30" /> Lengkapi data
+        diri anda sebelum memulai taaruf
+      </div>
+    </UCard>
     <UCard class="w-full">
       <div class="grid grid-cols-4 gap-4 mb-4">
         <UFormField label="Status Kawin">
@@ -332,6 +339,7 @@
             </table>
           </div>
           <UButton
+            v-if="authStore.session?.data?.user.isActive"
             variant="soft"
             class="mt-12 flex w-full justify-center"
             :loading="status == 'pending'"

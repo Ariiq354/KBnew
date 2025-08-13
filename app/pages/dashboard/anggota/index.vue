@@ -15,7 +15,7 @@
     query,
   });
 
-  const state = ref<ExtractObjectType<typeof data.value>["detail"]>();
+  const state = shallowRef<ExtractObjectType<typeof data.value>["detail"]>();
 
   const modalOpen = ref();
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -29,7 +29,7 @@
   <main>
     <LazyUModal v-model:open="modalOpen" title="Detail User" fullscreen>
       <template #body>
-        <div class="grid lg:grid-cols-4 gap-4">
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
           <UFormField label="Foto">
             <UInput :model-value="state?.foto" disabled />
           </UFormField>
@@ -91,7 +91,7 @@
             <UInput :model-value="state?.provinsi" disabled />
           </UFormField>
           <UFormField label="Kriteria">
-            <UInput :model-value="state?.kriteria" disabled />
+            <UTextarea :model-value="state?.kriteria" disabled />
           </UFormField>
         </div>
       </template>

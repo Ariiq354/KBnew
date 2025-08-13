@@ -52,7 +52,7 @@
           Kami Menyediakan Beberapa Layanan
         </h1>
         <div class="flex flex-col gap-12 px-4 md:flex-row">
-          <NuxtLink to="/product" class="block">
+          <NuxtLink to="/product">
             <div
               class="flex h-[25rem] max-w-[25rem] flex-col justify-end rounded-2xl bg-[url('/square1.webp')] bg-[length:42rem] bg-[center_calc(50%+3rem)] p-4 shadow-xl md:p-12"
             >
@@ -64,16 +64,18 @@
               </p>
             </div>
           </NuxtLink>
-          <div
-            class="flex h-[25rem] max-w-[25rem] flex-col justify-end rounded-2xl bg-[url('/square2.webp')] bg-[length:42rem] bg-[center_calc(50%+3rem)] p-4 shadow-xl md:p-12"
-          >
-            <h1 class="mb-2 text-center text-2xl font-bold">Jodoh</h1>
-            <p class="text-center">
-              Banyak yang percaya bahwa jodoh adalah cerminan dari diri kita
-              sendiri, jodoh adalah sebuah perjalanan yan penuh dengan kejutan &
-              pembelajaran.
-            </p>
-          </div>
+          <NuxtLink to="/dashboard/member">
+            <div
+              class="flex h-[25rem] max-w-[25rem] flex-col justify-end rounded-2xl bg-[url('/square2.webp')] bg-[length:42rem] bg-[center_calc(50%+3rem)] p-4 shadow-xl md:p-12"
+            >
+              <h1 class="mb-2 text-center text-2xl font-bold">Jodoh</h1>
+              <p class="text-center">
+                Banyak yang percaya bahwa jodoh adalah cerminan dari diri kita
+                sendiri, jodoh adalah sebuah perjalanan yan penuh dengan kejutan
+                & pembelajaran.
+              </p>
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </div>

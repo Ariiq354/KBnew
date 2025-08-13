@@ -26,7 +26,7 @@
   <LazyUModal
     v-model:open="modalOpen"
     title="Detail Bootcamp"
-    class="md:min-w-4xl"
+    class="max-w-4xl w-full"
   >
     <template #body>
       <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -72,6 +72,12 @@
     </template>
   </LazyUModal>
   <main>
+    <UCard class="mb-4">
+      <h1 class="w-full flex justify-between items-center">
+        Dapatkan Paket kami <UButton to="/product">Dapatkan Paket</UButton>
+      </h1>
+    </UCard>
+
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <UCard v-for="item in data?.data" :key="item.id" :ui="{ body: 'h-full' }">
         <div class="h-full flex flex-col justify-between">

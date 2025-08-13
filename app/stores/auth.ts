@@ -32,7 +32,7 @@ type TSignUp = {
 
 export const useAuthStore = defineStore("useAuthStore", () => {
   const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
-    null
+    null,
   );
 
   async function init() {
@@ -47,12 +47,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
   async function signIn(body: TSignIn) {
     loading.value = true;
-    const headers = new Headers();
     await authClient.signIn.email({
       ...body,
       callbackURL: "/dashboard",
       fetchOptions: {
-        headers,
         onError: (body) => {
           useToastError("Login Failed", body.error.message);
         },
@@ -63,11 +61,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
   async function signUp(body: TSignUp) {
     loading.value = true;
-    const headers = new Headers();
     await authClient.signUp.email({
       ...body,
       fetchOptions: {
-        headers,
         onError: (body) => {
           useToastError("Register Failed", body.error.message);
         },
@@ -82,10 +78,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
   async function signOut() {
     loading.value = true;
-    const headers = new Headers();
     await authClient.signOut({
       fetchOptions: {
-        headers,
         onError: (body) => {
           useToastError("Logout Failed", body.error.message);
         },
@@ -96,8 +90,13 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function hasPermission(body: TStatement) {
+    const headers = useRequestHeaders();
+
     const result = await authClient.admin.hasPermission({
       permissions: body,
+      fetchOptions: {
+        headers,
+      },
     });
 
     return result.data?.success;

@@ -8,15 +8,15 @@ export const loginSchema = z.object({
     .string()
     .check(
       z.minLength(1, "Required"),
-      z.minLength(8, "Password must be 8 character or more")
+      z.minLength(8, "Password must be 8 character or more"),
     ),
 });
 
-export const getInitialFormData = (): Schema => ({
+export const initFormData: Schema = {
   email: "",
   password: "",
   noTelepon: "",
   name: "",
-});
+};
 
 export type Schema = z.infer<typeof loginSchema>;

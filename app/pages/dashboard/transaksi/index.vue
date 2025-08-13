@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE } from "~/utils";
-  import { columns, getInitialFormData, schema } from "./_constants";
+  import { columns, initFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Daftar Transaksi");
 
-  const state = ref(getInitialFormData());
+  let state = reactive(initFormData);
   const query = reactive({
     search: "",
     page: 1,
@@ -20,7 +20,7 @@
   });
 
   const currentData = computed(() =>
-    data.value?.data.find((item) => item.id === state.value.id),
+    data.value?.data.find((item) => item.id === state.id),
   );
 
   const modalOpen = ref(false);
@@ -28,7 +28,7 @@
   async function onSubmit(event: FormSubmitEvent<Schema>) {
     const basePath = `${APIBASE}/transaksi`;
     await execute({
-      path: `${basePath}/${state.value.id}`,
+      path: `${basePath}/${state.id}`,
       body: event.data,
       method: "PUT",
       onSuccess() {
@@ -43,7 +43,7 @@
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
-    state.value = itemData;
+    state = itemData;
   }
 </script>
 
