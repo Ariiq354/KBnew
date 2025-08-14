@@ -53,7 +53,7 @@
     <LazyUModal
       v-model:open="modalOpen"
       title="Edit transaksi"
-      class="min-w-2xl"
+      class="max-w-2xl w-full"
     >
       <template #body>
         <UForm
