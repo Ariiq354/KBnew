@@ -17,36 +17,71 @@
             label: "Home Dashboard",
             to: "/dashboard",
             icon: "i-heroicons-home",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
           {
             label: "Daftar Anggota",
             to: "/dashboard/anggota",
             icon: "i-heroicons-user",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
           {
             label: "Daftar Bootcamp",
             to: "/dashboard/bootcamp",
             icon: "i-heroicons-computer-desktop",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
           {
             label: "Daftar Diskon",
             to: "/dashboard/diskon",
             icon: "i-heroicons-percent-badge",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
           {
             label: "Pengajuan Taaruf",
             to: "/dashboard/list-taaruf",
             icon: "i-heroicons-users",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
           {
             label: "Daftar Transaksi",
             to: "/dashboard/transaksi",
             icon: "i-heroicons-shopping-cart",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
           {
             label: "Daftar Tiket User",
             to: "/dashboard/tiket-user",
             icon: "i-heroicons-ticket",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
           },
         ] as NavigationMenuItem[])
       : [],
@@ -59,6 +94,11 @@
         label: "Pencarian Pasangan",
         to: "/dashboard/member",
         icon: "i-heroicons-user",
+        onSelect: () => {
+          if (!isDesktop.value) {
+            constantStore.toggleSidebar();
+          }
+        },
       },
       ...(isActive.value
         ? ([
@@ -66,6 +106,11 @@
               label: "Pengajuan Taaruf",
               to: "/dashboard/pengajuan",
               icon: "i-heroicons-heart",
+              onSelect: () => {
+                if (!isDesktop.value) {
+                  constantStore.toggleSidebar();
+                }
+              },
             },
           ] as NavigationMenuItem[])
         : []),
@@ -73,11 +118,21 @@
         label: "Identitas Diri",
         to: "/dashboard/profil",
         icon: "i-heroicons-user-circle",
+        onSelect: () => {
+          if (!isDesktop.value) {
+            constantStore.toggleSidebar();
+          }
+        },
       },
       {
         label: "Paket Saya",
         to: "/dashboard/paket-saya",
         icon: "i-heroicons-cube",
+        onSelect: () => {
+          if (!isDesktop.value) {
+            constantStore.toggleSidebar();
+          }
+        },
       },
     ],
   ];
