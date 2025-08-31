@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
+  import { useConstantStore } from "~/stores/constant";
   import {
     genderOptions,
     getInitialFormData,
@@ -9,6 +10,11 @@
     statusKawinOptions,
   } from "./_constants";
   import type { Schema } from "./_constants";
+  import { useAuthStore } from "~/stores/auth";
+  import { useWilayah } from "~/composables/wilayah";
+  import { useSubmit } from "~/composables/function";
+  import { APIBASE } from "~/utils";
+  import { useToastError, useToastSuccess } from "~/composables/toast";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();

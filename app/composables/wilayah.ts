@@ -1,3 +1,5 @@
+import { APIBASE } from "~/utils";
+
 export function useWilayah(
   state: Ref<{
     provinsi: string;

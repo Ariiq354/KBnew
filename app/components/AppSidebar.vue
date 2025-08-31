@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import type { NavigationMenuItem } from "@nuxt/ui";
+  import { useAuthStore } from "~/stores/auth";
+  import { useConstantStore } from "~/stores/constant";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();

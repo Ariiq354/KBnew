@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { APIBASE } from "~/utils";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
   import { columns, columnsTiket } from "./_constants";
+  import { useConstantStore } from "~/stores/constant";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Tiket User");

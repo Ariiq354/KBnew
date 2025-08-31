@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { formatRupiah } from "~/utils";
+  import { APIBASE, capitalizeWord, formatRupiah } from "~/utils";
   import DOMPurify from "dompurify";
+  import { useAuthStore } from "~/stores/auth";
+  import { useToastError, useToastSuccess } from "~/composables/toast";
 
   definePageMeta({
     layout: "landing",

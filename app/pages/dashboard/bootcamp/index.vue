@@ -1,8 +1,12 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
-  import { APIBASE } from "~/utils";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
   import { columns, getInitialFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
+  import { useConstantStore } from "~/stores/constant";
+  import { useSubmit } from "~/composables/function";
+  import { useToastError } from "~/composables/toast";
+  import { openConfirmModal } from "~/composables/modal";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Daftar Bootcamp");

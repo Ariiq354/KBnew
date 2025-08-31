@@ -1,6 +1,8 @@
+import { useToast } from "#ui/composables/useToast";
+
 export function useToastSuccess(
   title: string,
-  description: string | undefined
+  description: string | undefined,
 ) {
   const toast = useToast();
   toast.add({

@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { useConstantStore } from "~/stores/constant";
   import { columns } from "./_constants";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Anggota");

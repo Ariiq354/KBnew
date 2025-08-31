@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
+  import { useAuthStore } from "~/stores/auth";
   import { initFormData, loginSchema } from "./_constants";
   import type { Schema } from "./_constants";
 

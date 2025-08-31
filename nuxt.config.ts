@@ -43,4 +43,15 @@ export default defineNuxtConfig({
       routes: ["/", "/contact", "/about"],
     },
   },
+
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
+    },
+  ],
+
+  imports: {
+    scan: false,
+  },
 });

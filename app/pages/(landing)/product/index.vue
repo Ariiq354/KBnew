@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { formatRupiah } from "~/utils";
+  import { APIBASE, formatRupiah } from "~/utils";
 
   definePageMeta({
     layout: "landing",

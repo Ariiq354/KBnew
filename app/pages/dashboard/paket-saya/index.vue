@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
 
   const constantStore = useConstantStore();
