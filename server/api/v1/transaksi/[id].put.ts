@@ -1,15 +1,12 @@
-import { z } from "zod/mini";
-import { OTransaksiCreate } from "~~/server/services/transaksi/dto/create-transaksi.dto";
-import { updateTransaksi } from "~~/server/services/transaksi/transaksi.service";
-
-const paramsSchema = z.coerce.number();
+import { updateTransaksi } from "~~/server/repo/transaksi.repo";
+import { OTransaksiCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) =>
-    OTransaksiCreate.parse(b),
+    OTransaksiCreate.parse(b)
   );
-  const id = paramsSchema.parse(getRouterParam(event, "id"));
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   await updateTransaksi(id, { status: result.status });
 

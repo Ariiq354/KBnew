@@ -1,19 +1,19 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { timestamp } from "./common";
-import { user } from "./auth";
+import { createdUpdated } from "./common";
+import { userTable } from "./auth";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const taarufTable = sqliteTable("taaruf", {
-  id: int().primaryKey({ autoIncrement: true }),
-  idPenuju: int()
+export const taarufTable = pgTable("taaruf", {
+  id: serial().primaryKey(),
+  idPenuju: integer()
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  idDituju: int()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  idDituju: integer()
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => userTable.id, { onDelete: "cascade" }),
   status: text({
     enum: ["permintaan", "taaruf", "selesai", "ditolak"],
   })
     .notNull()
     .default("permintaan"),
-  ...timestamp,
+  ...createdUpdated,
 });

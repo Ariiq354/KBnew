@@ -1,32 +1,32 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { user } from "./auth";
-import { timestamp } from "./common";
+import { boolean, integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { userTable } from "./auth";
+import { createdUpdated } from "./common";
 
-export const bootcampTable = sqliteTable("bootcamp", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const bootcampTable = pgTable("bootcamp", {
+  id: serial().primaryKey(),
   judul: text().notNull(),
   deskripsi: text().notNull(),
-  status: int({ mode: "boolean" }).notNull().default(false),
-  harga: int().notNull(),
+  status: boolean().notNull().default(false),
+  harga: integer().notNull(),
   googleMap: text().notNull(),
   tempat: text().notNull(),
   waktu: text().notNull(),
   foto: text().notNull(),
   pembicara: text().notNull(),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const pemilikBootcampTable = sqliteTable("pemilikBootcamp", {
-  id: int().primaryKey({ autoIncrement: true }),
-  idUser: int()
+export const pemilikBootcampTable = pgTable("pemilikBootcamp", {
+  id: serial().primaryKey(),
+  idUser: integer()
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  idBootcamp: int()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  idBootcamp: integer()
     .notNull()
     .references(() => bootcampTable.id, { onDelete: "cascade" }),
-  harga: int().notNull(),
+  harga: integer().notNull(),
   diskon: text().notNull(),
-  status: int({ mode: "boolean" }).notNull().default(false),
+  status: boolean().notNull().default(false),
   kode: text().notNull().default(""),
-  ...timestamp,
+  ...createdUpdated,
 });

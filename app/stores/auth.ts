@@ -36,15 +36,15 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     null,
   );
 
+  const user = computed(() => session.value?.data?.user);
+  const loading = ref(false);
+
   async function init() {
     loading.value = true;
     const data = await authClient.useSession(useFetch);
     session.value = data;
     loading.value = false;
   }
-
-  const user = computed(() => session.value?.data?.user);
-  const loading = ref(false);
 
   async function signIn(body: TSignIn) {
     loading.value = true;
@@ -90,17 +90,13 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading.value = false;
   }
 
-  async function hasPermission(body: TStatement) {
-    const headers = useRequestHeaders();
-
-    const result = await authClient.admin.hasPermission({
-      permissions: body,
-      fetchOptions: {
-        headers,
-      },
+  function hasPermission(body: TStatement) {
+    const result = authClient.admin.checkRolePermission({
+      permission: body,
+      role: user.value?.role as "user" | "admin",
     });
 
-    return result.data?.success;
+    return result;
   }
 
   async function updateUser(body: { name?: string; noTelepon?: string }) {

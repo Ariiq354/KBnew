@@ -44,29 +44,29 @@
           <UFormField label="Nama Lengkap" name="name">
             <UInput
               v-model="state.name"
-              icon="i-heroicons-user"
+              icon="i-lucide-user"
               placeholder="Nama Lengkap"
             />
           </UFormField>
           <UFormField label="No Telepon" name="noTelepon">
             <UInput
               v-model="state.noTelepon"
-              icon="i-heroicons-phone"
+              icon="i-lucide-phone"
               placeholder="81XXX"
             />
           </UFormField>
           <UFormField label="Email" name="email">
             <UInput
               v-model="state.email"
-              icon="i-heroicons-envelope"
+              icon="i-lucide-mail"
               placeholder="Email"
             />
           </UFormField>
           <UFormField label="Password" name="password">
-            <UInput
+            <InputPassword
               v-model="state.password"
-              type="password"
-              icon="i-heroicons-lock-closed"
+              :disabled="authStore.loading"
+              icon="i-lucide-lock"
               placeholder="Password"
             />
           </UFormField>

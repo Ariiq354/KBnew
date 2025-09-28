@@ -1,16 +1,12 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../database";
 import { pemilikBootcampTable } from "../database/schema/bootcamp";
-import type {
-  SQLiteColumn,
-  SQLiteTableWithColumns,
-  TableConfig,
-} from "drizzle-orm/sqlite-core";
+import type { AnyPgTable, PgColumn } from "drizzle-orm/pg-core";
 
-export async function generateUniqueCode<T extends TableConfig>(
-  table: SQLiteTableWithColumns<T>,
-  column: SQLiteColumn,
-  length = 4,
+export async function generateUniqueCode(
+  table: AnyPgTable,
+  column: PgColumn,
+  length = 4
 ) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let result = "";
@@ -48,8 +44,8 @@ export async function getUniquePrice(price: number) {
       .where(
         and(
           eq(pemilikBootcampTable.harga, newPrice),
-          eq(pemilikBootcampTable.status, false),
-        ),
+          eq(pemilikBootcampTable.status, false)
+        )
       );
 
     if (exist.length === 0) {

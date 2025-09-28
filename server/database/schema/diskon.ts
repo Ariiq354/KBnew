@@ -1,13 +1,13 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { timestamp } from "./common";
+import { boolean, integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { createdUpdated } from "./common";
 
-export const diskonTable = sqliteTable("diskon", {
-  id: int().primaryKey({ autoIncrement: true }),
-  persen: int().notNull(),
+export const diskonTable = pgTable("diskon", {
+  id: serial().primaryKey(),
+  persen: integer().notNull(),
   kode: text().notNull().unique(),
   batasWaktu: text().notNull(),
-  batasPemakai: int().notNull(),
-  jumlahDipakai: int().notNull().default(0),
-  status: int({ mode: "boolean" }).notNull().default(false),
-  ...timestamp,
+  batasPemakai: integer().notNull(),
+  jumlahDipakai: integer().notNull().default(0),
+  status: boolean().notNull().default(false),
+  ...createdUpdated,
 });

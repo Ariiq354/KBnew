@@ -1,10 +1,9 @@
-import { listAllTransaksi } from "~~/server/services/transaksi/transaksi.service";
-import { OTransaksiList } from "~~/server/services/transaksi/dto/list-transaksi.dto";
+import { listAllTransaksi } from "~~/server/repo/transaksi.repo";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OTransaksiList.parse(query),
+    OSearchPagination.parse(query)
   );
 
   const data = await listAllTransaksi(query);

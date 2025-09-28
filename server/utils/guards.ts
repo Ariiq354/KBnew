@@ -21,5 +21,5 @@ export function adminGuard(event: H3Event) {
     });
   }
 
-  return event.context.user;
+  return user;
 }

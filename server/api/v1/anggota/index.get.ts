@@ -1,10 +1,10 @@
-import { listAllAnggota } from "~~/server/services/anggota/anggota.service";
-import { OAnggotaList } from "~~/server/services/anggota/dto/list-anggota.dto";
+import { listAllAnggota } from "~~/server/repo/anggota.repo";
+import { OSearchPagination } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OAnggotaList.parse(query)
+    OSearchPagination.parse(query)
   );
 
   const data = await listAllAnggota(query);

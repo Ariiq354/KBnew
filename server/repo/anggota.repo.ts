@@ -1,36 +1,42 @@
 import { and, desc, eq, gte, like, lte, ne, or, sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
-import type { TAnggotaList, TAnggotaPasangan } from "./dto/list-anggota.dto";
-import { user, userDtlTable } from "~~/server/database/schema/auth";
+import { userTable, userDtlTable } from "~~/server/database/schema/auth";
 import { db } from "~~/server/database";
-import type { TAnggotaDetailCreate } from "./dto/create-anggota.dto";
 import { generateUniqueCode } from "~~/server/utils/generate";
+import type {
+  TAnggotaDetailCreate,
+  TAnggotaPasangan,
+} from "../api/v1/anggota/_dto";
 
-export async function listAllAnggota({ limit, page, search }: TAnggotaList) {
+export async function listAllAnggota({
+  limit,
+  page,
+  search,
+}: TSearchPagination) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    ne(user.email, "admin@gmail.com"),
+    ne(userTable.email, "admin@gmail.com"),
   ];
   if (search) {
     const searchCondition = `%${search}%`;
 
     conditions.push(
       or(
-        like(user.name, searchCondition),
-        like(user.email, searchCondition),
-        like(user.noTelepon, searchCondition),
-        like(user.role, searchCondition),
-      ),
+        like(userTable.name, searchCondition),
+        like(userTable.email, searchCondition),
+        like(userTable.noTelepon, searchCondition),
+        like(userTable.role, searchCondition)
+      )
     );
   }
 
   const query = db
     .select({
-      id: user.id,
-      namaAnggota: user.name,
-      noTelepon: user.noTelepon,
-      email: user.email,
-      role: user.role,
+      id: userTable.id,
+      namaAnggota: userTable.name,
+      noTelepon: userTable.noTelepon,
+      email: userTable.email,
+      role: userTable.role,
       detail: {
         kodeUser: userDtlTable.kodeUser,
         statusKawin: userDtlTable.statusKawin,
@@ -56,35 +62,36 @@ export async function listAllAnggota({ limit, page, search }: TAnggotaList) {
         foto: userDtlTable.foto,
       },
     })
-    .from(user)
+    .from(userTable)
     .where(and(...conditions))
-    .leftJoin(userDtlTable, eq(user.id, userDtlTable.userId))
-    .orderBy(desc(user.createdAt))
-    .$dynamic();
+    .leftJoin(userDtlTable, eq(userTable.id, userDtlTable.userId))
+    .orderBy(desc(userTable.createdAt));
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to get total anggota",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Anggota", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get data anggota",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function getAnggotaById(id: number) {
   const query = db
     .select({
-      id: user.id,
-      namaAnggota: user.name,
-      noTelepon: user.noTelepon,
-      email: user.email,
-      role: user.role,
-      isAvailable: user.isAvailable,
+      id: userTable.id,
+      namaAnggota: userTable.name,
+      noTelepon: userTable.noTelepon,
+      email: userTable.email,
+      role: userTable.role,
+      isAvailable: userTable.isAvailable,
       detail: {
         kodeUser: userDtlTable.kodeUser,
         statusKawin: userDtlTable.statusKawin,
@@ -112,32 +119,27 @@ export async function getAnggotaById(id: number) {
         perokok: userDtlTable.perokok,
       },
     })
-    .from(user)
-    .where(eq(user.id, id))
-    .leftJoin(userDtlTable, eq(user.id, userDtlTable.userId));
+    .from(userTable)
+    .where(eq(userTable.id, id))
+    .leftJoin(userDtlTable, eq(userTable.id, userDtlTable.userId));
 
-  try {
-    const data = await query;
+  const data = await assertToErr("Failed to get Anggota By Id", query);
 
-    return data[0];
-  } catch (error) {
-    console.error("Failed to get Anggota", error);
-    throw InternalError;
-  }
+  return data.length > 0 ? data[0] : null;
 }
 
 export async function createAnggotaDetail(
   id: number,
-  body: TAnggotaDetailCreate,
+  body: TAnggotaDetailCreate
 ) {
-  try {
-    const kodeUser = await generateUniqueCode(
-      userDtlTable,
-      userDtlTable.kodeUser,
-      4,
-    );
+  const kodeUser = await assertToErr(
+    "Failed to generate code",
+    generateUniqueCode(userDtlTable, userDtlTable.kodeUser, 4)
+  );
 
-    await db
+  await assertToErr(
+    "Failed to insert user detail",
+    db
       .insert(userDtlTable)
       .values({
         ...body,
@@ -147,28 +149,31 @@ export async function createAnggotaDetail(
       .onConflictDoUpdate({
         target: userDtlTable.userId,
         set: body,
-      });
+      })
+  );
 
-    await db.update(user).set({ isActive: true }).where(eq(user.id, id));
-  } catch (error) {
-    console.error("Failed to insert Bootcamp", error);
-    throw InternalError;
-  }
+  await assertToErr(
+    "Failed to update user isActive",
+    db.update(userTable).set({ isActive: true }).where(eq(userTable.id, id))
+  );
 }
 
 export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
   const offset = (param.page - 1) * param.limit;
   const today = new Date();
 
-  const reqUser = await db.query.userDtlTable.findFirst({
-    where: eq(userDtlTable.userId, id),
-  });
+  const reqUser = await assertToErr(
+    "Failed to get request user",
+    db.query.userDtlTable.findFirst({
+      where: eq(userDtlTable.userId, id),
+    })
+  );
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    ne(user.email, "admin@gmail.com"),
-    ne(user.id, id),
-    eq(user.isActive, true),
-    eq(user.isAvailable, true),
+    ne(userTable.email, "admin@gmail.com"),
+    ne(userTable.id, id),
+    eq(userTable.isActive, true),
+    eq(userTable.isAvailable, true),
   ];
 
   if (reqUser) {
@@ -177,14 +182,14 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
 
   if (param.suku)
     conditions.push(
-      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`),
+      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`)
     );
   if (param.kodeUser)
     conditions.push(
       like(
         sql`LOWER(${userDtlTable.kodeUser})`,
-        `%${param.kodeUser.toLowerCase()}%`,
-      ),
+        `%${param.kodeUser.toLowerCase()}%`
+      )
     );
   if (param.statusKawin)
     conditions.push(eq(userDtlTable.statusKawin, param.statusKawin));
@@ -192,17 +197,17 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
     conditions.push(eq(userDtlTable.pendidikan, param.pendidikan));
   if (param.provinsi)
     conditions.push(
-      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`),
+      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`)
     );
   if (param.kecamatan)
     conditions.push(
-      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`),
+      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`)
     );
   if (param.kota)
     conditions.push(eq(userDtlTable.kota, `%${param.kota.toLowerCase()}%`));
   if (param.kelurahan)
     conditions.push(
-      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`),
+      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`)
     );
   if (param.umurMin) {
     const maxBirthDate = subtractYears(today, param.umurMin);
@@ -217,8 +222,8 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
 
   const query = db
     .select({
-      id: user.id,
-      namaAnggota: user.name,
+      id: userTable.id,
+      namaAnggota: userTable.name,
       kodeUser: userDtlTable.kodeUser,
       statusKawin: userDtlTable.statusKawin,
       tanggalLahir: userDtlTable.tanggalLahir,
@@ -242,22 +247,23 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
       deskripsi: userDtlTable.deskripsi,
       foto: userDtlTable.foto,
     })
-    .from(user)
+    .from(userTable)
     .where(and(...conditions))
-    .leftJoin(userDtlTable, eq(user.id, userDtlTable.userId))
-    .orderBy(desc(user.createdAt))
-    .$dynamic();
+    .leftJoin(userDtlTable, eq(userTable.id, userDtlTable.userId))
+    .orderBy(desc(userTable.createdAt));
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(param.limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to get total pasangan",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Pasangan", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get data pasangan",
+    query.limit(param.limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }

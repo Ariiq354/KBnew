@@ -1,20 +1,18 @@
 import type { SQL } from "drizzle-orm";
 import { and, desc, eq, like, or } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { user } from "~~/server/database/schema/auth";
+import { userTable } from "~~/server/database/schema/auth";
 import {
   bootcampTable,
   pemilikBootcampTable,
 } from "~~/server/database/schema/bootcamp";
-import type { TTransaksiCreate } from "./dto/create-transaksi.dto";
-import type { TTransaksiList } from "./dto/list-transaksi.dto";
-import type { TPagination } from "../common/pagination";
+import type { TTransaksiCreate } from "../api/v1/transaksi/_dto";
 
 export async function listAllTransaksi({
   limit,
   page,
   search,
-}: TTransaksiList) {
+}: TSearchPagination) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [];
   if (search) {
@@ -23,52 +21,54 @@ export async function listAllTransaksi({
     conditions.push(
       or(
         like(pemilikBootcampTable.harga, searchCondition),
-        like(user.name, searchCondition),
+        like(userTable.name, searchCondition),
         like(bootcampTable.judul, searchCondition),
-        like(pemilikBootcampTable.diskon, searchCondition),
-      ),
+        like(pemilikBootcampTable.diskon, searchCondition)
+      )
     );
   }
 
   const query = db
     .select({
       id: pemilikBootcampTable.id,
-      nama: user.name,
+      nama: userTable.name,
       namaBootcamp: bootcampTable.judul,
       harga: pemilikBootcampTable.harga,
       diskon: pemilikBootcampTable.diskon,
       status: pemilikBootcampTable.status,
     })
     .from(pemilikBootcampTable)
-    .leftJoin(user, eq(pemilikBootcampTable.idUser, user.id))
+    .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
     .leftJoin(
       bootcampTable,
-      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id),
+      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id)
     )
     .where(and(...conditions))
     .orderBy(desc(pemilikBootcampTable.createdAt))
     .$dynamic();
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to get total transaksi",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Transaksi", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get data transaksi",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function listAllTransaksiUser(
   id: number,
-  { limit, page }: TPagination,
+  { limit, page }: TPagination
 ) {
   const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [eq(user.id, id)];
+  const conditions: (SQL<unknown> | undefined)[] = [eq(userTable.id, id)];
 
   const query = db
     .select({
@@ -83,47 +83,46 @@ export async function listAllTransaksiUser(
       tempat: bootcampTable.tempat,
     })
     .from(pemilikBootcampTable)
-    .leftJoin(user, eq(pemilikBootcampTable.idUser, user.id))
+    .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
     .leftJoin(
       bootcampTable,
-      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id),
+      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id)
     )
     .where(and(...conditions))
     .orderBy(desc(pemilikBootcampTable.createdAt))
     .$dynamic();
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to get total transaksi user",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Transaksi User", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get data transaksi user",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function updateTransaksi(id: number, body: TTransaksiCreate) {
-  try {
-    const updatedData: Record<string, any> = { status: body.status };
+  const updatedData: Record<string, any> = { status: body.status };
 
-    if (body.status) {
-      updatedData["kode"] = await generateUniqueCode(
-        pemilikBootcampTable,
-        pemilikBootcampTable.kode,
-        12,
-      );
-    }
+  if (body.status) {
+    updatedData["kode"] = await assertToErr(
+      "Failed to generate code",
+      generateUniqueCode(pemilikBootcampTable, pemilikBootcampTable.kode, 12)
+    );
+  }
 
-    await db
+  await assertToErr(
+    "Failed to update Transaksi",
+    db
       .update(pemilikBootcampTable)
       .set(updatedData)
-      .where(eq(pemilikBootcampTable.id, id));
-  } catch (error) {
-    console.error("Failed to update Transaksi", error);
-    throw InternalError;
-  }
+      .where(eq(pemilikBootcampTable.id, id))
+  );
 }

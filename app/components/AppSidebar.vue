@@ -9,7 +9,7 @@
   const isActive = computed(() => authStore.user?.isActive);
 
   const sidebarItems: NavigationMenuItem[] | NavigationMenuItem[][] = [
-    (await authStore.hasPermission({ sidebar: ["admin"] }))
+    authStore.hasPermission({ sidebar: ["admin"] })
       ? ([
           {
             label: "Dashboard",
@@ -18,7 +18,7 @@
           {
             label: "Home Dashboard",
             to: "/dashboard",
-            icon: "i-heroicons-home",
+            icon: "i-lucide-home",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -28,7 +28,7 @@
           {
             label: "Daftar Anggota",
             to: "/dashboard/anggota",
-            icon: "i-heroicons-user",
+            icon: "i-lucide-user",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -38,7 +38,7 @@
           {
             label: "Daftar Bootcamp",
             to: "/dashboard/bootcamp",
-            icon: "i-heroicons-computer-desktop",
+            icon: "i-lucide-computer",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -48,7 +48,7 @@
           {
             label: "Daftar Diskon",
             to: "/dashboard/diskon",
-            icon: "i-heroicons-percent-badge",
+            icon: "i-lucide-ticket-percent",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -58,7 +58,7 @@
           {
             label: "Pengajuan Taaruf",
             to: "/dashboard/list-taaruf",
-            icon: "i-heroicons-users",
+            icon: "i-lucide-users",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -68,7 +68,7 @@
           {
             label: "Daftar Transaksi",
             to: "/dashboard/transaksi",
-            icon: "i-heroicons-shopping-cart",
+            icon: "i-lucide-shopping-cart",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -78,7 +78,7 @@
           {
             label: "Daftar Tiket User",
             to: "/dashboard/tiket-user",
-            icon: "i-heroicons-ticket",
+            icon: "i-lucide-ticket",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -95,7 +95,7 @@
       {
         label: "Pencarian Pasangan",
         to: "/dashboard/member",
-        icon: "i-heroicons-user",
+        icon: "i-lucide-user",
         onSelect: () => {
           if (!isDesktop.value) {
             constantStore.toggleSidebar();
@@ -107,7 +107,7 @@
             {
               label: "Pengajuan Taaruf",
               to: "/dashboard/pengajuan",
-              icon: "i-heroicons-heart",
+              icon: "i-lucide-heart",
               onSelect: () => {
                 if (!isDesktop.value) {
                   constantStore.toggleSidebar();
@@ -119,7 +119,7 @@
       {
         label: "Identitas Diri",
         to: "/dashboard/profil",
-        icon: "i-heroicons-user-circle",
+        icon: "i-lucide-user-circle",
         onSelect: () => {
           if (!isDesktop.value) {
             constantStore.toggleSidebar();
@@ -129,7 +129,7 @@
       {
         label: "Paket Saya",
         to: "/dashboard/paket-saya",
-        icon: "i-heroicons-cube",
+        icon: "i-lucide-package",
         onSelect: () => {
           if (!isDesktop.value) {
             constantStore.toggleSidebar();

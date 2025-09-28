@@ -27,3 +27,19 @@ export const OAnggotaDetailCreate = z.object({
 });
 
 export type TAnggotaDetailCreate = z.infer<typeof OAnggotaDetailCreate>;
+
+export const OAnggotaPasangan = z.object({
+  ...OPagination.def.shape,
+  statusKawin: z.optional(z.string()),
+  pendidikan: z.optional(z.string()),
+  provinsi: z.optional(z.string()),
+  kota: z.optional(z.string()),
+  kecamatan: z.optional(z.string()),
+  kelurahan: z.optional(z.string()),
+  suku: z.optional(z.string()),
+  umurMin: z.optional(z.coerce.number()),
+  umurMax: z.optional(z.coerce.number()),
+  kodeUser: z.optional(z.string()),
+});
+
+export type TAnggotaPasangan = z.infer<typeof OAnggotaPasangan>;

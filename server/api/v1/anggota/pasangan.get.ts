@@ -1,5 +1,5 @@
-import { listAnggotaPasangan } from "~~/server/services/anggota/anggota.service";
-import { OAnggotaPasangan } from "~~/server/services/anggota/dto/list-anggota.dto";
+import { listAnggotaPasangan } from "~~/server/repo/anggota.repo";
+import { OAnggotaPasangan } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

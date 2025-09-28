@@ -48,16 +48,16 @@
           <UFormField label="Email" name="email">
             <UInput
               v-model="state.email"
-              icon="i-heroicons-user"
+              icon="i-lucide-mail"
               placeholder="Email"
             />
           </UFormField>
 
           <UFormField label="Password" name="password">
-            <UInput
+            <InputPassword
               v-model="state.password"
-              icon="i-heroicons-lock-closed"
-              type="password"
+              :disabled="authStore.loading"
+              icon="i-lucide-lock"
               placeholder="Password"
             />
           </UFormField>
