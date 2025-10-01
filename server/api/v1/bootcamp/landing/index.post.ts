@@ -1,20 +1,13 @@
-import { getUniquePrice } from "~~/server/utils/generate";
+import { addUserBootcampService } from "~~/server/services/bootcamp.service";
 import { OUserBootcampCreate } from "../_dto";
-import { createUserBootcamp } from "~~/server/repository/bootcamp.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
-  const result = await readValidatedBody(event, (b) =>
+  const body = await readValidatedBody(event, (b) =>
     OUserBootcampCreate.parse(b)
   );
 
-  const newPrice = await getUniquePrice(result.harga);
-
-  await createUserBootcamp(user.id, {
-    diskon: result.diskon,
-    harga: newPrice,
-    idBootcamp: result.idBootcamp,
-  });
+  const newPrice = await addUserBootcampService(user, body);
 
   return HttpResponse({
     price: newPrice,

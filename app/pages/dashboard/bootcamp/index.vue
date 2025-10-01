@@ -82,7 +82,7 @@
       :title="
         (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Bootcamp'
       "
-      class="min-w-4xl"
+      class="max-w-4xl w-full"
     >
       <template #body>
         <UForm
@@ -92,6 +92,13 @@
           class="space-y-4"
           @submit="onSubmit"
         >
+          <UFormField label="Foto" name="foto">
+            <AppUploadImage
+              v-model:file="state.file"
+              v-model:foto="state.foto"
+              :disabled="isLoading || viewStatus"
+            />
+          </UFormField>
           <UFormField label="Judul" name="judul">
             <UInput v-model="state.judul" :disabled="isLoading || viewStatus" />
           </UFormField>
@@ -120,7 +127,6 @@
               class="mb-4"
               @picked="(e) => (state.googleMap = e)"
             />
-            <UInput :model-value="state.googleMap" disabled />
           </UFormField>
           <UFormField label="Tanggal & Waktu" name="waktu">
             <UInput v-model="state.waktu" :disabled="isLoading || viewStatus" />
@@ -134,13 +140,6 @@
           <UFormField label="Status" name="status">
             <USwitch
               v-model="state.status"
-              :disabled="isLoading || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Foto" name="foto">
-            <AppUploadImage
-              v-model:file="state.file"
-              v-model:foto="state.foto"
               :disabled="isLoading || viewStatus"
             />
           </UFormField>

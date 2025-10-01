@@ -20,6 +20,14 @@ export const schema = z.object({
   kriteria: z.string().check(z.minLength(1, "Required")),
   deskripsi: z.string().check(z.minLength(1, "Required")),
   foto: z.string(),
+  file: z.optional(
+    z
+      .file()
+      .check(
+        z.maxSize(5_000_000),
+        z.mime(["image/png", "image/jpeg", "image/webp"])
+      )
+  ),
   instagram: z.string().check(z.minLength(1, "Required")),
   gender: z.enum(["laki", "perempuan"]),
   perokok: z.boolean(),

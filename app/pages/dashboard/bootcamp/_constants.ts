@@ -35,26 +35,33 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const schema = z.object({
-  id: z.optional(z.number()),
-  judul: z.string().check(z.minLength(1, "Required")),
-  deskripsi: z.string().check(z.minLength(1, "Required")),
-  harga: z.number(),
-  googleMap: z.string().check(z.minLength(1, "Required")),
-  tempat: z.string().check(z.minLength(1, "Required")),
-  waktu: z.string().check(z.minLength(1, "Required")),
-  foto: z.string(),
-  file: z.optional(
-    z
-      .file()
-      .check(
-        z.maxSize(5_000_000),
-        z.mime(["image/png", "image/jpeg", "image/webp"])
-      )
-  ),
-  pembicara: z.string().check(z.minLength(1, "Required")),
-  status: z.boolean(),
-});
+export const schema = z
+  .object({
+    id: z.optional(z.number()),
+    judul: z.string().check(z.minLength(1, "Required")),
+    deskripsi: z.string().check(z.minLength(1, "Required")),
+    harga: z.number(),
+    googleMap: z.string().check(z.minLength(1, "Required")),
+    tempat: z.string().check(z.minLength(1, "Required")),
+    waktu: z.string().check(z.minLength(1, "Required")),
+    foto: z.string(),
+    file: z.optional(
+      z
+        .file()
+        .check(
+          z.maxSize(5_000_000),
+          z.mime(["image/png", "image/jpeg", "image/webp"])
+        )
+    ),
+    pembicara: z.string().check(z.minLength(1, "Required")),
+    status: z.boolean(),
+  })
+  .check(
+    z.refine((val) => val.file || val.foto, {
+      error: "Required",
+      path: ["foto"],
+    })
+  );
 
 export const getInitialFormData = (): Schema => ({
   id: undefined,

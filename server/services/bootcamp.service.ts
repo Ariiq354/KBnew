@@ -1,12 +1,22 @@
 import type { MultiPartData } from "h3";
 import ENV from "~~/shared/env";
-import { OBootcampCreate } from "../api/v1/bootcamp/_dto";
+import sanitizeHtml from "sanitize-html";
+import {
+  OBootcampCreate,
+  type TUserBootcampCreate,
+} from "../api/v1/bootcamp/_dto";
 import {
   createBootcamp,
+  createUserBootcamp,
   deleteBootcamp,
   getBootcampById,
   updateBootcamp,
 } from "../repository/bootcamp.repo";
+import {
+  getDiskonByCode,
+  getDiskonDipakai,
+  updateDiskonByKode,
+} from "../repository/diskon.repo";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -52,6 +62,8 @@ export async function createBootcampService(
   }
 
   const parsed = OBootcampCreate.parse(fields);
+
+  parsed.deskripsi = sanitizeHtml(parsed.deskripsi);
 
   await createBootcamp(parsed);
 }
@@ -107,6 +119,8 @@ export async function updateBootcampService(
     parsed.foto = fields["file"] as string;
   }
 
+  parsed.deskripsi = sanitizeHtml(parsed.deskripsi);
+
   await updateBootcamp(id, parsed);
 }
 
@@ -127,4 +141,30 @@ export async function deleteBootcampService(body: TDelete) {
   }
 
   await deleteBootcamp(body);
+}
+
+export async function addUserBootcampService(
+  user: UserWithId,
+  body: TUserBootcampCreate
+) {
+  const newPrice = await getUniquePrice(body.harga);
+
+  await createUserBootcamp(user.id, {
+    diskon: body.diskon,
+    harga: newPrice,
+    idBootcamp: body.idBootcamp,
+  });
+
+  if (body.diskon) {
+    const countDiskon = await getDiskonDipakai(body.diskon);
+    const diskon = await getDiskonByCode(body.diskon);
+
+    if (countDiskon >= diskon!.batasPemakai) {
+      await updateDiskonByKode(body.diskon, {
+        status: false,
+      });
+    }
+  }
+
+  return newPrice;
 }

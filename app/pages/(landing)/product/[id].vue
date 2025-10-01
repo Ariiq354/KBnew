@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { APIBASE, capitalizeWord, formatRupiah } from "~/utils";
-  import DOMPurify from "dompurify";
   import { useAuthStore } from "~/stores/auth";
   import { useToastError, useToastSuccess } from "~/composables/toast";
 
@@ -19,11 +18,11 @@
     data: diskon,
     status,
     refresh,
-  } = await useFetch(() => `${APIBASE}/diskon/${ticketCode.value}`, {
+  } = await useFetch(() => `${APIBASE}/diskon/kode/${ticketCode.value}`, {
     immediate: false,
     watch: false,
     onResponse(item) {
-      if (!item.response._data.data) {
+      if (!item.response._data?.data) {
         useToastError("Diskon Tidak Ada", "Diskon tidak ditemukan");
       } else {
         ticketCount.value = 1;
@@ -43,10 +42,6 @@
   const ticketCount = ref(1);
 
   const item = computed(() => data.value!.data!);
-  const sanitizedDeskripsi = ref("");
-  onMounted(() => {
-    sanitizedDeskripsi.value = DOMPurify.sanitize(item.value.deskripsi);
-  });
 
   const modalOpen = ref(false);
   const price = ref(0);
@@ -81,10 +76,35 @@
     :dismissible="false"
   >
     <template #body>
-      <div class="grid md:grid-cols-2 grid-cols-1 items-center gap-8">
+      <div class="grid md:grid-cols-2 grid-cols-1 gap-8">
         <NuxtImg src="/contohqris.png" class="w-full" />
-        <div class="flex items-center justify-center w-full">
-          Total Harga: {{ price.toLocaleString("id-ID") }}
+        <div class="flex flex-col gap-2">
+          <h2 class="font-bold mb-2">Detail Harga</h2>
+          <div class="flex justify-between">
+            <p>Harga Tiket:</p>
+            <p>{{ numToRupiah(item.harga) }}</p>
+          </div>
+          <div v-if="diskon?.data">
+            <p>Diskon:</p>
+            <p>
+              {{
+                numToRupiah(
+                  Number((item.harga * ticketCount * diskon.data.persen) / 100)
+                )
+              }}
+            </p>
+          </div>
+          <div class="flex justify-between">
+            <p>Kode Unik:</p>
+            <p>{{ numToRupiah(price - item.harga) }}</p>
+          </div>
+          <hr class="border-t border-default" />
+          <div class="flex justify-between">
+            <p>Total Harga:</p>
+            <p>
+              {{ numToRupiah(price) }}
+            </p>
+          </div>
         </div>
       </div>
     </template>
@@ -102,7 +122,7 @@
         />
         <div>
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="ml-2 prose prose-base" v-html="sanitizedDeskripsi" />
+          <div class="ml-2 prose prose-base" v-html="item.deskripsi" />
         </div>
       </div>
       <div
@@ -166,7 +186,7 @@
             <p v-if="diskon?.data">
               {{
                 formatRupiah(
-                  Number((item.harga * ticketCount * diskon.data.persen) / 100),
+                  Number((item.harga * ticketCount * diskon.data.persen) / 100)
                 )
               }}
             </p>

@@ -44,12 +44,10 @@
   async function onSubmit(event: FormSubmitEvent<Schema>) {
     const formData = new FormData();
 
-    for (const key in event.data) {
-      formData.append(key, (event.data as any)[key]);
-    }
-
-    if (file.value) {
-      formData.append("file", file.value);
+    for (const [key, value] of Object.entries(
+      event.data as Record<string, any>
+    )) {
+      formData.append(key, value);
     }
 
     await execute({

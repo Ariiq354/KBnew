@@ -41,17 +41,17 @@ export async function getUniquePrice(price: number) {
   while (true) {
     const newPrice = price + Math.floor(Math.random() * 900) + 100;
 
-    const exist = await db
-      .select()
-      .from(pemilikBootcampTable)
-      .where(
-        and(
+    const exist = await assertToErr(
+      "failed to get unique price",
+      db.query.pemilikBootcampTable.findFirst({
+        where: and(
           eq(pemilikBootcampTable.harga, newPrice),
           eq(pemilikBootcampTable.status, false)
-        )
-      );
+        ),
+      })
+    );
 
-    if (exist.length === 0) {
+    if (!exist) {
       return newPrice;
     }
   }

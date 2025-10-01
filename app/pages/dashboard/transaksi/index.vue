@@ -48,6 +48,13 @@
     modalOpen.value = true;
     state = itemData;
   }
+
+  watch(
+    () => [query.search],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>
@@ -103,11 +110,10 @@
       </template>
     </LazyUModal>
     <UCard>
-      <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          class="max-w-xs"
+          size="xl"
+          class="flex-5"
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
@@ -120,9 +126,9 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        action
+        editable
         pagination
-        @edit-click="clickUpdate"
+        @edit="clickUpdate"
       />
     </UCard>
   </main>

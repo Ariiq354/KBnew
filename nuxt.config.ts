@@ -49,8 +49,4 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
-
-  imports: {
-    scan: false,
-  },
 });

@@ -75,24 +75,21 @@ export async function listAllBootcampActive({
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(bootcampTable.status, true),
   ];
+
   if (search) {
     const searchCondition = `%${search}%`;
 
-    conditions.push(
-      or(
-        like(bootcampTable.deskripsi, searchCondition),
-        like(bootcampTable.judul, searchCondition),
-        like(bootcampTable.tempat, searchCondition)
-      )
-    );
+    conditions.push(or(like(bootcampTable.judul, searchCondition)));
   }
 
   const query = db
     .select({
       id: bootcampTable.id,
       judul: bootcampTable.judul,
-      tempat: bootcampTable.tempat,
       waktu: bootcampTable.waktu,
+      foto: bootcampTable.foto,
+      deskripsi: bootcampTable.deskripsi,
+      harga: bootcampTable.harga,
     })
     .from(bootcampTable)
     .where(and(...conditions))
@@ -164,7 +161,7 @@ export async function getBootcampById(id: number) {
   return await assertToErr(
     "Failed to get Bootcamp by id",
     db.query.bootcampTable.findFirst({
-      where: eq(bootcampTable.id, id),
+      where: and(eq(bootcampTable.id, id), eq(bootcampTable.status, true)),
       columns: {
         id: true,
         deskripsi: true,

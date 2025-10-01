@@ -3,6 +3,7 @@ import type { SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { diskonTable } from "~~/server/database/schema/diskon";
 import type { TDiskonCreate } from "../api/v1/diskon/_dto";
+import { pemilikBootcampTable } from "../database/schema/bootcamp";
 
 export async function listAllDiskon({
   limit,
@@ -42,24 +43,6 @@ export async function listAllDiskon({
   return { data, total };
 }
 
-export async function getDiskonById(id: number) {
-  try {
-    return await db.query.diskonTable.findFirst({
-      where: eq(diskonTable.id, id),
-      columns: {
-        batasPemakai: true,
-        batasWaktu: true,
-        jumlahDipakai: true,
-        kode: true,
-        persen: true,
-      },
-    });
-  } catch (error) {
-    console.error("Failed to get Diskon", error);
-    throw InternalError;
-  }
-}
-
 export async function getDiskonByCode(kode: string) {
   const today = new Date().toISOString().slice(0, 10);
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -69,8 +52,9 @@ export async function getDiskonByCode(kode: string) {
     lte(diskonTable.batasWaktu, today),
   ];
 
-  try {
-    return await db.query.diskonTable.findFirst({
+  return await assertToErr(
+    "Failed to get Diskon by code",
+    db.query.diskonTable.findFirst({
       where: and(...conditions),
       columns: {
         batasPemakai: true,
@@ -79,11 +63,8 @@ export async function getDiskonByCode(kode: string) {
         kode: true,
         persen: true,
       },
-    });
-  } catch (error) {
-    console.error("Failed to get Diskon", error);
-    throw InternalError;
-  }
+    })
+  );
 }
 
 export async function createDiskon(body: TDiskonCreate) {
@@ -92,6 +73,34 @@ export async function createDiskon(body: TDiskonCreate) {
     db.insert(diskonTable).values({
       ...body,
     })
+  );
+}
+
+export async function updateDiskonByKode(
+  kode: string,
+  body: Partial<TDiskonCreate>
+) {
+  await assertToErr(
+    "Failed to update Diskon by kode",
+    db
+      .update(diskonTable)
+      .set({
+        ...body,
+      })
+      .where(eq(diskonTable.kode, kode))
+  );
+}
+
+export async function getDiskonDipakai(kode: string) {
+  return await assertToErr(
+    "Failed to get Diskon dipakai",
+    db.$count(
+      pemilikBootcampTable,
+      and(
+        eq(pemilikBootcampTable.diskon, kode),
+        eq(pemilikBootcampTable.status, true)
+      )
+    )
   );
 }
 

@@ -3,7 +3,7 @@ import { z } from "zod/mini";
 export const OBootcampCreate = z.object({
   judul: z.string(),
   deskripsi: z.string(),
-  status: z.coerce.boolean(),
+  status: z.stringbool(),
   harga: z.coerce.number(),
   googleMap: z.string(),
   tempat: z.string(),

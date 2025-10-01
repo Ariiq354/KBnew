@@ -13,7 +13,7 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/bootcamp/daftar-user`, {
+  const { data, status } = await useFetch(`${APIBASE}/bootcamp/landing`, {
     query,
   });
 
@@ -37,50 +37,60 @@
       immediate: false,
     }
   );
+  watchOnce(bootcampId, () => refresh());
 
   const modalOpen = ref(false);
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     bootcampId.value = itemData.id;
-    refresh();
   }
+
+  watch(
+    () => [query.search],
+    () => {
+      query.page = 1;
+    }
+  );
+
+  watch(
+    () => [queryTiket.search],
+    () => {
+      queryTiket.page = 1;
+    }
+  );
 </script>
 
 <template>
-  <Title>Dashboard / Tiket User</Title>
+  <Title>Dashboard | Tiket User</Title>
   <main>
     <LazyUModal v-model:open="modalOpen" title="Daftar Kode Tiket" fullscreen>
       <template #body>
-        <div
-          class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-        >
+        <div class="mb-6 flex gap-2 md:gap-4">
           <UInput
-            class="max-w-xs"
+            size="xl"
+            class="flex-5"
             leading-icon="i-lucide-search"
             placeholder="Search..."
             @update:model-value="searchDebouncedTiket"
           />
         </div>
         <AppTable
-          v-model:page="query.page"
+          v-model:page="queryTiket.page"
           :columns="columnsTiket"
           :data="dataTiket?.data"
           :loading="statusTiket === 'pending'"
           :total="dataTiket?.metadata.total"
           enumerate
           pagination
-      /></template>
-      <template #footer>
-        <UButton icon="i-lucide-x" @click="modalOpen = false"> Tutup </UButton>
+        />
       </template>
     </LazyUModal>
     <UCard>
-      <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          class="max-w-xs"
+          size="xl"
+          class="flex-5"
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
@@ -93,9 +103,9 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        action
+        viewable
         pagination
-        @edit-click="clickUpdate"
+        @view="clickUpdate"
       />
     </UCard>
   </main>

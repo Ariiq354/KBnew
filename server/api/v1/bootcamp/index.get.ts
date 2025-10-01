@@ -1,6 +1,7 @@
 import { listAllBootcamp } from "~~/server/repository/bootcamp.repo";
 
 export default defineEventHandler(async (event) => {
+  adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
     OSearchPagination.parse(query)
   );

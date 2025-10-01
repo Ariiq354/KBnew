@@ -74,7 +74,7 @@
       :title="
         (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Diskon'
       "
-      class="min-w-2xl"
+      class="max-w-2xl w-full"
     >
       <template #body>
         <UForm
