@@ -1,17 +1,21 @@
 import type { SQL } from "drizzle-orm";
 import { and, desc, eq, inArray, like, or } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { user } from "~~/server/database/schema/auth";
 import {
   bootcampTable,
   pemilikBootcampTable,
 } from "~~/server/database/schema/bootcamp";
-import type { TDeleteDto } from "../common/dto";
-import type { TBootcampCreate } from "./dto/create-bootcamp.dto";
-import type { TUserBootcampCreate } from "./dto/create-user-bootcamp.dto";
-import type { TBootcampList } from "./dto/list-bootcamp.dto";
+import { userTable } from "../database/schema/auth";
+import type {
+  TBootcampCreate,
+  TUserBootcampCreate,
+} from "../api/v1/bootcamp/_dto";
 
-export async function listAllBootcamp({ limit, page, search }: TBootcampList) {
+export async function listAllBootcamp({
+  limit,
+  page,
+  search,
+}: TSearchPagination) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [];
   if (search) {
@@ -24,8 +28,8 @@ export async function listAllBootcamp({ limit, page, search }: TBootcampList) {
         like(bootcampTable.tempat, searchCondition),
         like(bootcampTable.pembicara, searchCondition),
         like(bootcampTable.harga, searchCondition),
-        like(bootcampTable.waktu, searchCondition),
-      ),
+        like(bootcampTable.waktu, searchCondition)
+      )
     );
   }
 
@@ -44,28 +48,29 @@ export async function listAllBootcamp({ limit, page, search }: TBootcampList) {
     })
     .from(bootcampTable)
     .where(and(...conditions))
-    .orderBy(desc(bootcampTable.createdAt))
-    .$dynamic();
+    .orderBy(desc(bootcampTable.createdAt));
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to get total bootcamp",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Bootcamp", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get data bootcamp",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function listAllBootcampActive({
   limit,
   page,
   search,
-}: TBootcampList) {
+}: TSearchPagination) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(bootcampTable.status, true),
@@ -77,8 +82,8 @@ export async function listAllBootcampActive({
       or(
         like(bootcampTable.deskripsi, searchCondition),
         like(bootcampTable.judul, searchCondition),
-        like(bootcampTable.tempat, searchCondition),
-      ),
+        like(bootcampTable.tempat, searchCondition)
+      )
     );
   }
 
@@ -91,26 +96,27 @@ export async function listAllBootcampActive({
     })
     .from(bootcampTable)
     .where(and(...conditions))
-    .orderBy(desc(bootcampTable.createdAt))
-    .$dynamic();
+    .orderBy(desc(bootcampTable.createdAt));
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to get total bootcamp active",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Bootcamp Active", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get data bootcamp active",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function getUserByBootcampId(
   bootcampId: number,
-  { page, limit, search }: TBootcampList,
+  { page, limit, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -123,8 +129,8 @@ export async function getUserByBootcampId(
     conditions.push(
       or(
         like(pemilikBootcampTable.kode, searchCondition),
-        like(user.name, searchCondition),
-      ),
+        like(userTable.name, searchCondition)
+      )
     );
   }
 
@@ -132,30 +138,32 @@ export async function getUserByBootcampId(
     .select({
       id: pemilikBootcampTable.id,
       kode: pemilikBootcampTable.kode,
-      nama: user.name,
+      nama: userTable.name,
     })
     .from(pemilikBootcampTable)
-    .leftJoin(user, eq(pemilikBootcampTable.idUser, user.id))
-    .where(and(...conditions))
-    .$dynamic();
+    .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
+    .where(and(...conditions));
 
-  try {
-    const total = await getTotalQuery(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = await assertToErr(
+    "Failed to total user by bootcamp id",
+    db.$count(query)
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List User By Bootcamp Id", error);
-    throw InternalError;
-  }
+  const data = await assertToErr(
+    "Failed to get user by bootcamp id",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function getBootcampById(id: number) {
-  try {
-    return await db.query.bootcampTable.findFirst({
+  return await assertToErr(
+    "Failed to get Bootcamp by id",
+    db.query.bootcampTable.findFirst({
       where: eq(bootcampTable.id, id),
       columns: {
         id: true,
@@ -169,61 +177,47 @@ export async function getBootcampById(id: number) {
         tempat: true,
         waktu: true,
       },
-    });
-  } catch (error) {
-    console.error("Failed to get Bootcamp", error);
-    throw InternalError;
-  }
+    })
+  );
 }
 
 export async function createBootcamp(body: TBootcampCreate) {
-  try {
-    await db.insert(bootcampTable).values({
+  await assertToErr(
+    "Failed to insert Bootcamp",
+    db.insert(bootcampTable).values({
       ...body,
-    });
-  } catch (error) {
-    console.error("Failed to insert Bootcamp", error);
-    throw InternalError;
-  }
+    })
+  );
 }
 
-export async function updateBootcamp(
-  id: number,
-  body: Partial<TBootcampCreate>,
-) {
-  try {
-    await db
+export async function updateBootcamp(id: number, body: TBootcampCreate) {
+  await assertToErr(
+    "Failed to update Bootcamp",
+    db
       .update(bootcampTable)
       .set({
         ...body,
       })
-      .where(eq(bootcampTable.id, id));
-  } catch (error) {
-    console.error("Failed to update Bootcamp", error);
-    throw InternalError;
-  }
+      .where(eq(bootcampTable.id, id))
+  );
 }
 
-export async function deleteBootcamp({ id }: TDeleteDto) {
-  try {
-    await db.delete(bootcampTable).where(inArray(bootcampTable.id, id));
-  } catch (error) {
-    console.error("Failed to delete Bootcamp", error);
-    throw InternalError;
-  }
+export async function deleteBootcamp({ id }: TDelete) {
+  await assertToErr(
+    "Failed to delete Bootcamp",
+    db.delete(bootcampTable).where(inArray(bootcampTable.id, id))
+  );
 }
 
 export async function createUserBootcamp(
   userId: number,
-  body: TUserBootcampCreate,
+  body: TUserBootcampCreate
 ) {
-  try {
-    await db.insert(pemilikBootcampTable).values({
+  await assertToErr(
+    "Failed to insert user Bootcamp",
+    db.insert(pemilikBootcampTable).values({
       ...body,
       idUser: userId,
-    });
-  } catch (error) {
-    console.error("Failed to insert Bootcamp", error);
-    throw InternalError;
-  }
+    })
+  );
 }

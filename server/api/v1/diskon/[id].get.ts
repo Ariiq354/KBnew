@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { getDiskonByCode } from "~~/server/services/diskon/diskon.service";
+import { getDiskonByCode } from "~~/server/repository/diskon.repo";
 
 const paramsSchema = z.string();
 

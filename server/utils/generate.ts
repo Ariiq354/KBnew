@@ -15,7 +15,10 @@ export async function generateUniqueCode(
     result += chars[randIndex];
   }
 
-  const exist = await db.select().from(table).where(eq(column, result));
+  const exist = await assertToErr(
+    "failed to select unique code",
+    db.select().from(table).where(eq(column, result))
+  );
 
   if (exist.length > 0) {
     return generateUniqueCode(table, column, length);

@@ -1,11 +1,17 @@
-import ModalConfirm from "~/components/ModalConfirm.vue";
 import { useOverlay } from "#ui/composables/useOverlay";
+import ModalConfirm from "~/components/Modal/ModalConfirm.vue";
 
 const overlay = useOverlay();
-export function openConfirmModal(anyFunction: () => Promise<void>) {
+export function openConfirmModal(
+  path: string,
+  body: object,
+  refresh: () => void
+) {
   const modal = overlay.create(ModalConfirm, {
     props: {
-      function: anyFunction,
+      path,
+      body,
+      refresh,
     },
   });
 

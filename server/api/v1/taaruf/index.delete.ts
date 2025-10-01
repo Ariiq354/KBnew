@@ -1,12 +1,9 @@
-import { ODeleteSchema } from "~~/server/services/common/dto";
-import { deleteTaaruf } from "~~/server/services/taaruf/taaruf.service";
+import { deleteTaarufService } from "~~/server/services/taaruf.service";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const query = await readValidatedBody(event, (query) =>
-    ODeleteSchema.parse(query)
-  );
+  const body = await readValidatedBody(event, (body) => ODelete.parse(body));
 
-  await deleteTaaruf(query);
+  await deleteTaarufService(body);
   return HttpResponse();
 });

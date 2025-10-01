@@ -35,7 +35,7 @@
     {
       query: queryTiket,
       immediate: false,
-    },
+    }
   );
 
   const modalOpen = ref(false);
@@ -57,7 +57,7 @@
         >
           <UInput
             class="max-w-xs"
-            leading-icon="i-heroicons-magnifying-glass"
+            leading-icon="i-lucide-search"
             placeholder="Search..."
             @update:model-value="searchDebouncedTiket"
           />
@@ -72,9 +72,7 @@
           pagination
       /></template>
       <template #footer>
-        <UButton icon="i-heroicons-x-mark-16-solid" @click="modalOpen = false">
-          Tutup
-        </UButton>
+        <UButton icon="i-lucide-x" @click="modalOpen = false"> Tutup </UButton>
       </template>
     </LazyUModal>
     <UCard>
@@ -83,7 +81,7 @@
       >
         <UInput
           class="max-w-xs"
-          leading-icon="i-heroicons-magnifying-glass"
+          leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />

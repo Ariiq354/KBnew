@@ -23,20 +23,19 @@
     query,
   });
 
+  const viewStatus = ref(false);
   const modalOpen = ref(false);
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {
-    const basePath = `${APIBASE}/bootcamp`;
     const formData = new FormData();
 
-    for (const key in event.data) {
-      formData.append(key, (event.data as any)[key]);
+    for (const [key, value] of Object.entries(
+      event.data as Record<string, any>
+    )) {
+      formData.append(key, value);
     }
 
-    if (file.value) {
-      formData.append("file", file.value);
-    }
-
+    const basePath = `${APIBASE}/bootcamp`;
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
       body: formData,
@@ -54,54 +53,25 @@
   function clickAdd() {
     state.value = getInitialFormData();
     modalOpen.value = true;
-    if (imageUrl.value) {
-      URL.revokeObjectURL(imageUrl.value);
-      imageUrl.value = undefined;
-      file.value = undefined;
-    }
+    viewStatus.value = false;
   }
 
-  const selected = ref<Record<string, boolean>>({});
-  async function clickDelete() {
-    const selectedId = Object.keys(selected.value)
-      .map(Number)
-      .map((index) => data.value?.data[index]?.id);
-    async function onDelete() {
-      await $fetch(`${APIBASE}/bootcamp`, {
-        method: "DELETE",
-        body: {
-          id: selectedId,
-        },
-      });
-      selected.value = {};
-      await refresh();
-    }
-    openConfirmModal(onDelete);
+  async function clickDelete(ids: number[]) {
+    openConfirmModal("/bootcamp", { id: ids }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
-    state.value = itemData;
-    if (imageUrl.value) {
-      URL.revokeObjectURL(imageUrl.value);
-      imageUrl.value = undefined;
-      file.value = undefined;
-    }
+    state.value = { ...itemData };
+    viewStatus.value = false;
   }
 
-  const imageUrl = ref();
-  const file = ref();
-  function uploadFile(event: any) {
-    file.value = event.target.files[0];
-    if (file.value && file.value.type.startsWith("image/")) {
-      if (imageUrl.value) {
-        URL.revokeObjectURL(imageUrl.value);
-      }
-      imageUrl.value = URL.createObjectURL(file.value);
-    } else {
-      imageUrl.value = undefined;
+  watch(
+    () => [query.search],
+    () => {
+      query.page = 1;
     }
-  }
+  );
 </script>
 
 <template>
@@ -109,7 +79,9 @@
   <main>
     <LazyUModal
       v-model:open="modalOpen"
-      :title="(state.id ? 'Edit' : 'Tambah') + ' Bootcamp'"
+      :title="
+        (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Bootcamp'
+      "
       class="min-w-4xl"
     >
       <template #body>
@@ -121,16 +93,26 @@
           @submit="onSubmit"
         >
           <UFormField label="Judul" name="judul">
-            <UInput v-model="state.judul" :disabled="isLoading" />
+            <UInput v-model="state.judul" :disabled="isLoading || viewStatus" />
           </UFormField>
           <UFormField label="Harga" name="harga">
-            <UInput v-model="state.harga" type="number" :disabled="isLoading" />
+            <UInput
+              v-model="state.harga"
+              type="number"
+              :disabled="isLoading || viewStatus"
+            />
           </UFormField>
           <UFormField label="Deskripsi" name="deskripsi">
-            <TipTapEditor v-model="state.deskripsi" :disabled="isLoading" />
+            <TipTapEditor
+              v-model="state.deskripsi"
+              :disabled="isLoading || viewStatus"
+            />
           </UFormField>
           <UFormField label="Tempat" name="tempat">
-            <UInput v-model="state.tempat" :disabled="isLoading" />
+            <UInput
+              v-model="state.tempat"
+              :disabled="isLoading || viewStatus"
+            />
           </UFormField>
           <UFormField label="Google Map" name="googleMap">
             <MapPicker
@@ -141,55 +123,41 @@
             <UInput :model-value="state.googleMap" disabled />
           </UFormField>
           <UFormField label="Tanggal & Waktu" name="waktu">
-            <UInput v-model="state.waktu" :disabled="isLoading" />
+            <UInput v-model="state.waktu" :disabled="isLoading || viewStatus" />
           </UFormField>
           <UFormField label="Pembicara" name="pembicara">
-            <UInput v-model="state.pembicara" :disabled="isLoading" />
+            <UInput
+              v-model="state.pembicara"
+              :disabled="isLoading || viewStatus"
+            />
           </UFormField>
           <UFormField label="Status" name="status">
-            <USwitch v-model="state.status" :disabled="isLoading" />
+            <USwitch
+              v-model="state.status"
+              :disabled="isLoading || viewStatus"
+            />
           </UFormField>
           <UFormField label="Foto" name="foto">
-            <UInput
-              type="file"
-              accept="image/*"
-              :disabled="isLoading"
-              @change="uploadFile"
+            <AppUploadImage
+              v-model:file="state.file"
+              v-model:foto="state.foto"
+              :disabled="isLoading || viewStatus"
             />
-            <div class="flex gap-2 mt-2 items-center">
-              <div v-if="state.foto">
-                <img
-                  class=""
-                  :src="state.foto"
-                  alt="Preview"
-                  style="max-width: 300px"
-                />
-              </div>
-              <div v-if="state.foto && imageUrl">-></div>
-              <div v-if="imageUrl">
-                <img
-                  class=""
-                  :src="imageUrl"
-                  alt="Preview"
-                  style="max-width: 300px"
-                />
-              </div>
-            </div>
           </UFormField>
         </UForm>
       </template>
       <template #footer>
         <UButton
-          icon="i-heroicons-x-mark-16-solid"
+          icon="i-lucide-x"
           variant="ghost"
           :disabled="isLoading"
           @click="modalOpen = false"
         >
-          Batal
+          {{ viewStatus ? "Tutup" : "Batal" }}
         </UButton>
         <UButton
           type="submit"
-          icon="i-heroicons-check-16-solid"
+          icon="i-lucide-check"
           :loading="isLoading"
           form="bootcamp-form"
         >
@@ -198,35 +166,42 @@
       </template>
     </LazyUModal>
     <UCard>
-      <CrudCard
-        :add-function="clickAdd"
-        :path="`${APIBASE}/bootcamp`"
-        :delete-function="clickDelete"
-        :delete-disabled="Object.keys(selected).length === 0"
-        :export-disabled="!data || data.data.length === 0"
-      />
-      <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          class="max-w-xs"
-          leading-icon="i-heroicons-magnifying-glass"
+          size="xl"
+          class="flex-5"
+          leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
+        <UButton
+          icon="i-lucide-plus"
+          class="text-white dark:bg-blue-600 hover:dark:bg-blue-600/75"
+          @click="clickAdd"
+        >
+          <p class="hidden md:block">Tambah</p>
+        </UButton>
       </div>
       <AppTable
         v-model:page="query.page"
-        v-model:select="selected"
         :columns="columns"
         :data="data?.data"
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        action
+        deletable
+        editable
+        viewable
         selectable
         pagination
-        @edit-click="clickUpdate"
+        @edit="clickUpdate"
+        @view="
+          (i) => {
+            clickUpdate(i);
+            viewStatus = true;
+          }
+        "
+        @delete="clickDelete"
       />
     </UCard>
   </main>

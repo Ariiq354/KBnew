@@ -8,6 +8,7 @@
 }
 
 @theme {
+  --font-display: "Poppins", sans-serif;
   --color-eastern-blue-50: #f1f9fa;
   --color-eastern-blue-100: #dcf0f1;
   --color-eastern-blue-200: #bee0e3;
@@ -19,10 +20,6 @@
   --color-eastern-blue-800: #30515a;
   --color-eastern-blue-900: #2c454d;
   --color-eastern-blue-950: #192d33;
-}
-
-html {
-  font-family: Poppins, sans-serif;
 }
 
 html.layout-small {

@@ -17,14 +17,14 @@
 
   const dataDituju = computed(() =>
     data.value?.data.filter(
-      (item) => item.idPenuju === Number(authStore.session!.data!.user.id),
-    ),
+      (item) => item.idPenuju === Number(authStore.session!.data!.user.id)
+    )
   );
 
   const dataPenuju = computed(() =>
     data.value?.data.filter(
-      (item) => item.idDituju === Number(authStore.session!.data!.user.id),
-    ),
+      (item) => item.idDituju === Number(authStore.session!.data!.user.id)
+    )
   );
 
   const modalState = ref<ExtractObjectType<typeof data.value>["dituju"]>();
@@ -55,11 +55,7 @@
 
         <div class="mt-6 flex gap-12">
           <div class="flex items-center gap-2">
-            <UIcon
-              name="i-heroicons-information-circle"
-              size="40"
-              class="text-primary"
-            />
+            <UIcon name="i-lucide-info" size="40" class="text-primary" />
             <div class="flex flex-col">
               <h1 class="text-primary">Status</h1>
               <h2 class="font-bold">
@@ -69,7 +65,7 @@
           </div>
           <div class="flex items-center gap-2">
             <UIcon
-              name="i-heroicons-calendar-date-range"
+              name="i-lucide-calendar-date-range"
               size="40"
               class="text-primary"
             />

@@ -1,4 +1,4 @@
-import { listAllTransaksiUser } from "~~/server/repo/transaksi.repo";
+import { listAllTransaksiUser } from "~~/server/repository/transaksi.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

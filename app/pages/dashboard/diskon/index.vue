@@ -23,6 +23,7 @@
     query,
   });
 
+  const viewStatus = ref(false);
   const modalOpen = ref(false);
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -44,30 +45,25 @@
   function clickAdd() {
     state.value = getInitialFormData();
     modalOpen.value = true;
+    viewStatus.value = false;
   }
 
-  const selected = ref<Record<string, boolean>>({});
-  async function clickDelete() {
-    const selectedId = Object.keys(selected.value)
-      .map(Number)
-      .map((index) => data.value?.data[index]?.id);
-    async function onDelete() {
-      await $fetch(`${APIBASE}/diskon`, {
-        method: "DELETE",
-        body: {
-          id: selectedId,
-        },
-      });
-      selected.value = {};
-      await refresh();
-    }
-    openConfirmModal(onDelete);
+  async function clickDelete(ids: number[]) {
+    openConfirmModal("/diskon", { id: ids }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     state.value = itemData;
+    viewStatus.value = false;
   }
+
+  watch(
+    () => [query.search],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>
@@ -75,7 +71,9 @@
   <main>
     <LazyUModal
       v-model:open="modalOpen"
-      :title="(state.id ? 'Edit' : 'Tambah') + ' Diskon'"
+      :title="
+        (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Diskon'
+      "
       class="min-w-2xl"
     >
       <template #body>
@@ -87,19 +85,19 @@
           @submit="onSubmit"
         >
           <UFormField label="Kode" name="kode">
-            <UInput v-model="state.kode" :disabled="isLoading" />
+            <UInput v-model="state.kode" :disabled="isLoading || viewStatus" />
           </UFormField>
           <UFormField label="Persen" name="persen">
             <UInput
               v-model="state.persen"
               type="number"
-              :disabled="isLoading"
+              :disabled="isLoading || viewStatus"
             />
           </UFormField>
           <UFormField label="Batas Waktu" name="batasWaktu">
             <UInput
               v-model="state.batasWaktu"
-              :disabled="isLoading"
+              :disabled="isLoading || viewStatus"
               type="date"
             />
           </UFormField>
@@ -107,26 +105,30 @@
             <UInput
               v-model="state.batasPemakai"
               type="number"
-              :disabled="isLoading"
+              :disabled="isLoading || viewStatus"
             />
           </UFormField>
           <UFormField label="Status" name="status">
-            <USwitch v-model="state.status" :disabled="isLoading" />
+            <USwitch
+              v-model="state.status"
+              :disabled="isLoading || viewStatus"
+            />
           </UFormField>
         </UForm>
       </template>
       <template #footer>
         <UButton
-          icon="i-heroicons-x-mark-16-solid"
+          icon="i-lucide-x"
           variant="ghost"
           :disabled="isLoading"
           @click="modalOpen = false"
         >
-          Batal
+          {{ viewStatus ? "Tutup" : "Batal" }}
         </UButton>
         <UButton
+          v-if="!viewStatus"
           type="submit"
-          icon="i-heroicons-check-16-solid"
+          icon="i-lucide-check"
           :loading="isLoading"
           form="diskon-form"
         >
@@ -135,35 +137,42 @@
       </template>
     </LazyUModal>
     <UCard>
-      <CrudCard
-        :add-function="clickAdd"
-        :path="`${APIBASE}/diskon`"
-        :delete-function="clickDelete"
-        :delete-disabled="Object.keys(selected).length === 0"
-        :export-disabled="!data || data.data.length === 0"
-      />
-      <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          class="max-w-xs"
-          leading-icon="i-heroicons-magnifying-glass"
+          size="xl"
+          class="flex-5"
+          leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
+        <UButton
+          icon="i-lucide-plus"
+          class="text-white dark:bg-blue-600 hover:dark:bg-blue-600/75"
+          @click="clickAdd"
+        >
+          <p class="hidden md:block">Tambah</p>
+        </UButton>
       </div>
       <AppTable
         v-model:page="query.page"
-        v-model:select="selected"
         :columns="columns"
         :data="data?.data"
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        action
+        deletable
+        editable
+        viewable
         selectable
         pagination
-        @edit-click="clickUpdate"
+        @edit="clickUpdate"
+        @view="
+          (i) => {
+            clickUpdate(i);
+            viewStatus = true;
+          }
+        "
+        @delete="clickDelete"
       />
     </UCard>
   </main>

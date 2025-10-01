@@ -1,20 +1,11 @@
-import { getAnggotaById } from "~~/server/services/anggota/anggota.service";
-import { OTaarufCreate } from "~~/server/services/taaruf/dto/create-taaruf.dto";
-import { createTaaruf } from "~~/server/services/taaruf/taaruf.service";
+import { createTaarufService } from "~~/server/services/taaruf.service";
+import { OTaarufCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
-  const result = await readValidatedBody(event, (b) => OTaarufCreate.parse(b));
+  const body = await readValidatedBody(event, (b) => OTaarufCreate.parse(b));
 
-  const dituju = await getAnggotaById(result.idDituju);
-  if (!user?.isAvailable || !dituju?.isAvailable) {
-    throw createError({
-      statusCode: 400,
-      message: "Anggota atau Anda sudah tidak available",
-    });
-  }
-
-  await createTaaruf(user.id, result);
+  await createTaarufService(user, body);
 
   return HttpResponse();
 });

@@ -14,7 +14,7 @@
           </h1>
           <ul class="flex flex-col gap-2">
             <li class="flex w-44 items-center gap-2">
-              <UIcon name="i-heroicons-phone" size="{20}" /> +62 857 7204 8120
+              <UIcon name="i-lucide-phone" size="{20}" /> +62 857 7204 8120
             </li>
             <li class="flex items-center gap-2">
               <UIcon name="i-mdi-gmail" size="{20}" />

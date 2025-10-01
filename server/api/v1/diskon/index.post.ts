@@ -1,5 +1,5 @@
-import { createDiskon } from "~~/server/services/diskon/diskon.service";
-import { ODiskonCreate } from "~~/server/services/diskon/dto/create-diskon.dto";
+import { createDiskon } from "~~/server/repository/diskon.repo";
+import { ODiskonCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   authGuard(event);

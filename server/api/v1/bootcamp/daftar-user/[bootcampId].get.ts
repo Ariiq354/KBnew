@@ -1,15 +1,11 @@
-import { z } from "zod/mini";
-import { getUserByBootcampId } from "~~/server/services/bootcamp/bootcamp.service";
-import { OBootcampList } from "~~/server/services/bootcamp/dto/list-bootcamp.dto";
-
-const paramsSchema = z.coerce.number();
+import { getUserByBootcampId } from "~~/server/repository/bootcamp.repo";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OBootcampList.parse(query),
+    OSearchPagination.parse(query)
   );
-  const id = paramsSchema.parse(getRouterParam(event, "bootcampId"));
+  const id = OParam.parse(getRouterParam(event, "bootcampId"));
 
   const data = await getUserByBootcampId(id, query);
 

@@ -1,4 +1,4 @@
-import { listAllAnggota } from "~~/server/repo/anggota.repo";
+import { listAllAnggota } from "~~/server/repository/anggota.repo";
 import { OSearchPagination } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

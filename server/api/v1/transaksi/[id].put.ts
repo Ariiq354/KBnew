@@ -1,4 +1,4 @@
-import { updateTransaksi } from "~~/server/repo/transaksi.repo";
+import { updateTransaksi } from "~~/server/repository/transaksi.repo";
 import { OTransaksiCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {

@@ -1,4 +1,4 @@
-import { listAllTransaksi } from "~~/server/repo/transaksi.repo";
+import { listAllTransaksi } from "~~/server/repository/transaksi.repo";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

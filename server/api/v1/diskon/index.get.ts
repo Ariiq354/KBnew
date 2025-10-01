@@ -1,10 +1,9 @@
-import { listAllDiskon } from "~~/server/services/diskon/diskon.service";
-import { ODiskonList } from "~~/server/services/diskon/dto/list-diskon.dto";
+import { listAllDiskon } from "~~/server/repository/diskon.repo";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    ODiskonList.parse(query)
+    OSearchPagination.parse(query)
   );
 
   const data = await listAllDiskon(query);

@@ -17,7 +17,7 @@ export const ODelete = z.object({
   id: z.array(z.number()),
 });
 
-export type TDeleteDto = z.infer<typeof ODelete>;
+export type TDelete = z.infer<typeof ODelete>;
 
 export const OPagination = z.object({
   page: z._default(z.coerce.number(), 1),

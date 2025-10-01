@@ -23,7 +23,7 @@
       <div class="space-y-6">
         <div class="flex flex-col items-center text-center">
           <NuxtLink href="/">
-            <NuxtImg src="/logo.webp" width="150" height="150" alt="logo ppg" />
+            <NuxtImg src="/logo.webp" width="150" height="150" alt="logo" />
           </NuxtLink>
           <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
             Selamat Datang

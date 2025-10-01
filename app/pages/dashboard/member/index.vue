@@ -40,7 +40,7 @@
     {
       query,
       watch: false,
-    },
+    }
   );
 
   const { data: dataTaaruf } = await useFetch(`${APIBASE}/taaruf/user`);
@@ -103,11 +103,7 @@
 
       <div class="mt-6 flex gap-12">
         <div class="flex items-center gap-2">
-          <UIcon
-            name="i-heroicons-information-circle"
-            size="40"
-            class="text-primary"
-          />
+          <UIcon name="i-lucide-info" size="40" class="text-primary" />
           <div class="flex flex-col">
             <h1 class="text-primary">Status</h1>
             <h2 class="font-bold">
@@ -117,7 +113,7 @@
         </div>
         <div class="flex items-center gap-2">
           <UIcon
-            name="i-heroicons-calendar-date-range"
+            name="i-lucide-calendar-date-range"
             size="40"
             class="text-primary"
           />
@@ -204,8 +200,8 @@
   <main class="flex flex-col gap-4 items-center">
     <UCard v-if="!authStore.session?.data?.user.isActive" class="w-full">
       <div class="flex items-center gap-4">
-        <UIcon name="i-heroicons-information-circle" size="30" /> Lengkapi data
-        diri anda sebelum memulai taaruf
+        <UIcon name="i-lucide-info" size="30" /> Lengkapi data diri anda sebelum
+        memulai taaruf
       </div>
     </UCard>
     <UCard class="w-full">

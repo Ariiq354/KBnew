@@ -17,9 +17,9 @@
     query,
   });
 
-  const state = shallowRef<ExtractObjectType<typeof data.value>["detail"]>();
+  const state = ref();
 
-  const modalOpen = ref();
+  const modalOpen = ref(false);
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     state.value = itemData.detail;
@@ -33,7 +33,7 @@
       <template #body>
         <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
           <UFormField label="Foto">
-            <UInput :model-value="state?.foto" disabled />
+            <AppUploadImage v-model:foto="state.foto" disabled />
           </UFormField>
           <UFormField label="Kode User">
             <UInput :model-value="state?.kodeUser" disabled />
@@ -98,22 +98,17 @@
         </div>
       </template>
       <template #footer>
-        <UButton
-          icon="i-heroicons-x-mark-16-solid"
-          variant="ghost"
-          @click="modalOpen = false"
-        >
+        <UButton icon="i-lucide-x" variant="ghost" @click="modalOpen = false">
           Tutup
         </UButton>
       </template>
     </LazyUModal>
     <UCard>
-      <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          class="max-w-xs"
-          leading-icon="i-heroicons-magnifying-glass"
+          size="xl"
+          class="flex-5"
+          leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
@@ -125,9 +120,9 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
+        viewable
         pagination
-        action
-        @edit-click="clickUpdate"
+        @view="clickUpdate"
       >
         <template #noTelepon-cell="{ row }">
           <NuxtLink

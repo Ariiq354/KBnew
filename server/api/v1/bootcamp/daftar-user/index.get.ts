@@ -1,10 +1,9 @@
-import { listAllBootcampActive } from "~~/server/services/bootcamp/bootcamp.service";
-import { OBootcampList } from "~~/server/services/bootcamp/dto/list-bootcamp.dto";
+import { listAllBootcampActive } from "~~/server/repository/bootcamp.repo";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OBootcampList.parse(query),
+    OSearchPagination.parse(query)
   );
 
   const data = await listAllBootcampActive(query);

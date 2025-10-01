@@ -1,11 +1,11 @@
-import { createUserBootcamp } from "~~/server/services/bootcamp/bootcamp.service";
-import { OUserBootcampCreate } from "~~/server/services/bootcamp/dto/create-user-bootcamp.dto";
 import { getUniquePrice } from "~~/server/utils/generate";
+import { OUserBootcampCreate } from "../_dto";
+import { createUserBootcamp } from "~~/server/repository/bootcamp.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
   const result = await readValidatedBody(event, (b) =>
-    OUserBootcampCreate.parse(b),
+    OUserBootcampCreate.parse(b)
   );
 
   const newPrice = await getUniquePrice(result.harga);

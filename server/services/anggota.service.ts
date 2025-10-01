@@ -1,7 +1,11 @@
 import type { MultiPartData } from "h3";
 import ENV from "~~/shared/env";
 import { OAnggotaDetailCreate } from "../api/v1/anggota/_dto";
-import { createAnggotaDetail } from "../repo/anggota.repo";
+import {
+  createAnggotaDetail,
+  updateUserActive,
+} from "../repository/anggota.repo";
+import { userDtlTable } from "../database/schema/auth";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -35,7 +39,11 @@ export async function createAnggotaDetailService(
         });
       }
 
-      const uploadResult = await uploadCloudinary(ENV.USER_PRESET, part.data);
+      const uploadResult = await uploadCloudinary(
+        ENV.USER_PRESET,
+        part.data,
+        "image"
+      );
 
       fields["foto"] = uploadResult.secure_url;
     } else {
@@ -45,5 +53,13 @@ export async function createAnggotaDetailService(
 
   const parsed = OAnggotaDetailCreate.parse(fields);
 
-  await createAnggotaDetail(user.id, parsed);
+  const kodeUser = await generateUniqueCode(
+    userDtlTable,
+    userDtlTable.kodeUser,
+    4
+  );
+
+  await createAnggotaDetail(user.id, parsed, kodeUser);
+
+  await updateUserActive(user.id);
 }

@@ -86,8 +86,8 @@
   <main>
     <UCard v-if="!data?.data?.detail">
       <div class="flex items-center gap-4">
-        <UIcon name="i-heroicons-information-circle" size="30" /> Lengkapi data
-        diri anda sebelum memulai taaruf
+        <UIcon name="i-lucide-info" size="30" /> Lengkapi data diri anda sebelum
+        memulai taaruf
       </div>
     </UCard>
     <UCard class="mt-4">
@@ -298,7 +298,7 @@
           <UButton
             type="submit"
             form="form-profil"
-            icon="i-heroicons-check-16-solid"
+            icon="i-lucide-check"
             :loading="isLoading"
           >
             Simpan

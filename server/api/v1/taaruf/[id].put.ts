@@ -1,15 +1,12 @@
-import { z } from "zod/mini";
-import { OTaarufUpdate } from "~~/server/services/taaruf/dto/create-taaruf.dto";
-import { updateTaaruf } from "~~/server/services/taaruf/taaruf.service";
-
-const paramsSchema = z.coerce.number();
+import { updateTaarufService } from "~~/server/services/taaruf.service";
+import { OTaarufUpdate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) => OTaarufUpdate.parse(b));
-  const id = paramsSchema.parse(getRouterParam(event, "id"));
+  const id = OParam.parse(getRouterParam(event, "id"));
 
-  await updateTaaruf(id, result);
+  await updateTaarufService(id, result);
 
   return HttpResponse();
 });

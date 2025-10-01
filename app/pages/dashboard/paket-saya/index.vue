@@ -36,14 +36,14 @@
           <h1 class="text-4xl font-bold">{{ state?.namaBootcamp }}</h1>
           <div>
             <h2 class="flex gap-2 items-center font-bold">
-              <UIcon name="i-heroicons-map-pin" size="20" /> Tempat
+              <UIcon name="i-lucide-map-pin" size="20" /> Tempat
             </h2>
             <hr class="my-2" />
             <p>{{ state?.tempat }}</p>
           </div>
           <div>
             <h2 class="flex gap-2 items-center font-bold">
-              <UIcon name="i-heroicons-calendar-date-range" size="20" /> Waktu
+              <UIcon name="i-lucide-calendar-date-range" size="20" /> Waktu
             </h2>
             <hr class="my-2" />
             <p>{{ state?.waktu }}</p>
@@ -67,9 +67,7 @@
       </div>
     </template>
     <template #footer>
-      <UButton icon="i-heroicons-x-mark-16-solid" @click="modalOpen = false">
-        Tutup
-      </UButton>
+      <UButton icon="i-lucide-x" @click="modalOpen = false"> Tutup </UButton>
     </template>
   </LazyUModal>
   <main>

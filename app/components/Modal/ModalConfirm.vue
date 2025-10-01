@@ -1,8 +1,11 @@
 <script lang="ts" setup>
   import { useToastError } from "~/composables/toast";
+  import { APIBASE } from "~/utils";
 
   const props = defineProps<{
-    function: () => Promise<void>;
+    path: string;
+    body: object;
+    refresh: () => void;
   }>();
 
   const emit = defineEmits(["close"]);
@@ -11,7 +14,11 @@
   async function onClick() {
     loading.value = true;
     try {
-      await props.function();
+      await $fetch(`${APIBASE}${props.path}`, {
+        method: "DELETE",
+        body: props.body,
+      });
+      props.refresh();
       emit("close", false);
     } catch (error: any) {
       useToastError("Delete Failed", error.message);
@@ -30,14 +37,14 @@
     <template #body>
       <div class="space-y-5">
         <div class="flex items-center gap-4">
-          <UIcon name="i-heroicons-exclamation-triangle" size="36" />
+          <UIcon name="i-lucide-triangle-alert" size="36" />
           Are you sure you want to delete the selected products?
         </div>
       </div>
     </template>
     <template #footer>
       <UButton
-        icon="i-heroicons-x-mark-16-solid"
+        icon="i-lucide-x"
         :disabled="loading"
         class="text-base"
         variant="ghost"
@@ -47,7 +54,7 @@
         No
       </UButton>
       <UButton
-        icon="i-heroicons-check-16-solid"
+        icon="i-lucide-check"
         :loading="loading"
         color="error"
         class="text-base"

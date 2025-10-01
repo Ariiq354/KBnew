@@ -1,4 +1,4 @@
-import { getAnggotaById } from "~~/server/repo/anggota.repo";
+import { getAnggotaById } from "~~/server/repository/anggota.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

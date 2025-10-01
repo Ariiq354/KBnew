@@ -1,4 +1,4 @@
-import { listAnggotaPasangan } from "~~/server/repo/anggota.repo";
+import { listAnggotaPasangan } from "~~/server/repository/anggota.repo";
 import { OAnggotaPasangan } from "./_dto";
 
 export default defineEventHandler(async (event) => {

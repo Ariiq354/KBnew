@@ -130,13 +130,9 @@ export async function getAnggotaById(id: number) {
 
 export async function createAnggotaDetail(
   id: number,
-  body: TAnggotaDetailCreate
+  body: TAnggotaDetailCreate,
+  kodeUser: string
 ) {
-  const kodeUser = await assertToErr(
-    "Failed to generate code",
-    generateUniqueCode(userDtlTable, userDtlTable.kodeUser, 4)
-  );
-
   await assertToErr(
     "Failed to insert user detail",
     db
@@ -151,7 +147,9 @@ export async function createAnggotaDetail(
         set: body,
       })
   );
+}
 
+export async function updateUserActive(id: number) {
   await assertToErr(
     "Failed to update user isActive",
     db.update(userTable).set({ isActive: true }).where(eq(userTable.id, id))

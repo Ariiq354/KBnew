@@ -1,30 +1,10 @@
-import {
-  deleteBootcamp,
-  getBootcampById,
-} from "~~/server/services/bootcamp/bootcamp.service";
-import { ODeleteSchema } from "~~/server/services/common/dto";
+import { deleteBootcampService } from "~~/server/services/bootcamp.service";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const query = await readValidatedBody(event, (query) =>
-    ODeleteSchema.parse(query)
-  );
+  const query = await readValidatedBody(event, (query) => ODelete.parse(query));
 
-  for (const id of query.id) {
-    const data = await getBootcampById(id);
-    if (!data) {
-      throw createError({
-        statusCode: 400,
-        message: "Item not found",
-      });
-    }
+  await deleteBootcampService(query);
 
-    if (data.foto) {
-      const publicId = getPublicIdFromUrl(data.foto);
-      await deleteCloudinary(publicId);
-    }
-  }
-
-  await deleteBootcamp(query);
   return HttpResponse();
 });

@@ -33,7 +33,7 @@ export const columns: TableColumn<any>[] = [
       }[row.getValue("status") ? "true" : "false"];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status") ? "Aktif" : "Tidak Aktif",
+        row.getValue("status") ? "Aktif" : "Tidak Aktif"
       );
     },
   },
@@ -51,9 +51,9 @@ export const schema = z.object({
 export const getInitialFormData = (): Schema => ({
   id: undefined,
   persen: 0,
-  batasPemakai: 0,
   kode: "",
   batasWaktu: "",
+  batasPemakai: 0,
   status: false,
 });
 

@@ -1,15 +1,10 @@
-import { z } from "zod/mini";
-import { ODiskonCreate } from "~~/server/services/diskon/dto/create-diskon.dto";
-import { updateDiskon } from "~~/server/services/diskon/diskon.service";
-
-const paramsSchema = z.coerce.number();
+import { updateDiskon } from "~~/server/repository/diskon.repo";
+import { ODiskonCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const result = await readValidatedBody(event, (b) =>
-    z.partial(ODiskonCreate).parse(b)
-  );
-  const id = paramsSchema.parse(getRouterParam(event, "id"));
+  const result = await readValidatedBody(event, (b) => ODiskonCreate.parse(b));
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   await updateDiskon(id, result);
 

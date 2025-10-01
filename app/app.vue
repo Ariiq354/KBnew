@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 font-sans dark:bg-black">
+  <div class="min-h-screen bg-gray-100 dark:bg-black">
     <NuxtRouteAnnouncer />
     <NuxtLoadingIndicator :height="5" />
     <UApp>

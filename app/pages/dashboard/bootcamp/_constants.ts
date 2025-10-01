@@ -29,7 +29,7 @@ export const columns: TableColumn<any>[] = [
       }[row.getValue("status") ? "true" : "false"];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status") ? "Aktif" : "Tidak Aktif",
+        row.getValue("status") ? "Aktif" : "Tidak Aktif"
       );
     },
   },
@@ -44,6 +44,14 @@ export const schema = z.object({
   tempat: z.string().check(z.minLength(1, "Required")),
   waktu: z.string().check(z.minLength(1, "Required")),
   foto: z.string(),
+  file: z.optional(
+    z
+      .file()
+      .check(
+        z.maxSize(5_000_000),
+        z.mime(["image/png", "image/jpeg", "image/webp"])
+      )
+  ),
   pembicara: z.string().check(z.minLength(1, "Required")),
   status: z.boolean(),
 });
@@ -52,6 +60,7 @@ export const getInitialFormData = (): Schema => ({
   id: undefined,
   deskripsi: "",
   foto: "",
+  file: undefined,
   googleMap: "",
   harga: 0,
   judul: "",

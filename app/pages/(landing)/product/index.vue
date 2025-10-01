@@ -7,7 +7,7 @@
 
   const { data } = await useFetch(`${APIBASE}/bootcamp`, {
     query: {
-      limit: 100,
+      limit: 12,
     },
   });
 </script>

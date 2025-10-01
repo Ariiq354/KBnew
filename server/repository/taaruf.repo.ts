@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, like, or } from "drizzle-orm";
+import { and, desc, eq, inArray, like, ne, or } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { taarufTable } from "~~/server/database/schema/taaruf";
@@ -6,76 +6,30 @@ import { userTable, userDtlTable } from "~~/server/database/schema/auth";
 import { alias } from "drizzle-orm/pg-core";
 import type { TTaarufCreate, TTaarufUpdate } from "../api/v1/taaruf/_dto";
 
-async function checkAndUpdateAvailabilityOnCreate(
-  idPenuju: number,
-  idDituju: number
-) {
-  const taarufList = await assertToErr(
-    "Failed to find taaruf requests for user",
-    db.query.taarufTable.findMany({
-      where: eq(taarufTable.idDituju, idDituju),
-    })
-  );
-
-  if (taarufList.length >= 3) {
-    await assertToErr(
-      "Failed to update user availability on taaruf limit reached",
-
-      db
-        .update(userTable)
-        .set({
-          isAvailable: false,
-        })
-        .where(inArray(userTable.id, [idPenuju, idDituju]))
-    );
-  }
-}
-
-async function updateAvailabilityOnReject(id: number) {
-  const taaruf = await assertToErr(
-    "Failed to find taaruf entry by id",
+export async function getTaarufById(id: number) {
+  return await assertToErr(
+    "Failed to get taaruf by id",
     db.query.taarufTable.findFirst({
       where: eq(taarufTable.id, id),
     })
   );
-  if (taaruf) {
-    await assertToErr(
-      "Failed to reset user availability after rejection",
-
-      db
-        .update(userTable)
-        .set({ isAvailable: true })
-        .where(inArray(userTable.id, [taaruf.idDituju, taaruf.idPenuju]))
-    );
-  }
 }
 
-async function getAndResetAvailability(id: number[]) {
-  const userIds: number[] = [];
+export async function updateUserStatus(id: number, status: boolean) {
+  return await assertToErr(
+    "Failed to update user status",
+    db
+      .update(userTable)
+      .set({ isAvailable: status })
+      .where(eq(userTable.id, id))
+  );
+}
 
-  for (const i of id) {
-    const taaruf = await assertToErr(
-      "Failed to find taaruf entry for deletion",
-
-      db.query.taarufTable.findFirst({
-        where: eq(taarufTable.id, i),
-      })
-    );
-    if (taaruf) {
-      userIds.push(taaruf.idDituju, taaruf.idPenuju);
-    }
-  }
-
-  if (userIds.length > 0) {
-    await assertToErr(
-      "Failed to reset user availability before deleting taaruf",
-
-      db
-        .update(userTable)
-        .set({ isAvailable: true })
-        .where(inArray(userTable.id, userIds))
-    );
-  }
+export async function getCountTaarufUser(id: number) {
+  return db.$count(
+    taarufTable,
+    and(or(eq(taarufTable.idPenuju, id)), ne(taarufTable.status, "ditolak"))
+  );
 }
 
 export async function listAllTaaruf({
@@ -287,13 +241,11 @@ export async function createTaaruf(idPenuju: number, body: TTaarufCreate) {
       ...body,
     })
   );
-  await checkAndUpdateAvailabilityOnCreate(idPenuju, body.idDituju);
 }
 
 export async function updateTaaruf(id: number, body: TTaarufUpdate) {
   await assertToErr(
     "Failed to update Taaruf",
-
     db
       .update(taarufTable)
       .set({
@@ -301,15 +253,9 @@ export async function updateTaaruf(id: number, body: TTaarufUpdate) {
       })
       .where(eq(taarufTable.id, id))
   );
-
-  if (body.status === "ditolak") {
-    await updateAvailabilityOnReject(id);
-  }
 }
 
-export async function deleteTaaruf({ id }: TDeleteDto) {
-  await getAndResetAvailability(id);
-
+export async function deleteTaaruf({ id }: TDelete) {
   await assertToErr(
     "Failed to delete Taaruf",
     db.delete(taarufTable).where(inArray(taarufTable.id, id))

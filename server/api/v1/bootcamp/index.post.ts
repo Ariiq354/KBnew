@@ -1,11 +1,10 @@
-import { createDiskon } from "~~/server/services/diskon/diskon.service";
-import { ODiskonCreate } from "~~/server/services/diskon/dto/create-diskon.dto";
+import { createBootcampService } from "~~/server/services/bootcamp.service";
 
 export default defineEventHandler(async (event) => {
-  authGuard(event);
-  const result = await readValidatedBody(event, (b) => ODiskonCreate.parse(b));
+  adminGuard(event);
+  const result = await readMultipartFormData(event);
 
-  await createDiskon(result);
+  await createBootcampService(result);
 
   return HttpResponse();
 });
