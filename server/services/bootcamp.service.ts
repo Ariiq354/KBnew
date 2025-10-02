@@ -1,6 +1,6 @@
 import type { MultiPartData } from "h3";
-import ENV from "~~/shared/env";
 import sanitizeHtml from "sanitize-html";
+import ENV from "~~/shared/env";
 import {
   OBootcampCreate,
   type TUserBootcampCreate,
@@ -12,11 +12,7 @@ import {
   getBootcampById,
   updateBootcamp,
 } from "../repository/bootcamp.repo";
-import {
-  getDiskonByCode,
-  getDiskonDipakai,
-  updateDiskonByKode,
-} from "../repository/diskon.repo";
+import { getDiskonByCode, updateDiskonByKode } from "../repository/diskon.repo";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -156,12 +152,19 @@ export async function addUserBootcampService(
   });
 
   if (body.diskon) {
-    const countDiskon = await getDiskonDipakai(body.diskon);
     const diskon = await getDiskonByCode(body.diskon);
 
-    if (countDiskon >= diskon!.batasPemakai) {
+    const newJumlahDipakai = diskon!.jumlahDipakai + 1;
+    const isLimitReached = newJumlahDipakai === diskon!.batasPemakai;
+
+    if (isLimitReached) {
       await updateDiskonByKode(body.diskon, {
+        jumlahDipakai: newJumlahDipakai,
         status: false,
+      });
+    } else {
+      await updateDiskonByKode(body.diskon, {
+        jumlahDipakai: newJumlahDipakai,
       });
     }
   }

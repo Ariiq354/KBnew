@@ -136,6 +136,16 @@
           }
         },
       },
+      {
+        label: "Daftar Bootcamp",
+        to: "/dashboard/daftar-bootcamp",
+        icon: "i-lucide-computer",
+        onSelect: () => {
+          if (!isDesktop.value) {
+            constantStore.toggleSidebar();
+          }
+        },
+      },
     ],
   ];
 </script>

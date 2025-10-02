@@ -54,7 +54,7 @@
         body: {
           idBootcamp: id,
           harga: item.value.harga * ticketCount.value,
-          diskon: ticketCode.value,
+          ...(diskon && { diskon: ticketCode.value }),
         },
       });
 
@@ -106,8 +106,14 @@
             </p>
           </div>
           <div class="mt-auto flex flex-col gap-2 md:flex-row">
-            <UButton class="flex w-full justify-center">Sudah Bayar</UButton>
-            <UButton class="flex w-full justify-center">Nanti Saja</UButton>
+            <UButton class="flex w-full justify-center"> Sudah Bayar </UButton>
+            <UButton
+              class="flex w-full justify-center"
+              color="secondary"
+              @click="modalOpen = false"
+            >
+              Nanti Saja
+            </UButton>
           </div>
         </div>
       </div>

@@ -9,3 +9,10 @@ export const ODiskonCreate = z.object({
 });
 
 export type TDiskonCreate = z.infer<typeof ODiskonCreate>;
+
+export const ODiskonDipakai = z.object({
+  status: z.boolean(),
+  jumlahDipakai: z.number(),
+}); 
+
+export type TDiskonDipakai = z.infer<typeof ODiskonDipakai>;

@@ -49,6 +49,7 @@
   const modalStatePenuju =
     ref<ExtractObjectType<typeof data.value>["dituju"]>();
 
+  const viewStatus = ref(true);
   const modalOpen = ref(false);
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
@@ -108,11 +109,10 @@
       </template>
     </UModal>
     <UCard>
-      <div
-        class="flex justify-end border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          class="max-w-xs"
+          size="xl"
+          class="flex-5"
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
@@ -125,9 +125,16 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
+        editable
+        viewable
         pagination
-        action
-        @edit-click="clickUpdate"
+        @edit="clickUpdate"
+        @view="
+          (i) => {
+            clickUpdate(i);
+            viewStatus = true;
+          }
+        "
       >
         <template #noTelepon-cell="{ row }">
           <NuxtLink

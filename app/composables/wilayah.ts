@@ -32,6 +32,7 @@ export function useWilayah(
     execute: eKb,
   } = useFetch(() => `${APIBASE}/options/kabupaten/${pId.value}`, {
     immediate: false,
+    watch: false,
   });
 
   watchEffect(() => {
@@ -61,6 +62,7 @@ export function useWilayah(
     execute: eK,
   } = useFetch(() => `${APIBASE}/options/kecamatan/${kbId.value}`, {
     immediate: false,
+    watch: false,
   });
 
   watchEffect(() => {
@@ -89,6 +91,7 @@ export function useWilayah(
     execute: eKl,
   } = useFetch(() => `${APIBASE}/options/kelurahan/${kId.value}`, {
     immediate: false,
+    watch: false,
   });
 
   watchEffect(() => {

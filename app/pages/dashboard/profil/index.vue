@@ -20,7 +20,7 @@
   const authStore = useAuthStore();
   constantStore.setTitle("Dashboard / Profil");
 
-  const { data } = useFetch(`${APIBASE}/anggota/current`);
+  const { data } = await useFetch(`${APIBASE}/anggota/current`);
   const state = ref(getInitialFormData());
 
   watchEffect(() => {
@@ -63,20 +63,6 @@
       },
     });
   }
-
-  const imageUrl = ref();
-  const file = ref();
-  function uploadFile(event: any) {
-    file.value = event.target.files[0];
-    if (file.value && file.value.type.startsWith("image/")) {
-      if (imageUrl.value) {
-        URL.revokeObjectURL(imageUrl.value);
-      }
-      imageUrl.value = URL.createObjectURL(file.value);
-    } else {
-      imageUrl.value = undefined;
-    }
-  }
 </script>
 
 <template>
@@ -101,31 +87,11 @@
           @submit="onSubmit"
         >
           <UFormField label="Foto diri" name="foto">
-            <UInput
-              type="file"
-              accept="image/*"
+            <AppUploadImage
+              v-model:file="state.file"
+              v-model:foto="state.foto"
               :disabled="isLoading"
-              @change="uploadFile"
             />
-            <div class="mt-2 flex items-center gap-2">
-              <div v-if="state.foto">
-                <img
-                  class=""
-                  :src="state.foto"
-                  alt="Preview"
-                  style="max-width: 300px"
-                />
-              </div>
-              <div v-if="state.foto && imageUrl">-></div>
-              <div v-if="imageUrl">
-                <img
-                  class=""
-                  :src="imageUrl"
-                  alt="Preview"
-                  style="max-width: 300px"
-                />
-              </div>
-            </div>
           </UFormField>
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <UFormField label="Nama Lengkap">
@@ -149,8 +115,6 @@
                 v-model="state.statusKawin"
                 placeholder="Select Status Kawin"
                 :items="statusKawinOptions"
-                value-key="name"
-                label-key="name"
                 :disabled="isLoading"
               />
             </UFormField>
@@ -232,8 +196,6 @@
               <USelectMenu
                 v-model="state.pendidikan"
                 placeholder="Select Pendidikan"
-                value-key="name"
-                label-key="name"
                 :items="pendidikanOptions"
                 :disabled="isLoading"
               />

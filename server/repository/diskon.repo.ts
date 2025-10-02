@@ -1,9 +1,8 @@
-import { and, desc, eq, inArray, like, lte, or } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
+import { and, desc, eq, inArray, like, lte, or } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { diskonTable } from "~~/server/database/schema/diskon";
-import type { TDiskonCreate } from "../api/v1/diskon/_dto";
-import { pemilikBootcampTable } from "../database/schema/bootcamp";
+import type { TDiskonCreate, TDiskonDipakai } from "../api/v1/diskon/_dto";
 
 export async function listAllDiskon({
   limit,
@@ -78,7 +77,7 @@ export async function createDiskon(body: TDiskonCreate) {
 
 export async function updateDiskonByKode(
   kode: string,
-  body: Partial<TDiskonCreate>,
+  body: Partial<TDiskonDipakai>,
 ) {
   await assertToErr(
     "Failed to update Diskon by kode",
@@ -88,19 +87,6 @@ export async function updateDiskonByKode(
         ...body,
       })
       .where(eq(diskonTable.kode, kode)),
-  );
-}
-
-export async function getDiskonDipakai(kode: string) {
-  return await assertToErr(
-    "Failed to get Diskon dipakai",
-    db.$count(
-      pemilikBootcampTable,
-      and(
-        eq(pemilikBootcampTable.diskon, kode),
-        eq(pemilikBootcampTable.status, true),
-      ),
-    ),
   );
 }
 
