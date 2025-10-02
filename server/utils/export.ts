@@ -11,12 +11,12 @@ export function exportToXlsx(event: H3Event, title: string, data: object[]) {
   setHeader(
     event,
     "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   );
   setHeader(
     event,
     "Content-Disposition",
-    `attachment; filename="${title}-${new Date().toISOString().slice(0, 10)}.xlsx"`
+    `attachment; filename="${title}-${new Date().toISOString().slice(0, 10)}.xlsx"`,
   );
 
   return buf;

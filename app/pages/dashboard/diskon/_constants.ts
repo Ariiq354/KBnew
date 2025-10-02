@@ -33,7 +33,7 @@ export const columns: TableColumn<any>[] = [
       }[row.getValue("status") ? "true" : "false"];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status") ? "Aktif" : "Tidak Aktif"
+        row.getValue("status") ? "Aktif" : "Tidak Aktif",
       );
     },
   },

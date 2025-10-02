@@ -5,7 +5,7 @@ const overlay = useOverlay();
 export function openConfirmModal(
   path: string,
   body: object,
-  refresh: () => void
+  refresh: () => void,
 ) {
   const modal = overlay.create(ModalConfirm, {
     props: {

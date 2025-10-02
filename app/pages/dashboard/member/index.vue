@@ -40,7 +40,7 @@
     {
       query,
       watch: false,
-    }
+    },
   );
 
   const { data: dataTaaruf } = await useFetch(`${APIBASE}/taaruf/user`);
@@ -197,7 +197,7 @@
       </div>
     </template>
   </UModal>
-  <main class="flex flex-col gap-4 items-center">
+  <main class="flex flex-col items-center gap-4">
     <UCard v-if="!authStore.session?.data?.user.isActive" class="w-full">
       <div class="flex items-center gap-4">
         <UIcon name="i-lucide-info" size="30" /> Lengkapi data diri anda sebelum
@@ -205,7 +205,7 @@
       </div>
     </UCard>
     <UCard class="w-full">
-      <div class="grid grid-cols-4 gap-4 mb-4">
+      <div class="mb-4 grid grid-cols-4 gap-4">
         <UFormField label="Status Kawin">
           <USelectMenu
             v-model="query.statusKawin"
@@ -274,13 +274,13 @@
       <UFormField label="Umur">
         <USlider v-model="umurRange" :tooltip="{ delayDuration: 100 }" />
       </UFormField>
-      <div class="w-full flex mt-4 justify-end">
+      <div class="mt-4 flex w-full justify-end">
         <UButton :loading="status == 'pending'" @click="() => refresh()">
           Filter
         </UButton>
       </div>
     </UCard>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 w-full">
+    <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       <UCard v-for="(item, index) in data?.data" :key="index">
         <div class="flex flex-col">
           <div class="flex gap-4">

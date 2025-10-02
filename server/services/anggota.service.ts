@@ -12,7 +12,7 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function createAnggotaDetailService(
   user: UserWithId,
-  formData: MultiPartData[] | undefined
+  formData: MultiPartData[] | undefined,
 ) {
   if (!formData) {
     throw createError({
@@ -42,7 +42,7 @@ export async function createAnggotaDetailService(
       const uploadResult = await uploadCloudinary(
         ENV.USER_PRESET,
         part.data,
-        "image"
+        "image",
       );
 
       fields["foto"] = uploadResult.secure_url;
@@ -56,7 +56,7 @@ export async function createAnggotaDetailService(
   const kodeUser = await generateUniqueCode(
     userDtlTable,
     userDtlTable.kodeUser,
-    4
+    4,
   );
 
   await createAnggotaDetail(user.id, parsed, kodeUser);

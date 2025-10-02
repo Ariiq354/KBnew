@@ -27,38 +27,38 @@
   <LazyUModal
     v-model:open="modalOpen"
     title="Detail Bootcamp"
-    class="max-w-4xl w-full"
+    class="w-full max-w-4xl"
   >
     <template #body>
-      <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <NuxtImg :src="state!.foto!" />
         <div class="flex flex-col gap-4">
           <h1 class="text-4xl font-bold">{{ state?.namaBootcamp }}</h1>
           <div>
-            <h2 class="flex gap-2 items-center font-bold">
+            <h2 class="flex items-center gap-2 font-bold">
               <UIcon name="i-lucide-map-pin" size="20" /> Tempat
             </h2>
             <hr class="my-2" />
             <p>{{ state?.tempat }}</p>
           </div>
           <div>
-            <h2 class="flex gap-2 items-center font-bold">
+            <h2 class="flex items-center gap-2 font-bold">
               <UIcon name="i-lucide-calendar-date-range" size="20" /> Waktu
             </h2>
             <hr class="my-2" />
             <p>{{ state?.waktu }}</p>
           </div>
           <div class="mt-auto">
-            <h2 class="text-center font-bold text-xl">KODE</h2>
+            <h2 class="text-center text-xl font-bold">KODE</h2>
             <p
               v-if="state?.kode"
-              class="text-center font-bold text-2xl border border-primary rounded-xl bg-accent"
+              class="border-primary bg-accent rounded-xl border text-center text-2xl font-bold"
             >
               {{ state?.kode }}
             </p>
             <p
               v-else
-              class="text-center text-xl border border-primary rounded-xl bg-accent"
+              class="border-primary bg-accent rounded-xl border text-center text-xl"
             >
               Pembayaran belum divalidasi
             </p>
@@ -72,17 +72,17 @@
   </LazyUModal>
   <main>
     <UCard class="mb-4">
-      <h1 class="w-full flex justify-between items-center">
+      <h1 class="flex w-full items-center justify-between">
         Dapatkan Paket kami <UButton to="/product">Dapatkan Paket</UButton>
       </h1>
     </UCard>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
       <UCard v-for="item in data?.data" :key="item.id" :ui="{ body: 'h-full' }">
-        <div class="h-full flex flex-col justify-between">
+        <div class="flex h-full flex-col justify-between">
           <div><NuxtImg :src="item.foto!" /></div>
           <div>
-            <h1 class="text-bold text-2xl my-2">{{ item.namaBootcamp }}</h1>
+            <h1 class="text-bold my-2 text-2xl">{{ item.namaBootcamp }}</h1>
             <div class="flex justify-between">
               <div class="flex flex-col gap-2">
                 <p>{{ item.waktu }}</p>
@@ -93,7 +93,7 @@
         </div>
       </UCard>
     </div>
-    <div class="w-full flex justify-center mt-4">
+    <div class="mt-4 flex w-full justify-center">
       <UPagination
         v-model:page="query.page"
         :items-per-page="query.limit"

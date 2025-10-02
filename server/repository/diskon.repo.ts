@@ -34,11 +34,11 @@ export async function listAllDiskon({
 
   const total = await assertToErr(
     "Failed to get total count of diskon",
-    db.$count(query)
+    db.$count(query),
   );
   const data = await assertToErr(
     "Failed to get diskon",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
   return { data, total };
 }
@@ -63,7 +63,7 @@ export async function getDiskonByCode(kode: string) {
         kode: true,
         persen: true,
       },
-    })
+    }),
   );
 }
 
@@ -72,13 +72,13 @@ export async function createDiskon(body: TDiskonCreate) {
     "Failed to insert Diskon",
     db.insert(diskonTable).values({
       ...body,
-    })
+    }),
   );
 }
 
 export async function updateDiskonByKode(
   kode: string,
-  body: Partial<TDiskonCreate>
+  body: Partial<TDiskonCreate>,
 ) {
   await assertToErr(
     "Failed to update Diskon by kode",
@@ -87,7 +87,7 @@ export async function updateDiskonByKode(
       .set({
         ...body,
       })
-      .where(eq(diskonTable.kode, kode))
+      .where(eq(diskonTable.kode, kode)),
   );
 }
 
@@ -98,9 +98,9 @@ export async function getDiskonDipakai(kode: string) {
       pemilikBootcampTable,
       and(
         eq(pemilikBootcampTable.diskon, kode),
-        eq(pemilikBootcampTable.status, true)
-      )
-    )
+        eq(pemilikBootcampTable.status, true),
+      ),
+    ),
   );
 }
 
@@ -112,13 +112,13 @@ export async function updateDiskon(id: number, body: Partial<TDiskonCreate>) {
       .set({
         ...body,
       })
-      .where(eq(diskonTable.id, id))
+      .where(eq(diskonTable.id, id)),
   );
 }
 
 export async function deleteDiskon({ id }: TDelete) {
   await assertToErr(
     "Failed to delete Diskon",
-    db.delete(diskonTable).where(inArray(diskonTable.id, id))
+    db.delete(diskonTable).where(inArray(diskonTable.id, id)),
   );
 }

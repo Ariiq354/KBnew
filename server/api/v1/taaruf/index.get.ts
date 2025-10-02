@@ -3,7 +3,7 @@ import { listAllTaaruf } from "~~/server/repository/taaruf.repo";
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OSearchPagination.parse(query)
+    OSearchPagination.parse(query),
   );
 
   const data = await listAllTaaruf(query);

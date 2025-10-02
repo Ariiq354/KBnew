@@ -45,7 +45,7 @@
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(
-      event.data as Record<string, any>
+      event.data as Record<string, any>,
     )) {
       formData.append(key, value);
     }
@@ -107,7 +107,7 @@
               :disabled="isLoading"
               @change="uploadFile"
             />
-            <div class="flex gap-2 mt-2 items-center">
+            <div class="mt-2 flex items-center gap-2">
               <div v-if="state.foto">
                 <img
                   class=""

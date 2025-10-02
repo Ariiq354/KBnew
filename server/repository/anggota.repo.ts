@@ -25,8 +25,8 @@ export async function listAllAnggota({
         like(userTable.name, searchCondition),
         like(userTable.email, searchCondition),
         like(userTable.noTelepon, searchCondition),
-        like(userTable.role, searchCondition)
-      )
+        like(userTable.role, searchCondition),
+      ),
     );
   }
 
@@ -69,12 +69,12 @@ export async function listAllAnggota({
 
   const total = await assertToErr(
     "Failed to get total anggota",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get data anggota",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
 
   return {
@@ -131,7 +131,7 @@ export async function getAnggotaById(id: number) {
 export async function createAnggotaDetail(
   id: number,
   body: TAnggotaDetailCreate,
-  kodeUser: string
+  kodeUser: string,
 ) {
   await assertToErr(
     "Failed to insert user detail",
@@ -145,14 +145,14 @@ export async function createAnggotaDetail(
       .onConflictDoUpdate({
         target: userDtlTable.userId,
         set: body,
-      })
+      }),
   );
 }
 
 export async function updateUserActive(id: number) {
   await assertToErr(
     "Failed to update user isActive",
-    db.update(userTable).set({ isActive: true }).where(eq(userTable.id, id))
+    db.update(userTable).set({ isActive: true }).where(eq(userTable.id, id)),
   );
 }
 
@@ -164,7 +164,7 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
     "Failed to get request user",
     db.query.userDtlTable.findFirst({
       where: eq(userDtlTable.userId, id),
-    })
+    }),
   );
 
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -180,14 +180,14 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
 
   if (param.suku)
     conditions.push(
-      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`)
+      like(sql`LOWER(${userDtlTable.suku})`, `%${param.suku.toLowerCase()}%`),
     );
   if (param.kodeUser)
     conditions.push(
       like(
         sql`LOWER(${userDtlTable.kodeUser})`,
-        `%${param.kodeUser.toLowerCase()}%`
-      )
+        `%${param.kodeUser.toLowerCase()}%`,
+      ),
     );
   if (param.statusKawin)
     conditions.push(eq(userDtlTable.statusKawin, param.statusKawin));
@@ -195,17 +195,17 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
     conditions.push(eq(userDtlTable.pendidikan, param.pendidikan));
   if (param.provinsi)
     conditions.push(
-      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`)
+      eq(userDtlTable.provinsi, `%${param.provinsi.toLowerCase()}%`),
     );
   if (param.kecamatan)
     conditions.push(
-      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`)
+      eq(userDtlTable.kecamatan, `%${param.kecamatan.toLowerCase()}%`),
     );
   if (param.kota)
     conditions.push(eq(userDtlTable.kota, `%${param.kota.toLowerCase()}%`));
   if (param.kelurahan)
     conditions.push(
-      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`)
+      eq(userDtlTable.kelurahan, `%${param.kelurahan.toLowerCase()}%`),
     );
   if (param.umurMin) {
     const maxBirthDate = subtractYears(today, param.umurMin);
@@ -252,12 +252,12 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
 
   const total = await assertToErr(
     "Failed to get total pasangan",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get data pasangan",
-    query.limit(param.limit).offset(offset)
+    query.limit(param.limit).offset(offset),
   );
 
   return {

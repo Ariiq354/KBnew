@@ -22,7 +22,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function createBootcampService(
-  formData: MultiPartData[] | undefined
+  formData: MultiPartData[] | undefined,
 ) {
   if (!formData) {
     throw createError({
@@ -52,7 +52,7 @@ export async function createBootcampService(
       const uploadResult = await uploadCloudinary(
         ENV.USER_PRESET,
         part.data,
-        "image"
+        "image",
       );
 
       fields["foto"] = uploadResult.secure_url;
@@ -70,7 +70,7 @@ export async function createBootcampService(
 
 export async function updateBootcampService(
   id: number,
-  formData: MultiPartData[] | undefined
+  formData: MultiPartData[] | undefined,
 ) {
   if (!formData) {
     throw createError({
@@ -100,7 +100,7 @@ export async function updateBootcampService(
       const uploadResult = await uploadCloudinary(
         ENV.USER_PRESET,
         part.data,
-        "image"
+        "image",
       );
 
       fields["foto"] = uploadResult.secure_url;
@@ -145,7 +145,7 @@ export async function deleteBootcampService(body: TDelete) {
 
 export async function addUserBootcampService(
   user: UserWithId,
-  body: TUserBootcampCreate
+  body: TUserBootcampCreate,
 ) {
   const newPrice = await getUniquePrice(body.harga);
 

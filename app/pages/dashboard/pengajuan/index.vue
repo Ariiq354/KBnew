@@ -17,14 +17,14 @@
 
   const dataDituju = computed(() =>
     data.value?.data.filter(
-      (item) => item.idPenuju === Number(authStore.session!.data!.user.id)
-    )
+      (item) => item.idPenuju === Number(authStore.session!.data!.user.id),
+    ),
   );
 
   const dataPenuju = computed(() =>
     data.value?.data.filter(
-      (item) => item.idDituju === Number(authStore.session!.data!.user.id)
-    )
+      (item) => item.idDituju === Number(authStore.session!.data!.user.id),
+    ),
   );
 
   const modalState = ref<ExtractObjectType<typeof data.value>["dituju"]>();

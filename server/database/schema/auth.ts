@@ -27,7 +27,7 @@ export const userTable = pgTable(
     isAvailable: boolean().notNull().default(true),
     ...createdUpdated,
   },
-  (table) => [uniqueIndex("email_idx").on(table.email)]
+  (table) => [uniqueIndex("email_idx").on(table.email)],
 );
 
 export const userDtlTable = pgTable("user_dtl", {
@@ -80,7 +80,7 @@ export const session = pgTable(
   (table) => [
     index("userid_idx_session").on(table.userId),
     index("token_idx").on(table.token),
-  ]
+  ],
 );
 
 export const account = pgTable(
@@ -101,7 +101,7 @@ export const account = pgTable(
     password: text(),
     ...createdUpdated,
   },
-  (table) => [index("userid_idx").on(table.userId)]
+  (table) => [index("userid_idx").on(table.userId)],
 );
 
 export const verification = pgTable(
@@ -113,5 +113,5 @@ export const verification = pgTable(
     expiresAt: timestamp({ withTimezone: true }).notNull(),
     ...createdUpdated,
   },
-  (table) => [index("identifier_idx").on(table.identifier)]
+  (table) => [index("identifier_idx").on(table.identifier)],
 );

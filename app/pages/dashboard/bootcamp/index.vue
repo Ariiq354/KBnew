@@ -30,7 +30,7 @@
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(
-      event.data as Record<string, any>
+      event.data as Record<string, any>,
     )) {
       formData.append(key, value);
     }
@@ -70,7 +70,7 @@
     () => [query.search],
     () => {
       query.page = 1;
-    }
+    },
   );
 </script>
 
@@ -82,7 +82,7 @@
       :title="
         (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Bootcamp'
       "
-      class="max-w-4xl w-full"
+      class="w-full max-w-4xl"
     >
       <template #body>
         <UForm

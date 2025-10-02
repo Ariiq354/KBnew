@@ -16,7 +16,7 @@
   <div class="bg-eastern-blue-200 bg-cover px-12 py-12">
     <div class="px-8 text-4xl font-semibold">Daftar Bootcamp</div>
   </div>
-  <main class="mb-8 px-12 container">
+  <main class="container mb-8 px-12">
     <UCarousel
       v-slot="{ item }"
       arrows
@@ -30,7 +30,7 @@
             <NuxtImg
               :src="item.foto"
               alt="produk"
-              class="max-h-128 aspect-108/135"
+              class="aspect-108/135 max-h-128"
             />
             <h1 class="text-lg font-bold">
               {{ item.judul }}

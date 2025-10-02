@@ -76,10 +76,10 @@
     :dismissible="false"
   >
     <template #body>
-      <div class="grid md:grid-cols-2 grid-cols-1 gap-8">
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
         <NuxtImg src="/contohqris.png" class="w-full" />
         <div class="flex flex-col gap-2">
-          <h2 class="font-bold mb-2">Detail Harga</h2>
+          <h2 class="mb-2 font-bold">Detail Harga</h2>
           <div class="flex justify-between">
             <p>Harga Tiket:</p>
             <p>{{ numToRupiah(item.harga) }}</p>
@@ -89,7 +89,7 @@
             <p>
               {{
                 numToRupiah(
-                  Number((item.harga * ticketCount * diskon.data.persen) / 100)
+                  Number((item.harga * ticketCount * diskon.data.persen) / 100),
                 )
               }}
             </p>
@@ -98,23 +98,27 @@
             <p>Kode Unik:</p>
             <p>{{ numToRupiah(price - item.harga) }}</p>
           </div>
-          <hr class="border-t border-default" />
+          <hr class="border-default border-t" />
           <div class="flex justify-between">
             <p>Total Harga:</p>
             <p>
               {{ numToRupiah(price) }}
             </p>
           </div>
+          <div class="mt-auto flex flex-col gap-2 md:flex-row">
+            <UButton class="flex w-full justify-center">Sudah Bayar</UButton>
+            <UButton class="flex w-full justify-center">Nanti Saja</UButton>
+          </div>
         </div>
       </div>
     </template>
   </LazyUModal>
-  <main class="bg-[url('/landingbg1.webp')] bg-center h-full py-4">
+  <main class="h-full bg-[url('/landingbg1.webp')] bg-center py-4">
     <div class="container flex flex-col gap-4">
-      <h1 class="text-center text-5xl font-bold md:text-6xl my-4">
+      <h1 class="my-4 text-center text-5xl font-bold md:text-6xl">
         {{ capitalizeWord(item.judul) }}
       </h1>
-      <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <NuxtImg
           :src="item.foto"
           alt="produk"
@@ -122,13 +126,13 @@
         />
         <div>
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="ml-2 prose prose-base" v-html="item.deskripsi" />
+          <div class="prose prose-base ml-2" v-html="item.deskripsi" />
         </div>
       </div>
       <div
-        class="border-2 rounded-2xl bg-eastern-blue-50 p-4 flex md:flex-row flex-col gap-4"
+        class="bg-eastern-blue-50 flex flex-col gap-4 rounded-2xl border-2 p-4 md:flex-row"
       >
-        <div class="flex flex-col gap-1 shrink-0 md:border-r-2 pr-4">
+        <div class="flex shrink-0 flex-col gap-1 pr-4 md:border-r-2">
           <h2 class="text-2xl font-semibold">Waktu</h2>
           <p class="text-xl">{{ item.waktu }}</p>
         </div>
@@ -139,11 +143,11 @@
       </div>
       <div class="flex justify-end">
         <div
-          class="flex flex-col border rounded-xl py-2 px-4 max-w-sm w-full gap-4"
+          class="flex w-full max-w-sm flex-col gap-4 rounded-xl border px-4 py-2"
         >
           <div class="flex justify-between">
             <div class="flex justify-between text-xl font-bold">Jumlah</div>
-            <div class="flex gap-4 items-center">
+            <div class="flex items-center gap-4">
               <div
                 v-if="!diskon?.data"
                 class="cursor-pointer select-none"
@@ -186,7 +190,7 @@
             <p v-if="diskon?.data">
               {{
                 formatRupiah(
-                  Number((item.harga * ticketCount * diskon.data.persen) / 100)
+                  Number((item.harga * ticketCount * diskon.data.persen) / 100),
                 )
               }}
             </p>
@@ -194,13 +198,13 @@
           </div>
           <UButton
             v-if="authStore.user"
-            class="flex justify-center cursor-pointer"
+            class="flex cursor-pointer justify-center"
             :loading="isLoading"
             @click="async () => await onSubmit()"
           >
             Pesan Tiket
           </UButton>
-          <div v-else class="text-center py-4 text-eastern-blue-500">
+          <div v-else class="text-eastern-blue-500 py-4 text-center">
             Login terlebih dahulu untuk memesan
           </div>
         </div>

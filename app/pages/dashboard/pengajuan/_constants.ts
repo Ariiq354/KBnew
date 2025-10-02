@@ -22,7 +22,7 @@ export const columns: TableColumn<any>[] = [
       }[row.getValue("status") as string];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status")
+        row.getValue("status"),
       );
     },
   },
@@ -49,7 +49,7 @@ export const columnsPenuju: TableColumn<any>[] = [
       }[row.getValue("status") as string];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status")
+        row.getValue("status"),
       );
     },
   },

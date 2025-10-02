@@ -25,8 +25,8 @@ export const schema = z.object({
       .file()
       .check(
         z.maxSize(5_000_000),
-        z.mime(["image/png", "image/jpeg", "image/webp"])
-      )
+        z.mime(["image/png", "image/jpeg", "image/webp"]),
+      ),
   ),
   instagram: z.string().check(z.minLength(1, "Required")),
   gender: z.enum(["laki", "perempuan"]),

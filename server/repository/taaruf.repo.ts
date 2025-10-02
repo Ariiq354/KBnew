@@ -11,7 +11,7 @@ export async function getTaarufById(id: number) {
     "Failed to get taaruf by id",
     db.query.taarufTable.findFirst({
       where: eq(taarufTable.id, id),
-    })
+    }),
   );
 }
 
@@ -21,14 +21,14 @@ export async function updateUserStatus(id: number, status: boolean) {
     db
       .update(userTable)
       .set({ isAvailable: status })
-      .where(eq(userTable.id, id))
+      .where(eq(userTable.id, id)),
   );
 }
 
 export async function getCountTaarufUser(id: number) {
   return db.$count(
     taarufTable,
-    and(or(eq(taarufTable.idPenuju, id)), ne(taarufTable.status, "ditolak"))
+    and(or(eq(taarufTable.idPenuju, id)), ne(taarufTable.status, "ditolak")),
   );
 }
 
@@ -50,8 +50,8 @@ export async function listAllTaaruf({
     conditions.push(
       or(
         like(userAsPenuju.name, searchCondition),
-        like(userAsDituju.name, searchCondition)
-      )
+        like(userAsDituju.name, searchCondition),
+      ),
     );
   }
 
@@ -123,18 +123,18 @@ export async function listAllTaaruf({
 
   const total = await assertToErr(
     "Failed to get total count of Taaruf List",
-    db.$count(query)
+    db.$count(query),
   );
   const data = await assertToErr(
     "Failed to get Taaruf List",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
   return { data, total };
 }
 
 export async function listUserTaaruf(
   userId: number,
-  { limit, page, search }: TSearchPagination
+  { limit, page, search }: TSearchPagination,
 ) {
   const offset = (page - 1) * limit;
   const userAsPenuju = alias(userTable, "user_penuju");
@@ -151,8 +151,8 @@ export async function listUserTaaruf(
     conditions.push(
       or(
         like(userAsDituju.name, searchCondition),
-        like(userAsPenuju.name, searchCondition)
-      )
+        like(userAsPenuju.name, searchCondition),
+      ),
     );
   }
 
@@ -224,11 +224,11 @@ export async function listUserTaaruf(
 
   const total = await assertToErr(
     "Failed to get total count of User Taaruf List",
-    db.$count(query)
+    db.$count(query),
   );
   const data = await assertToErr(
     "Failed to get User Taaruf List",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
   return { data, total };
 }
@@ -239,7 +239,7 @@ export async function createTaaruf(idPenuju: number, body: TTaarufCreate) {
     db.insert(taarufTable).values({
       idPenuju,
       ...body,
-    })
+    }),
   );
 }
 
@@ -251,13 +251,13 @@ export async function updateTaaruf(id: number, body: TTaarufUpdate) {
       .set({
         ...body,
       })
-      .where(eq(taarufTable.id, id))
+      .where(eq(taarufTable.id, id)),
   );
 }
 
 export async function deleteTaaruf({ id }: TDelete) {
   await assertToErr(
     "Failed to delete Taaruf",
-    db.delete(taarufTable).where(inArray(taarufTable.id, id))
+    db.delete(taarufTable).where(inArray(taarufTable.id, id)),
   );
 }

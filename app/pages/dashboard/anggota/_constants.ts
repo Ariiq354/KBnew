@@ -28,7 +28,7 @@ export const columns: TableColumn<any>[] = [
       }[row.original.detail ? "true" : "false"];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.original.detail ? "Aktif" : "Tidak Aktif"
+        row.original.detail ? "Aktif" : "Tidak Aktif",
       );
     },
   },

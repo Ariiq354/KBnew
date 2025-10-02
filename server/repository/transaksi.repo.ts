@@ -23,8 +23,8 @@ export async function listAllTransaksi({
         like(pemilikBootcampTable.harga, searchCondition),
         like(userTable.name, searchCondition),
         like(bootcampTable.judul, searchCondition),
-        like(pemilikBootcampTable.diskon, searchCondition)
-      )
+        like(pemilikBootcampTable.diskon, searchCondition),
+      ),
     );
   }
 
@@ -41,7 +41,7 @@ export async function listAllTransaksi({
     .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
     .leftJoin(
       bootcampTable,
-      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id)
+      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id),
     )
     .where(and(...conditions))
     .orderBy(desc(pemilikBootcampTable.createdAt))
@@ -49,12 +49,12 @@ export async function listAllTransaksi({
 
   const total = await assertToErr(
     "Failed to get total transaksi",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get data transaksi",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
 
   return {
@@ -65,7 +65,7 @@ export async function listAllTransaksi({
 
 export async function listAllTransaksiUser(
   id: number,
-  { limit, page }: TPagination
+  { limit, page }: TPagination,
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [eq(userTable.id, id)];
@@ -86,7 +86,7 @@ export async function listAllTransaksiUser(
     .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
     .leftJoin(
       bootcampTable,
-      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id)
+      eq(pemilikBootcampTable.idBootcamp, bootcampTable.id),
     )
     .where(and(...conditions))
     .orderBy(desc(pemilikBootcampTable.createdAt))
@@ -94,12 +94,12 @@ export async function listAllTransaksiUser(
 
   const total = await assertToErr(
     "Failed to get total transaksi user",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get data transaksi user",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
 
   return {
@@ -114,7 +114,7 @@ export async function updateTransaksi(id: number, body: TTransaksiCreate) {
   if (body.status) {
     updatedData["kode"] = await assertToErr(
       "Failed to generate code",
-      generateUniqueCode(pemilikBootcampTable, pemilikBootcampTable.kode, 12)
+      generateUniqueCode(pemilikBootcampTable, pemilikBootcampTable.kode, 12),
     );
   }
 
@@ -123,6 +123,6 @@ export async function updateTransaksi(id: number, body: TTransaksiCreate) {
     db
       .update(pemilikBootcampTable)
       .set(updatedData)
-      .where(eq(pemilikBootcampTable.id, id))
+      .where(eq(pemilikBootcampTable.id, id)),
   );
 }

@@ -23,7 +23,7 @@
       if (editor.value && newValue !== editor.value.getHTML()) {
         editor.value.commands.setContent(String(newValue));
       }
-    }
+    },
   );
 </script>
 

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = authGuard(event);
 
   const query = await getValidatedQuery(event, (query) =>
-    OPagination.parse(query)
+    OPagination.parse(query),
   );
 
   const data = await listAllTransaksiUser(user.id, query);

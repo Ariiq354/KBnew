@@ -16,7 +16,7 @@ async function refreshUserAvailability(userId: number) {
 
 export async function createTaarufService(
   user: UserWithId,
-  body: TTaarufCreate
+  body: TTaarufCreate,
 ) {
   const dituju = await getAnggotaById(body.idDituju);
 

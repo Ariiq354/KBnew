@@ -1,6 +1,6 @@
 export async function assertToErr<T>(
   label: string,
-  promise: Promise<T>
+  promise: Promise<T>,
 ): Promise<T> {
   try {
     return await promise;

@@ -35,7 +35,7 @@
     {
       query: queryTiket,
       immediate: false,
-    }
+    },
   );
   watchOnce(bootcampId, () => refresh());
 
@@ -50,14 +50,14 @@
     () => [query.search],
     () => {
       query.page = 1;
-    }
+    },
   );
 
   watch(
     () => [queryTiket.search],
     () => {
       queryTiket.page = 1;
-    }
+    },
   );
 </script>
 

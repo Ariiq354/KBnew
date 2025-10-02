@@ -4,7 +4,7 @@ import { OTransaksiCreate } from "./_dto";
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) =>
-    OTransaksiCreate.parse(b)
+    OTransaksiCreate.parse(b),
   );
   const id = OParam.parse(getRouterParam(event, "id"));
 

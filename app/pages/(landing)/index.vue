@@ -2,6 +2,8 @@
   definePageMeta({
     layout: "landing",
   });
+
+  const authStore = useAuthStore();
 </script>
 
 <template>
@@ -29,7 +31,12 @@
           </p>
           <div class="flex justify-center gap-4 md:justify-normal">
             <UButton class="shadow-lg" href="/about">Learn More</UButton>
-            <UButton variant="soft" class="shadow-lg" href="/login">
+            <UButton
+              v-if="!authStore.user"
+              variant="soft"
+              class="shadow-lg"
+              href="/login"
+            >
               Sign Up
             </UButton>
           </div>

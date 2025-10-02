@@ -62,7 +62,7 @@
     () => [query.search],
     () => {
       query.page = 1;
-    }
+    },
   );
 </script>
 
@@ -74,7 +74,7 @@
       :title="
         (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Diskon'
       "
-      class="max-w-2xl w-full"
+      class="w-full max-w-2xl"
     >
       <template #body>
         <UForm

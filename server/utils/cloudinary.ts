@@ -4,7 +4,7 @@ import type { UploadApiResponse, DeleteApiResponse } from "cloudinary";
 export async function uploadCloudinary(
   preset: string,
   file: Buffer,
-  type: "raw" | "image"
+  type: "raw" | "image",
 ) {
   try {
     const uploadResult = await new Promise<UploadApiResponse>(
@@ -15,10 +15,10 @@ export async function uploadCloudinary(
             (err, result) => {
               if (err) return reject(err);
               resolve(result as UploadApiResponse);
-            }
+            },
           )
           .end(file);
-      }
+      },
     );
 
     return uploadResult;
@@ -33,7 +33,7 @@ export async function uploadCloudinary(
 
 export async function deleteCloudinary(
   public_id: string,
-  type: "raw" | "image"
+  type: "raw" | "image",
 ): Promise<DeleteApiResponse> {
   try {
     const deleteResult = await new Promise<DeleteApiResponse>(
@@ -49,9 +49,9 @@ export async function deleteCloudinary(
             }
 
             resolve(result as DeleteApiResponse);
-          }
+          },
         );
-      }
+      },
     );
 
     return deleteResult;

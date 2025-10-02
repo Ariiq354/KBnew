@@ -4,7 +4,7 @@ import { OAnggotaPasangan } from "./_dto";
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OAnggotaPasangan.parse(query)
+    OAnggotaPasangan.parse(query),
   );
 
   const data = await listAnggotaPasangan(user.id, query);

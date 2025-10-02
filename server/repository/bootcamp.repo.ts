@@ -28,8 +28,8 @@ export async function listAllBootcamp({
         like(bootcampTable.tempat, searchCondition),
         like(bootcampTable.pembicara, searchCondition),
         like(bootcampTable.harga, searchCondition),
-        like(bootcampTable.waktu, searchCondition)
-      )
+        like(bootcampTable.waktu, searchCondition),
+      ),
     );
   }
 
@@ -52,12 +52,12 @@ export async function listAllBootcamp({
 
   const total = await assertToErr(
     "Failed to get total bootcamp",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get data bootcamp",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
 
   return {
@@ -97,12 +97,12 @@ export async function listAllBootcampActive({
 
   const total = await assertToErr(
     "Failed to get total bootcamp active",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get data bootcamp active",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
 
   return {
@@ -113,7 +113,7 @@ export async function listAllBootcampActive({
 
 export async function getUserByBootcampId(
   bootcampId: number,
-  { page, limit, search }: TSearchPagination
+  { page, limit, search }: TSearchPagination,
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -126,8 +126,8 @@ export async function getUserByBootcampId(
     conditions.push(
       or(
         like(pemilikBootcampTable.kode, searchCondition),
-        like(userTable.name, searchCondition)
-      )
+        like(userTable.name, searchCondition),
+      ),
     );
   }
 
@@ -143,12 +143,12 @@ export async function getUserByBootcampId(
 
   const total = await assertToErr(
     "Failed to total user by bootcamp id",
-    db.$count(query)
+    db.$count(query),
   );
 
   const data = await assertToErr(
     "Failed to get user by bootcamp id",
-    query.limit(limit).offset(offset)
+    query.limit(limit).offset(offset),
   );
 
   return {
@@ -174,7 +174,7 @@ export async function getBootcampById(id: number) {
         tempat: true,
         waktu: true,
       },
-    })
+    }),
   );
 }
 
@@ -183,7 +183,7 @@ export async function createBootcamp(body: TBootcampCreate) {
     "Failed to insert Bootcamp",
     db.insert(bootcampTable).values({
       ...body,
-    })
+    }),
   );
 }
 
@@ -195,26 +195,26 @@ export async function updateBootcamp(id: number, body: TBootcampCreate) {
       .set({
         ...body,
       })
-      .where(eq(bootcampTable.id, id))
+      .where(eq(bootcampTable.id, id)),
   );
 }
 
 export async function deleteBootcamp({ id }: TDelete) {
   await assertToErr(
     "Failed to delete Bootcamp",
-    db.delete(bootcampTable).where(inArray(bootcampTable.id, id))
+    db.delete(bootcampTable).where(inArray(bootcampTable.id, id)),
   );
 }
 
 export async function createUserBootcamp(
   userId: number,
-  body: TUserBootcampCreate
+  body: TUserBootcampCreate,
 ) {
   await assertToErr(
     "Failed to insert user Bootcamp",
     db.insert(pemilikBootcampTable).values({
       ...body,
       idUser: userId,
-    })
+    }),
   );
 }

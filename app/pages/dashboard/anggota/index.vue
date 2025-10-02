@@ -31,7 +31,7 @@
   <main>
     <LazyUModal v-model:open="modalOpen" title="Detail User" fullscreen>
       <template #body>
-        <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <UFormField label="Foto">
             <AppUploadImage v-model:foto="state.foto" disabled />
           </UFormField>

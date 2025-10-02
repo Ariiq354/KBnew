@@ -3,7 +3,7 @@ import { listUserTaaruf } from "~~/server/repository/taaruf.repo";
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OSearchPagination.parse(query)
+    OSearchPagination.parse(query),
   );
 
   const data = await listUserTaaruf(user.id, query);

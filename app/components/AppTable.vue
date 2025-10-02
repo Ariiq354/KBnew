@@ -131,8 +131,8 @@
                       color: "neutral",
                       variant: "ghost",
                       "aria-label": "Actions dropdown",
-                    })
-                )
+                    }),
+                ),
               );
             },
           } as TableColumn<any>,
@@ -144,7 +144,7 @@
     () => data,
     () => {
       rowSelection.value = {};
-    }
+    },
   );
 </script>
 
@@ -166,7 +166,7 @@
             'delete',
             Object.keys(rowSelection)
               .map((k) => data?.[Number(k)]?.id)
-              .filter((id) => id != null)
+              .filter((id) => id != null),
           )
         "
       >

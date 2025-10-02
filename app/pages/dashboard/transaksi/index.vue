@@ -23,7 +23,7 @@
   });
 
   const currentData = computed(() =>
-    data.value?.data.find((item) => item.id === state.id)
+    data.value?.data.find((item) => item.id === state.id),
   );
 
   const modalOpen = ref(false);
@@ -53,7 +53,7 @@
     () => [query.search],
     () => {
       query.page = 1;
-    }
+    },
   );
 </script>
 
@@ -63,7 +63,7 @@
     <LazyUModal
       v-model:open="modalOpen"
       title="Edit transaksi"
-      class="max-w-2xl w-full"
+      class="w-full max-w-2xl"
     >
       <template #body>
         <UForm

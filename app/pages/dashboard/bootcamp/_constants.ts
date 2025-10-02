@@ -29,7 +29,7 @@ export const columns: TableColumn<any>[] = [
       }[row.getValue("status") ? "true" : "false"];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status") ? "Aktif" : "Tidak Aktif"
+        row.getValue("status") ? "Aktif" : "Tidak Aktif",
       );
     },
   },
@@ -50,8 +50,8 @@ export const schema = z
         .file()
         .check(
           z.maxSize(5_000_000),
-          z.mime(["image/png", "image/jpeg", "image/webp"])
-        )
+          z.mime(["image/png", "image/jpeg", "image/webp"]),
+        ),
     ),
     pembicara: z.string().check(z.minLength(1, "Required")),
     status: z.boolean(),
@@ -60,7 +60,7 @@ export const schema = z
     z.refine((val) => val.file || val.foto, {
       error: "Required",
       path: ["foto"],
-    })
+    }),
   );
 
 export const getInitialFormData = (): Schema => ({

@@ -71,7 +71,7 @@
           class="space-y-4"
           @submit="onSubmit"
         >
-          <div class="grid gap-4 grid-cols-2">
+          <div class="grid grid-cols-2 gap-4">
             <UFormField label="Nama Lengkap Penuju">
               <UInput :model-value="modalStatePenuju?.namaAnggota" disabled />
             </UFormField>

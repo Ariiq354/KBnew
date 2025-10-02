@@ -53,7 +53,7 @@
       :center="center"
       :zoom="14"
       style="width: 100%; height: 100%"
-      class="rounded-md overflow-hidden"
+      class="overflow-hidden rounded-md"
       @click="onMapClick"
     >
       <AdvancedMarker v-if="marker" :options="{ position: marker }" />

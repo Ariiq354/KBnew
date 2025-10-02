@@ -7,7 +7,7 @@ export function HttpResponse<T>(data: T): {
 };
 export function HttpResponse<T, K>(
   data: T,
-  metadata: K
+  metadata: K,
 ): { statusCode: number; message: string; data: T; metadata: K };
 
 // Implementation

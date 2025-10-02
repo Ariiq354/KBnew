@@ -5,7 +5,7 @@ export const DaerahDto = z.object({
     z.object({
       code: z.string(),
       name: z.string(),
-    })
+    }),
   ),
   meta: z.object({
     administrative_area_level: z.number(),

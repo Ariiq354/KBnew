@@ -6,7 +6,7 @@ import type { AnyPgTable, PgColumn } from "drizzle-orm/pg-core";
 export async function generateUniqueCode(
   table: AnyPgTable,
   column: PgColumn,
-  length = 4
+  length = 4,
 ) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let result = "";
@@ -17,7 +17,7 @@ export async function generateUniqueCode(
 
   const exist = await assertToErr(
     "failed to select unique code",
-    db.select().from(table).where(eq(column, result))
+    db.select().from(table).where(eq(column, result)),
   );
 
   if (exist.length > 0) {
@@ -46,9 +46,9 @@ export async function getUniquePrice(price: number) {
       db.query.pemilikBootcampTable.findFirst({
         where: and(
           eq(pemilikBootcampTable.harga, newPrice),
-          eq(pemilikBootcampTable.status, false)
+          eq(pemilikBootcampTable.status, false),
         ),
-      })
+      }),
     );
 
     if (!exist) {
