@@ -25,7 +25,6 @@
       if (!item.response._data?.data) {
         useToastError("Diskon Tidak Ada", "Diskon tidak ditemukan");
       } else {
-        ticketCount.value = 1;
         useToastSuccess("Diskon Ada", "Diskon berhasil ditambahkan");
       }
     },
@@ -38,8 +37,6 @@
       });
     }
   });
-
-  const ticketCount = ref(1);
 
   const item = computed(() => data.value!.data!);
 
@@ -54,7 +51,7 @@
         method: "POST",
         body: {
           idBootcamp: id,
-          harga: item.value.harga * ticketCount.value,
+          harga: item.value.harga,
           ...(diskon && { diskon: ticketCode.value }),
         },
       });
@@ -107,11 +104,7 @@
           <div v-if="diskon?.data" class="flex justify-between">
             <p>Diskon</p>
             <p>
-              {{
-                numToRupiah(
-                  Number((item.harga * ticketCount * diskon.data.persen) / 100),
-                )
-              }}
+              {{ numToRupiah(Number((item.harga * diskon.data.persen) / 100)) }}
             </p>
           </div>
           <div class="flex justify-between">
@@ -197,11 +190,7 @@
               <p>Diskon</p>
               <p>
                 -{{
-                  numToRupiah(
-                    Number(
-                      (item.harga * ticketCount * diskon.data.persen) / 100,
-                    ),
-                  )
+                  numToRupiah(Number((item.harga * diskon.data.persen) / 100))
                 }}
               </p>
             </div>
@@ -211,8 +200,7 @@
                 {{
                   diskon?.data
                     ? numToRupiah(
-                        item.harga -
-                          (item.harga * ticketCount * diskon.data.persen) / 100,
+                        item.harga - (item.harga * diskon.data.persen) / 100,
                       )
                     : numToRupiah(item.harga)
                 }}

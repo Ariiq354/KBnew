@@ -49,81 +49,97 @@
   <LazyUModal
     v-model:open="modalOpen"
     title="Detail Bootcamp"
-    class="w-full max-w-4xl"
+    class="w-full max-w-2xl"
   >
     <template #body>
-      <div
-        v-if="state?.status === 'Sudah Diverif'"
-        class="grid grid-cols-1 gap-4 md:grid-cols-2"
-      >
-        <NuxtImg :src="state!.foto!" class="bg-gray-400" />
-        <div class="flex flex-col gap-4">
-          <h1 class="text-4xl font-bold">{{ state?.namaBootcamp }}</h1>
-          <div>
-            <h2 class="flex items-center gap-2 font-bold">
-              <UIcon name="i-lucide-map-pin" size="20" /> Tempat
-            </h2>
-            <hr class="my-2" />
-            <p>{{ state?.tempat }}</p>
+      <div>
+        <h1 class="text-2xl font-bold">{{ state?.bootcamp?.namaBootcamp }}</h1>
+        <p class="text-muted">Dipesan di {{ formatDate(state!.createdAt) }}</p>
+        <UBadge
+          variant="soft"
+          :color="
+            state?.status === 'Belum Dibayar'
+              ? 'error'
+              : state?.status === 'Sudah Dibayar'
+                ? 'info'
+                : 'success'
+          "
+          class="my-6 rounded-full"
+        >
+          {{ state?.status }}
+        </UBadge>
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between">
+            <p>Harga Tiket</p>
+            <p>{{ numToRupiah(state!.bootcamp!.hargaBootcamp) }}</p>
           </div>
-          <div>
-            <h2 class="flex items-center gap-2 font-bold">
-              <UIcon name="i-lucide-calendar-date-range" size="20" /> Waktu
-            </h2>
-            <hr class="my-2" />
-            <p>{{ state?.waktu }}</p>
+          <div v-if="state?.diskon" class="flex justify-between">
+            <p>Diskon</p>
+            <p>
+              {{
+                numToRupiah(
+                  Number(
+                    (state!.bootcamp!.hargaBootcamp * state.diskon.persen!) /
+                      100,
+                  ),
+                )
+              }}
+            </p>
           </div>
-          <div class="mt-auto">
-            <h2 class="text-center text-xl font-bold">KODE</h2>
-            <p
-              v-if="state?.kode"
-              class="border-primary bg-accent rounded-xl border text-center text-2xl font-bold"
-            >
-              {{ state?.kode }}
+          <div class="flex justify-between">
+            <p>Kode Unik</p>
+            <p>
+              {{ numToRupiah(state!.bootcamp!.hargaBootcamp - state!.harga) }}
             </p>
-            <p
-              v-else
-              class="border-primary bg-accent rounded-xl border text-center text-xl"
-            >
-              Pembayaran belum divalidasi
+          </div>
+          <div class="flex justify-between font-bold">
+            <p>Total Harga</p>
+            <p>
+              {{ numToRupiah(state!.harga) }}
             </p>
+          </div>
+          <hr class="border-muted my-4 border" />
+          <div
+            v-if="state?.status === 'Sudah Diverif'"
+            class="flex flex-col gap-2"
+          >
+            <p class="text-muted">Kode Tiket Anda</p>
+            <p class="text-3xl font-bold">{{ state.kode }}</p>
+            <p class="text-muted text-sm">
+              Tolong simpan kode ini. Anda bisa mununjukkan saat hadir untuk
+              verifikasi
+            </p>
+          </div>
+          <div v-else-if="state?.status === 'Sudah Dibayar'">
+            <p class="text-center text-xl font-bold">
+              Dimohon menunggu verifikasi dari Admin
+            </p>
+          </div>
+          <div v-else>
+            <p class="text-muted">Silahkan bayar menggunakan qris dibawah</p>
+            <NuxtImg src="/contohqris.png" class="my-4 w-full" />
+            <UButton
+              class="flex w-full justify-center"
+              @click="onSelesai(state!.id)"
+            >
+              Sudah Bayar
+            </UButton>
           </div>
         </div>
       </div>
-      <div v-else>
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <NuxtImg src="/contohqris.png" class="w-full" />
-          <div class="flex flex-col gap-2">
-            <h2 class="mb-2 font-bold">Detail Harga</h2>
-            <div class="flex justify-between">
-              <p>Harga Tiket:</p>
-              <p>{{ numToRupiah(state!.harga) }}</p>
-            </div>
-            <div class="mt-auto flex flex-col gap-2 md:flex-row">
-              <UButton
-                class="flex w-full justify-center"
-                @click="onSelesai(state!.id)"
-              >
-                Sudah Bayar
-              </UButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-    <template #footer>
-      <UButton icon="i-lucide-x" @click="modalOpen = false"> Tutup </UButton>
     </template>
   </LazyUModal>
   <main>
     <UCard class="mb-4">
-      <h1 class="flex w-full items-center justify-between text-2xl font-bold">
+      <h1
+        class="flex w-full items-center justify-between text-xl font-bold md:text-2xl"
+      >
         Dapatkan Paket kami
-        <UButton to="/product" size="xl">Dapatkan Paket</UButton>
+        <UButton to="/product">Dapatkan Paket</UButton>
       </h1>
     </UCard>
 
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
       <UCard
         v-for="item in data?.data"
         :key="item.id"
@@ -131,9 +147,9 @@
         :ui="{ body: 'h-full' }"
       >
         <div class="flex h-full flex-col justify-between">
-          <NuxtImg :src="item.foto!" class="rounded-2xl bg-gray-400" />
+          <NuxtImg :src="item.bootcamp?.foto" class="rounded-2xl bg-gray-400" />
           <div class="mt-2">
-            <h1 class="text-xl font-bold">{{ item.namaBootcamp }}</h1>
+            <h1 class="text-xl font-bold">{{ item.bootcamp?.namaBootcamp }}</h1>
             <p class="text-muted">
               Dipesan di {{ formatDate(item.createdAt) }}
             </p>

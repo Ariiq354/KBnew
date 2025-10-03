@@ -3,7 +3,7 @@ export type ExtractObjectType<T> = T extends { data: (infer U)[] } ? U : never;
 export function formatDate(input: string) {
   const date = new Date(input);
 
-  return date.toLocaleString("id-ID", {
+  return date.toLocaleString("en-GB", {
     month: "numeric",
     day: "numeric",
     year: "numeric",

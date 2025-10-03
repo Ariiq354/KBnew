@@ -6,6 +6,7 @@ import {
   bootcampTable,
   pemilikBootcampTable,
 } from "~~/server/database/schema/bootcamp";
+import { diskonTable } from "../database/schema/diskon";
 
 export async function listAllTransaksi({
   limit,
@@ -72,15 +73,21 @@ export async function listAllTransaksiUser(
   const query = db
     .select({
       id: pemilikBootcampTable.id,
-      namaBootcamp: bootcampTable.judul,
       harga: pemilikBootcampTable.harga,
-      diskon: pemilikBootcampTable.diskon,
       status: pemilikBootcampTable.status,
-      waktu: bootcampTable.waktu,
       kode: pemilikBootcampTable.kode,
-      foto: bootcampTable.foto,
-      tempat: bootcampTable.tempat,
       createdAt: pemilikBootcampTable.createdAt,
+      bootcamp: {
+        namaBootcamp: bootcampTable.judul,
+        hargaBootcamp: bootcampTable.harga,
+        waktu: bootcampTable.waktu,
+        foto: bootcampTable.foto,
+        tempat: bootcampTable.tempat,
+      },
+      diskon: {
+        kode: pemilikBootcampTable.diskon,
+        persen: diskonTable.persen,
+      },
     })
     .from(pemilikBootcampTable)
     .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
@@ -88,6 +95,7 @@ export async function listAllTransaksiUser(
       bootcampTable,
       eq(pemilikBootcampTable.idBootcamp, bootcampTable.id),
     )
+    .leftJoin(diskonTable, eq(pemilikBootcampTable.diskon, diskonTable.kode))
     .where(and(...conditions))
     .orderBy(desc(pemilikBootcampTable.createdAt))
     .$dynamic();
