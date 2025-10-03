@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { db } from "../database";
 import { pemilikBootcampTable } from "../database/schema/bootcamp";
 import type { AnyPgTable, PgColumn } from "drizzle-orm/pg-core";
@@ -46,7 +46,7 @@ export async function getUniquePrice(price: number) {
       db.query.pemilikBootcampTable.findFirst({
         where: and(
           eq(pemilikBootcampTable.harga, newPrice),
-          eq(pemilikBootcampTable.status, false),
+          ne(pemilikBootcampTable.status, "Sudah Diverif"),
         ),
       }),
     );

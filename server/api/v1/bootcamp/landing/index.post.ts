@@ -7,9 +7,7 @@ export default defineEventHandler(async (event) => {
     OUserBootcampCreate.parse(b),
   );
 
-  const newPrice = await addUserBootcampService(user, body);
+  const result = await addUserBootcampService(user, body);
 
-  return HttpResponse({
-    price: newPrice,
-  });
+  return HttpResponse(result);
 });

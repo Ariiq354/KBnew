@@ -25,25 +25,32 @@ export const columns: TableColumn<any>[] = [
     header: "Status",
     cell: ({ row }) => {
       const color = {
-        true: "success" as const,
-        false: "info" as const,
-      }[row.getValue("status") ? "true" : "false"];
+        "Belum Dibayar": "error" as const,
+        "Sudah Dibayar": "info" as const,
+        "Sudah Diverif": "success" as const,
+      }[row.getValue("status") as string];
 
       return h(UBadge, { class: "capitalize rounded-full", color }, () =>
-        row.getValue("status") ? "Sudah Dibayar" : "Belum Dibayar",
+        row.getValue("status"),
       );
     },
   },
 ];
 
+export const statusOptions = [
+  "Belum Dibayar",
+  "Sudah Dibayar",
+  "Sudah Diverif",
+];
+
 export const schema = z.object({
   id: z.number().check(z.minimum(1, "Required")),
-  status: z.boolean(),
+  status: z.enum(statusOptions),
 });
 
 export const initFormData: Schema = {
   id: 0,
-  status: false,
+  status: "Belum Dibayar",
 };
 
 export type Schema = z.infer<typeof schema>;

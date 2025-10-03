@@ -1,14 +1,14 @@
-import { updateTransaksi } from "~~/server/repository/transaksi.repo";
-import { OTransaksiCreate } from "./_dto";
+import { updateTransaksiStatusService } from "~~/server/services/transaksi.service";
+import { OTransaksiUpdate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) =>
-    OTransaksiCreate.parse(b),
+    OTransaksiUpdate.parse(b),
   );
   const id = OParam.parse(getRouterParam(event, "id"));
 
-  await updateTransaksi(id, { status: result.status });
+  await updateTransaksiStatusService(id, result.status);
 
   return HttpResponse();
 });

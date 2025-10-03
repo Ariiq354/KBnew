@@ -1,12 +1,11 @@
 import type { SQL } from "drizzle-orm";
-import { and, desc, eq, like, or } from "drizzle-orm";
+import { and, desc, eq, inArray, like, or } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userTable } from "~~/server/database/schema/auth";
 import {
   bootcampTable,
   pemilikBootcampTable,
 } from "~~/server/database/schema/bootcamp";
-import type { TTransaksiCreate } from "../api/v1/transaksi/_dto";
 
 export async function listAllTransaksi({
   limit,
@@ -81,6 +80,7 @@ export async function listAllTransaksiUser(
       kode: pemilikBootcampTable.kode,
       foto: bootcampTable.foto,
       tempat: bootcampTable.tempat,
+      createdAt: pemilikBootcampTable.createdAt,
     })
     .from(pemilikBootcampTable)
     .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
@@ -108,21 +108,46 @@ export async function listAllTransaksiUser(
   };
 }
 
-export async function updateTransaksi(id: number, body: TTransaksiCreate) {
-  const updatedData: Record<string, any> = { status: body.status };
-
-  if (body.status) {
-    updatedData["kode"] = await assertToErr(
-      "Failed to generate code",
-      generateUniqueCode(pemilikBootcampTable, pemilikBootcampTable.kode, 12),
-    );
-  }
-
+export async function updateTransaksiStatus(
+  id: number,
+  status: "Belum Dibayar" | "Sudah Dibayar" | "Sudah Diverif",
+  idUser?: number,
+  kode?: string,
+) {
   await assertToErr(
     "Failed to update Transaksi",
     db
       .update(pemilikBootcampTable)
-      .set(updatedData)
-      .where(eq(pemilikBootcampTable.id, id)),
+      .set({
+        status,
+        kode,
+      })
+      .where(
+        and(
+          eq(pemilikBootcampTable.id, id),
+          ...(idUser ? [eq(pemilikBootcampTable.idUser, idUser)] : []),
+        ),
+      ),
+  );
+}
+
+export async function deleteTransaksi(id: number[]) {
+  await assertToErr(
+    "Failed to delete Transaksi",
+    db.delete(pemilikBootcampTable).where(inArray(pemilikBootcampTable.id, id)),
+  );
+}
+
+export async function deleteTransaksiUser(userId: number, id: number[]) {
+  await assertToErr(
+    "Failed to delete Transaksi User",
+    db
+      .delete(pemilikBootcampTable)
+      .where(
+        and(
+          inArray(pemilikBootcampTable.id, id),
+          eq(pemilikBootcampTable.idUser, userId),
+        ),
+      ),
   );
 }

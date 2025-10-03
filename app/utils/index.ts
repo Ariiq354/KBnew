@@ -3,12 +3,15 @@ export type ExtractObjectType<T> = T extends { data: (infer U)[] } ? U : never;
 export function formatDate(input: string) {
   const date = new Date(input);
 
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-
-  const formatted = `${day}-${month}-${year}`;
-  return formatted;
+  return date.toLocaleString("id-ID", {
+    month: "numeric",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: false,
+  });
 }
 
 export const formatRupiah = (value: number) => {

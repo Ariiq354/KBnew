@@ -8,10 +8,6 @@ export const columns: TableColumn<any>[] = [
     header: "Judul",
   },
   {
-    accessorKey: "tempat",
-    header: "Lokasi",
-  },
-  {
     accessorKey: "waktu",
     header: "Jadwal",
   },

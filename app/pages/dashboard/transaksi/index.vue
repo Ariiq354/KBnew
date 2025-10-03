@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { columns, initFormData, schema } from "./_constants";
+  import { columns, initFormData, schema, statusOptions } from "./_constants";
   import type { Schema } from "./_constants";
   import { useConstantStore } from "~/stores/constant";
   import { useSubmit } from "~/composables/function";
@@ -49,6 +49,10 @@
     state = itemData;
   }
 
+  async function clickDelete(ids: number[]) {
+    openConfirmModal("/transaksi", { id: ids }, refresh);
+  }
+
   watch(
     () => [query.search],
     () => {
@@ -86,7 +90,11 @@
             <UInput :model-value="currentData?.diskon" disabled />
           </UFormField>
           <UFormField label="Status" name="status">
-            <USwitch v-model="state.status" :disabled="isLoading" />
+            <USelectMenu
+              v-model="state.status"
+              :items="statusOptions"
+              :disabled="isLoading"
+            />
           </UFormField>
         </UForm>
       </template>
@@ -125,10 +133,13 @@
         :data="data?.data"
         :loading="status === 'pending'"
         :total="data?.metadata.total"
+        selectable
         enumerate
+        deletable
         editable
         pagination
         @edit="clickUpdate"
+        @delete="clickDelete"
       />
     </UCard>
   </main>

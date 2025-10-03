@@ -26,7 +26,9 @@ export const pemilikBootcampTable = pgTable("pemilikBootcamp", {
     .references(() => bootcampTable.id, { onDelete: "cascade" }),
   harga: integer().notNull(),
   diskon: text().notNull(),
-  status: boolean().notNull().default(false),
+  status: text({ enum: ["Belum Dibayar", "Sudah Dibayar", "Sudah Diverif"] })
+    .notNull()
+    .default("Belum Dibayar"),
   kode: text().notNull().default(""),
   ...createdUpdated,
 });

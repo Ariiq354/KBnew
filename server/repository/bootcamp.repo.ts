@@ -86,6 +86,7 @@ export async function listAllBootcampActive({
     .select({
       id: bootcampTable.id,
       judul: bootcampTable.judul,
+      tempat: bootcampTable.tempat,
       waktu: bootcampTable.waktu,
       foto: bootcampTable.foto,
       deskripsi: bootcampTable.deskripsi,
@@ -118,7 +119,7 @@ export async function getUserByBootcampId(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(pemilikBootcampTable.idBootcamp, bootcampId),
-    eq(pemilikBootcampTable.status, true),
+    eq(pemilikBootcampTable.status, "Sudah Diverif"),
   ];
   if (search) {
     const searchCondition = `%${search}%`;
@@ -210,11 +211,14 @@ export async function createUserBootcamp(
   userId: number,
   body: TUserBootcampCreate,
 ) {
-  await assertToErr(
+  return await assertToErr(
     "Failed to insert user Bootcamp",
-    db.insert(pemilikBootcampTable).values({
-      ...body,
-      idUser: userId,
-    }),
+    db
+      .insert(pemilikBootcampTable)
+      .values({
+        ...body,
+        idUser: userId,
+      })
+      .returning({ id: pemilikBootcampTable.id }),
   );
 }

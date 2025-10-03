@@ -77,9 +77,9 @@
         </div>
       </div>
     </div>
-    <div class="px-4">
+    <div class="bg-white px-4 pb-12">
       <div
-        class="bg-eastern-blue-100 mx container my-12 flex max-w-[1000px] flex-col gap-4 rounded-lg p-4 shadow-xl md:p-12"
+        class="bg-eastern-blue-100 mx container flex max-w-[1000px] flex-col gap-4 rounded-lg p-4 shadow-xl md:p-12"
       >
         <h1 class="text-center text-4xl font-semibold">Email</h1>
         <p class="text-center text-lg">
