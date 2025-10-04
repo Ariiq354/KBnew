@@ -136,16 +136,6 @@
           }
         },
       },
-      {
-        label: "Daftar Bootcamp",
-        to: "/dashboard/daftar-bootcamp",
-        icon: "i-lucide-computer",
-        onSelect: () => {
-          if (!isDesktop.value) {
-            constantStore.toggleSidebar();
-          }
-        },
-      },
     ],
   ];
 </script>
@@ -207,5 +197,38 @@
         </aside>
       </template>
     </USlideover>
+    <div
+      v-if="!isDesktop"
+      class="border-primary fixed bottom-0 z-10 flex h-20 w-full justify-center gap-12 border-t-2 bg-white"
+    >
+      <NuxtLink
+        to="/dashboard/member"
+        class="flex flex-col items-center justify-center"
+      >
+        <UIcon name="i-lucide-user" size="32" />
+        <p class="text-muted text-sm">Pasangan</p>
+      </NuxtLink>
+      <NuxtLink
+        to="/dashboard/pengajuan"
+        class="flex flex-col items-center justify-center"
+      >
+        <UIcon name="i-lucide-heart" size="32" />
+        <p class="text-muted text-sm">Taaruf</p>
+      </NuxtLink>
+      <NuxtLink
+        to="/dashboard/profil"
+        class="flex flex-col items-center justify-center"
+      >
+        <UIcon name="i-lucide-user-circle" size="32" />
+        <p class="text-muted text-sm">Profil</p>
+      </NuxtLink>
+      <NuxtLink
+        to="/dashboard/paket-saya"
+        class="flex flex-col items-center justify-center"
+      >
+        <UIcon name="i-lucide-package" size="32" />
+        <p class="text-muted text-sm">Paket</p>
+      </NuxtLink>
+    </div>
   </ClientOnly>
 </template>

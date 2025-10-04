@@ -205,7 +205,7 @@
       </div>
     </UCard>
     <UCard class="w-full">
-      <div class="mb-4 grid grid-cols-4 gap-4">
+      <div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
         <UFormField label="Status Kawin">
           <USelectMenu
             v-model="query.statusKawin"

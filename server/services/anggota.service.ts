@@ -1,8 +1,13 @@
 import type { MultiPartData } from "h3";
 import ENV from "~~/shared/env";
-import { OAnggotaDetailCreate } from "../api/v1/anggota/_dto";
+import {
+  OAnggotaDetailCreate,
+  type TAnggotaPasangan,
+} from "../api/v1/anggota/_dto";
 import {
   createAnggotaDetail,
+  getAnggotaById,
+  listAnggotaPasangan,
   updateUserActive,
 } from "../repository/anggota.repo";
 import { userDtlTable } from "../database/schema/auth";
@@ -62,4 +67,13 @@ export async function createAnggotaDetailService(
   await createAnggotaDetail(user.id, parsed, kodeUser);
 
   await updateUserActive(user.id);
+}
+
+export async function getListMemberService(
+  user: UserWithId,
+  query: TAnggotaPasangan,
+) {
+  const userDetail = await getAnggotaById(user.id);
+
+  return await listAnggotaPasangan(user.id, query, userDetail!.detail!.gender);
 }

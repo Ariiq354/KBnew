@@ -1,4 +1,4 @@
-import { listAnggotaPasangan } from "~~/server/repository/anggota.repo";
+import { getListMemberService } from "~~/server/services/anggota.service";
 import { OAnggotaPasangan } from "./_dto";
 
 export default defineEventHandler(async (event) => {
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     OAnggotaPasangan.parse(query),
   );
 
-  const data = await listAnggotaPasangan(user.id, query);
+  const data = await getListMemberService(user, query);
 
   const metadata = {
     page: query.page,

@@ -1,8 +1,7 @@
-import { and, desc, eq, gte, like, lte, ne, or, sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
-import { userTable, userDtlTable } from "~~/server/database/schema/auth";
+import { and, desc, eq, gte, like, lte, ne, or, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generateUniqueCode } from "~~/server/utils/generate";
+import { userDtlTable, userTable } from "~~/server/database/schema/auth";
 import type {
   TAnggotaDetailCreate,
   TAnggotaPasangan,
@@ -156,7 +155,11 @@ export async function updateUserActive(id: number) {
   );
 }
 
-export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
+export async function listAnggotaPasangan(
+  id: number,
+  param: TAnggotaPasangan,
+  gender: "laki" | "perempuan",
+) {
   const offset = (param.page - 1) * param.limit;
   const today = new Date();
 
@@ -172,6 +175,7 @@ export async function listAnggotaPasangan(id: number, param: TAnggotaPasangan) {
     ne(userTable.id, id),
     eq(userTable.isActive, true),
     eq(userTable.isAvailable, true),
+    ne(userDtlTable.gender, gender),
   ];
 
   if (reqUser) {
