@@ -40,7 +40,8 @@
 
   const item = computed(() => data.value!.data!);
 
-  const modalOpen = ref(false);
+  const qrisOpen = ref(false);
+  const modalOpen = ref(true);
   const price = ref(0);
   const idBootcampUser = ref();
   const isLoading = ref(false);
@@ -86,15 +87,47 @@
 
 <template>
   <LazyUModal
-    v-model:open="modalOpen"
+    v-model:open="qrisOpen"
     title="Pembayaran QRIS"
     description="Scan QR ini untuk membayar"
+    class="md:min-w-2xl"
+  >
+    <template #body>
+      <NuxtImg src="/contohqris.png" class="w-full" />
+    </template>
+  </LazyUModal>
+  <LazyUModal
+    v-model:open="modalOpen"
+    title="Pembayaran"
+    description="Silahkan pilih opsi untuk bayar"
     class="md:min-w-2xl"
     :dismissible="false"
   >
     <template #body>
       <div class="flex flex-col">
-        <NuxtImg src="/contohqris.png" class="w-full" />
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          <div class="flex items-center gap-2">
+            <NuxtImg src="bca-logo.png" class="h-6" />
+            <div>
+              <p class="font-bold">1234567890</p>
+              <p class="text-muted text-xs">A/n John Doe</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <NuxtImg src="bsi-logo.png" class="h-6" />
+            <div>
+              <p class="font-bold">1234567890</p>
+              <p class="text-muted text-xs">A/n John Doe</p>
+            </div>
+          </div>
+          <UButton
+            variant="outline"
+            icon="i-lucide-qr-code"
+            @click="qrisOpen = true"
+          >
+            QRIS
+          </UButton>
+        </div>
         <hr class="border-muted my-4 border" />
         <div class="flex flex-col gap-2">
           <div class="flex justify-between">
