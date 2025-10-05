@@ -1,5 +1,5 @@
-import { addUserBootcampService } from "~~/server/services/bootcamp.service";
-import { OUserBootcampCreate } from "../_dto";
+import { addUserBootcampService } from "~~/server/modules/bootcamp";
+import { OUserBootcampCreate } from "~~/server/modules/bootcamp/bootcamp.dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

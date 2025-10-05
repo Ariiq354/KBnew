@@ -1,5 +1,5 @@
-import { updateTransaksiStatusService } from "~~/server/services/transaksi.service";
-import { OTransaksiUpdate } from "./_dto";
+import { updateTransaksiStatusService } from "~~/server/modules/transaksi";
+import { OTransaksiUpdate } from "~~/server/modules/transaksi/transaksi.dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

@@ -1,4 +1,4 @@
-import { listAllAnggota } from "~~/server/repository/anggota.repo";
+import { getAllAnggotaService } from "~~/server/modules/anggota";
 import { OSearchPagination } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
@@ -7,14 +7,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(query),
   );
 
-  const data = await listAllAnggota(query);
+  const data = await getAllAnggotaService(query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

@@ -1,12 +1,12 @@
-import { updateDiskon } from "~~/server/repository/diskon.repo";
-import { ODiskonCreate } from "./_dto";
+import { updateDiskonService } from "~~/server/modules/diskon";
+import { ODiskonCreate } from "~~/server/modules/diskon/diskon.dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) => ODiskonCreate.parse(b));
   const id = OParam.parse(getRouterParam(event, "id"));
 
-  await updateDiskon(id, result);
+  await updateDiskonService(id, result);
 
   return HttpResponse();
 });

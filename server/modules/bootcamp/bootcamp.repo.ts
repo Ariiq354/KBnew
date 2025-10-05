@@ -1,17 +1,14 @@
 import type { SQL } from "drizzle-orm";
 import { and, desc, eq, inArray, like, or } from "drizzle-orm";
 import { db } from "~~/server/database";
+import { userTable } from "~~/server/database/schema/auth";
 import {
   bootcampTable,
   pemilikBootcampTable,
 } from "~~/server/database/schema/bootcamp";
-import { userTable } from "../database/schema/auth";
-import type {
-  TBootcampCreate,
-  TUserBootcampCreate,
-} from "../api/v1/bootcamp/_dto";
+import type { TBootcampCreate, TUserBootcampCreate } from "./bootcamp.dto";
 
-export async function listAllBootcamp({
+export async function getAllBootcamp({
   limit,
   page,
   search,
@@ -50,12 +47,12 @@ export async function listAllBootcamp({
     .where(and(...conditions))
     .orderBy(desc(bootcampTable.createdAt));
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total bootcamp",
     db.$count(query),
   );
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get data bootcamp",
     query.limit(limit).offset(offset),
   );
@@ -66,7 +63,7 @@ export async function listAllBootcamp({
   };
 }
 
-export async function listAllBootcampActive({
+export async function getAllBootcampActive({
   limit,
   page,
   search,
@@ -96,12 +93,12 @@ export async function listAllBootcampActive({
     .where(and(...conditions))
     .orderBy(desc(bootcampTable.createdAt));
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total bootcamp active",
     db.$count(query),
   );
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get data bootcamp active",
     query.limit(limit).offset(offset),
   );
@@ -142,12 +139,12 @@ export async function getUserByBootcampId(
     .leftJoin(userTable, eq(pemilikBootcampTable.idUser, userTable.id))
     .where(and(...conditions));
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to total user by bootcamp id",
     db.$count(query),
   );
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get user by bootcamp id",
     query.limit(limit).offset(offset),
   );
@@ -159,7 +156,7 @@ export async function getUserByBootcampId(
 }
 
 export async function getBootcampById(id: number) {
-  return await assertToErr(
+  return await tryCatch(
     "Failed to get Bootcamp by id",
     db.query.bootcampTable.findFirst({
       where: and(eq(bootcampTable.id, id), eq(bootcampTable.status, true)),
@@ -180,7 +177,7 @@ export async function getBootcampById(id: number) {
 }
 
 export async function createBootcamp(body: TBootcampCreate) {
-  await assertToErr(
+  await tryCatch(
     "Failed to insert Bootcamp",
     db.insert(bootcampTable).values({
       ...body,
@@ -189,7 +186,7 @@ export async function createBootcamp(body: TBootcampCreate) {
 }
 
 export async function updateBootcamp(id: number, body: TBootcampCreate) {
-  await assertToErr(
+  await tryCatch(
     "Failed to update Bootcamp",
     db
       .update(bootcampTable)
@@ -201,7 +198,7 @@ export async function updateBootcamp(id: number, body: TBootcampCreate) {
 }
 
 export async function deleteBootcamp({ id }: TDelete) {
-  await assertToErr(
+  await tryCatch(
     "Failed to delete Bootcamp",
     db.delete(bootcampTable).where(inArray(bootcampTable.id, id)),
   );
@@ -211,7 +208,7 @@ export async function createUserBootcamp(
   userId: number,
   body: TUserBootcampCreate,
 ) {
-  return await assertToErr(
+  return await tryCatch(
     "Failed to insert user Bootcamp",
     db
       .insert(pemilikBootcampTable)

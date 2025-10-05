@@ -1,4 +1,4 @@
-import { createBootcampService } from "~~/server/services/bootcamp.service";
+import { createBootcampService } from "~~/server/modules/bootcamp";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

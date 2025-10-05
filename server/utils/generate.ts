@@ -15,7 +15,7 @@ export async function generateUniqueCode(
     result += chars[randIndex];
   }
 
-  const exist = await assertToErr(
+  const exist = await tryCatch(
     "failed to select unique code",
     db.select().from(table).where(eq(column, result)),
   );
@@ -41,7 +41,7 @@ export async function getUniquePrice(price: number) {
   while (true) {
     const newPrice = price + Math.floor(Math.random() * 900) + 100;
 
-    const exist = await assertToErr(
+    const exist = await tryCatch(
       "failed to get unique price",
       db.query.pemilikBootcampTable.findFirst({
         where: and(

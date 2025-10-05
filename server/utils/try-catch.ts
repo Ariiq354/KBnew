@@ -1,4 +1,4 @@
-export async function assertToErr<T>(
+export async function tryCatch<T>(
   label: string,
   promise: Promise<T>,
 ): Promise<T> {

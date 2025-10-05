@@ -1,21 +1,77 @@
 import type { MultiPartData } from "h3";
 import sanitizeHtml from "sanitize-html";
 import ENV from "~~/shared/env";
-import {
-  OBootcampCreate,
-  type TUserBootcampCreate,
-} from "../api/v1/bootcamp/_dto";
+import { OBootcampCreate, type TUserBootcampCreate } from "./bootcamp.dto";
 import {
   createBootcamp,
   createUserBootcamp,
   deleteBootcamp,
+  getAllBootcamp,
+  getAllBootcampActive,
   getBootcampById,
+  getUserByBootcampId,
   updateBootcamp,
-} from "../repository/bootcamp.repo";
-import { getDiskonByCode, updateDiskonByKode } from "../repository/diskon.repo";
+} from "./bootcamp.repo";
+import { getDiskonByKodeService, updateDiskonByKodeService } from "../diskon";
+import type { TSearchPagination } from "~~/server/utils/dto";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export async function getAllBootcampService(query: TSearchPagination) {
+  const data = await getAllBootcamp(query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getAllBootcampActiveService(query: TSearchPagination) {
+  const data = await getAllBootcampActive(query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getBootcampByIdService(id: number) {
+  return await getBootcampById(id);
+}
+
+export async function getUserByBootcampIdService(
+  id: number,
+  query: TSearchPagination,
+) {
+  const data = await getUserByBootcampId(id, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
 
 export async function createBootcampService(
   formData: MultiPartData[] | undefined,
@@ -152,25 +208,23 @@ export async function addUserBootcampService(
   });
 
   if (body.diskon) {
-    const diskon = await getDiskonByCode(body.diskon);
+    const diskon = await getDiskonByKodeService(body.diskon);
 
     const newJumlahDipakai = diskon!.jumlahDipakai + 1;
     const isLimitReached = newJumlahDipakai === diskon!.batasPemakai;
 
     if (isLimitReached) {
-      await updateDiskonByKode(body.diskon, {
+      await updateDiskonByKodeService(body.diskon, {
         jumlahDipakai: newJumlahDipakai,
         status: false,
       });
     } else {
-      await updateDiskonByKode(body.diskon, {
+      await updateDiskonByKodeService(body.diskon, {
+        status: true,
         jumlahDipakai: newJumlahDipakai,
       });
     }
   }
 
-  return {
-    newPrice,
-    id: id.id,
-  };
+  return { newPrice, id: id!.id };
 }

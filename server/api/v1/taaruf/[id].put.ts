@@ -1,5 +1,5 @@
-import { updateTaarufService } from "~~/server/services/taaruf.service";
-import { OTaarufUpdate } from "./_dto";
+import { updateTaarufService } from "~~/server/modules/taaruf";
+import { OTaarufUpdate } from "~~/server/modules/taaruf/taaruf.dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

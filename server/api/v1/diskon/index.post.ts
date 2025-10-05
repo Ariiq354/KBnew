@@ -1,11 +1,11 @@
-import { createDiskon } from "~~/server/repository/diskon.repo";
-import { ODiskonCreate } from "./_dto";
+import { createDiskonService } from "~~/server/modules/diskon";
+import { ODiskonCreate } from "~~/server/modules/diskon/diskon.dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
   const result = await readValidatedBody(event, (b) => ODiskonCreate.parse(b));
 
-  await createDiskon(result);
+  await createDiskonService(result);
 
   return HttpResponse();
 });

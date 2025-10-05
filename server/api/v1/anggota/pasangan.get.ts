@@ -1,5 +1,5 @@
-import { getListMemberService } from "~~/server/services/anggota.service";
-import { OAnggotaPasangan } from "./_dto";
+import { getAnggotaPasanganService } from "~~/server/modules/anggota";
+import { OAnggotaPasangan } from "~~/server/modules/anggota/anggota.dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
@@ -7,14 +7,7 @@ export default defineEventHandler(async (event) => {
     OAnggotaPasangan.parse(query),
   );
 
-  const data = await getListMemberService(user, query);
+  const data = await getAnggotaPasanganService(user.id, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

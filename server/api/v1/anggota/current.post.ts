@@ -1,4 +1,4 @@
-import { createAnggotaDetailService } from "~~/server/services/anggota.service";
+import { createAnggotaDetailService } from "~~/server/modules/anggota";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

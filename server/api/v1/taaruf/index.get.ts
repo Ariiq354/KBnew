@@ -1,4 +1,4 @@
-import { listAllTaaruf } from "~~/server/repository/taaruf.repo";
+import { getAllTaarufService } from "~~/server/modules/taaruf";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
@@ -6,14 +6,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(query),
   );
 
-  const data = await listAllTaaruf(query);
+  const data = await getAllTaarufService(query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

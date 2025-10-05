@@ -1,4 +1,4 @@
-import { listAllDiskon } from "~~/server/repository/diskon.repo";
+import { getAllDiskonService } from "~~/server/modules/diskon";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
@@ -6,14 +6,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(query),
   );
 
-  const data = await listAllDiskon(query);
+  const data = await getAllDiskonService(query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

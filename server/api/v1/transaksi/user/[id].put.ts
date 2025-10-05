@@ -1,4 +1,4 @@
-import { updateTransaksiStatus } from "~~/server/repository/transaksi.repo";
+import { updateTransaksiStatusService } from "~~/server/modules/transaksi";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   console.log("check", id);
 
-  await updateTransaksiStatus(id, "Sudah Dibayar", user.id);
+  await updateTransaksiStatusService(id, "Sudah Dibayar", user.id);
 
   return HttpResponse();
 });

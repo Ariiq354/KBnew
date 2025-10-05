@@ -13,7 +13,8 @@
     "lint:fix": "eslint . --fix",
     "cleanup": "nuxt cleanup",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "gen:module": "ts-node scripts/gen-module.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
@@ -50,7 +51,8 @@
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14"
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "ts-node": "^10.9.2"
   },
   "trustedDependencies": [
     "@parcel/watcher",

@@ -1,4 +1,5 @@
 import { z } from "zod/mini";
+import { OPagination } from "~~/server/utils/dto";
 
 export const OAnggotaDetailCreate = z.object({
   statusKawin: z.string(),

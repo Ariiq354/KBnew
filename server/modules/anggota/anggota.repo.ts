@@ -2,12 +2,9 @@ import type { SQL } from "drizzle-orm";
 import { and, desc, eq, gte, like, lte, ne, or, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userDtlTable, userTable } from "~~/server/database/schema/auth";
-import type {
-  TAnggotaDetailCreate,
-  TAnggotaPasangan,
-} from "../api/v1/anggota/_dto";
+import type { TAnggotaDetailCreate, TAnggotaPasangan } from "./anggota.dto";
 
-export async function listAllAnggota({
+export async function getAllAnggota({
   limit,
   page,
   search,
@@ -66,12 +63,9 @@ export async function listAllAnggota({
     .leftJoin(userDtlTable, eq(userTable.id, userDtlTable.userId))
     .orderBy(desc(userTable.createdAt));
 
-  const total = await assertToErr(
-    "Failed to get total anggota",
-    db.$count(query),
-  );
+  const total = await tryCatch("Failed to get total anggota", db.$count(query));
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get data anggota",
     query.limit(limit).offset(offset),
   );
@@ -122,7 +116,7 @@ export async function getAnggotaById(id: number) {
     .where(eq(userTable.id, id))
     .leftJoin(userDtlTable, eq(userTable.id, userDtlTable.userId));
 
-  const data = await assertToErr("Failed to get Anggota By Id", query);
+  const data = await tryCatch("Failed to get Anggota By Id", query);
 
   return data.length > 0 ? data[0] : null;
 }
@@ -132,7 +126,7 @@ export async function createAnggotaDetail(
   body: TAnggotaDetailCreate,
   kodeUser: string,
 ) {
-  await assertToErr(
+  await tryCatch(
     "Failed to insert user detail",
     db
       .insert(userDtlTable)
@@ -149,21 +143,17 @@ export async function createAnggotaDetail(
 }
 
 export async function updateUserActive(id: number) {
-  await assertToErr(
+  await tryCatch(
     "Failed to update user isActive",
     db.update(userTable).set({ isActive: true }).where(eq(userTable.id, id)),
   );
 }
 
-export async function listAnggotaPasangan(
-  id: number,
-  param: TAnggotaPasangan,
-  gender: "laki" | "perempuan",
-) {
+export async function getAnggotaPasangan(id: number, param: TAnggotaPasangan) {
   const offset = (param.page - 1) * param.limit;
   const today = new Date();
 
-  const reqUser = await assertToErr(
+  const reqUser = await tryCatch(
     "Failed to get request user",
     db.query.userDtlTable.findFirst({
       where: eq(userDtlTable.userId, id),
@@ -175,7 +165,6 @@ export async function listAnggotaPasangan(
     ne(userTable.id, id),
     eq(userTable.isActive, true),
     eq(userTable.isAvailable, true),
-    ne(userDtlTable.gender, gender),
   ];
 
   if (reqUser) {
@@ -254,12 +243,12 @@ export async function listAnggotaPasangan(
     .leftJoin(userDtlTable, eq(userTable.id, userDtlTable.userId))
     .orderBy(desc(userTable.createdAt));
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total pasangan",
     db.$count(query),
   );
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get data pasangan",
     query.limit(param.limit).offset(offset),
   );

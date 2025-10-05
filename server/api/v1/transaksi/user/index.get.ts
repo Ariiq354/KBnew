@@ -1,4 +1,4 @@
-import { listAllTransaksiUser } from "~~/server/repository/transaksi.repo";
+import { getAllTransaksiUserService } from "~~/server/modules/transaksi";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
@@ -7,14 +7,7 @@ export default defineEventHandler(async (event) => {
     OPagination.parse(query),
   );
 
-  const data = await listAllTransaksiUser(user.id, query);
+  const data = await getAllTransaksiUserService(user.id, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

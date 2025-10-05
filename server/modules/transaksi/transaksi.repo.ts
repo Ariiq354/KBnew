@@ -6,9 +6,9 @@ import {
   bootcampTable,
   pemilikBootcampTable,
 } from "~~/server/database/schema/bootcamp";
-import { diskonTable } from "../database/schema/diskon";
+import { diskonTable } from "~~/server/database/schema/diskon";
 
-export async function listAllTransaksi({
+export async function getAllTransaksi({
   limit,
   page,
   search,
@@ -47,12 +47,12 @@ export async function listAllTransaksi({
     .orderBy(desc(pemilikBootcampTable.createdAt))
     .$dynamic();
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total transaksi",
     db.$count(query),
   );
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get data transaksi",
     query.limit(limit).offset(offset),
   );
@@ -63,7 +63,7 @@ export async function listAllTransaksi({
   };
 }
 
-export async function listAllTransaksiUser(
+export async function getAllTransaksiUser(
   id: number,
   { limit, page }: TPagination,
 ) {
@@ -100,12 +100,12 @@ export async function listAllTransaksiUser(
     .orderBy(desc(pemilikBootcampTable.createdAt))
     .$dynamic();
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total transaksi user",
     db.$count(query),
   );
 
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get data transaksi user",
     query.limit(limit).offset(offset),
   );
@@ -122,7 +122,7 @@ export async function updateTransaksiStatus(
   idUser?: number,
   kode?: string,
 ) {
-  await assertToErr(
+  await tryCatch(
     "Failed to update Transaksi",
     db
       .update(pemilikBootcampTable)
@@ -140,14 +140,14 @@ export async function updateTransaksiStatus(
 }
 
 export async function deleteTransaksi(id: number[]) {
-  await assertToErr(
+  await tryCatch(
     "Failed to delete Transaksi",
     db.delete(pemilikBootcampTable).where(inArray(pemilikBootcampTable.id, id)),
   );
 }
 
 export async function deleteTransaksiUser(userId: number, id: number[]) {
-  await assertToErr(
+  await tryCatch(
     "Failed to delete Transaksi User",
     db
       .delete(pemilikBootcampTable)

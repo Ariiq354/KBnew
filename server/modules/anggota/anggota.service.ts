@@ -1,19 +1,57 @@
 import type { MultiPartData } from "h3";
 import ENV from "~~/shared/env";
-import {
-  OAnggotaDetailCreate,
-  type TAnggotaPasangan,
-} from "../api/v1/anggota/_dto";
+import { OAnggotaDetailCreate, type TAnggotaPasangan } from "./anggota.dto";
 import {
   createAnggotaDetail,
+  getAllAnggota,
   getAnggotaById,
-  listAnggotaPasangan,
+  getAnggotaPasangan,
   updateUserActive,
-} from "../repository/anggota.repo";
-import { userDtlTable } from "../database/schema/auth";
+} from "./anggota.repo";
+import { userDtlTable } from "~~/server/database/schema/auth";
+import type { TSearchPagination } from "~~/server/utils/dto";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export async function getAllAnggotaService(query: TSearchPagination) {
+  const data = await getAllAnggota(query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getAnggotaPasanganService(
+  id: number,
+  query: TAnggotaPasangan,
+) {
+  const data = await getAnggotaPasangan(id, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getAnggotaByIdService(id: number) {
+  return await getAnggotaById(id);
+}
 
 export async function createAnggotaDetailService(
   user: UserWithId,
@@ -67,13 +105,4 @@ export async function createAnggotaDetailService(
   await createAnggotaDetail(user.id, parsed, kodeUser);
 
   await updateUserActive(user.id);
-}
-
-export async function getListMemberService(
-  user: UserWithId,
-  query: TAnggotaPasangan,
-) {
-  const userDetail = await getAnggotaById(user.id);
-
-  return await listAnggotaPasangan(user.id, query, userDetail!.detail!.gender);
 }

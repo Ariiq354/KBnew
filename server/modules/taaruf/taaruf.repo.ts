@@ -4,10 +4,10 @@ import { db } from "~~/server/database";
 import { taarufTable } from "~~/server/database/schema/taaruf";
 import { userTable, userDtlTable } from "~~/server/database/schema/auth";
 import { alias } from "drizzle-orm/pg-core";
-import type { TTaarufCreate, TTaarufUpdate } from "../api/v1/taaruf/_dto";
+import type { TTaarufCreate, TTaarufUpdate } from "./taaruf.dto";
 
 export async function getTaarufById(id: number) {
-  return await assertToErr(
+  return await tryCatch(
     "Failed to get taaruf by id",
     db.query.taarufTable.findFirst({
       where: eq(taarufTable.id, id),
@@ -16,7 +16,7 @@ export async function getTaarufById(id: number) {
 }
 
 export async function updateUserStatus(id: number, status: boolean) {
-  return await assertToErr(
+  return await tryCatch(
     "Failed to update user status",
     db
       .update(userTable)
@@ -32,11 +32,7 @@ export async function getCountTaarufUser(id: number) {
   );
 }
 
-export async function listAllTaaruf({
-  limit,
-  page,
-  search,
-}: TSearchPagination) {
+export async function getAllTaaruf({ limit, page, search }: TSearchPagination) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [];
 
@@ -121,18 +117,18 @@ export async function listAllTaaruf({
     .orderBy(desc(taarufTable.createdAt))
     .$dynamic();
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total count of Taaruf List",
     db.$count(query),
   );
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get Taaruf List",
     query.limit(limit).offset(offset),
   );
   return { data, total };
 }
 
-export async function listUserTaaruf(
+export async function getUserTaaruf(
   userId: number,
   { limit, page, search }: TSearchPagination,
 ) {
@@ -222,11 +218,11 @@ export async function listUserTaaruf(
     .orderBy(desc(taarufTable.createdAt))
     .$dynamic();
 
-  const total = await assertToErr(
+  const total = await tryCatch(
     "Failed to get total count of User Taaruf List",
     db.$count(query),
   );
-  const data = await assertToErr(
+  const data = await tryCatch(
     "Failed to get User Taaruf List",
     query.limit(limit).offset(offset),
   );
@@ -234,7 +230,7 @@ export async function listUserTaaruf(
 }
 
 export async function createTaaruf(idPenuju: number, body: TTaarufCreate) {
-  await assertToErr(
+  await tryCatch(
     "Failed to insert Taaruf",
     db.insert(taarufTable).values({
       idPenuju,
@@ -244,7 +240,7 @@ export async function createTaaruf(idPenuju: number, body: TTaarufCreate) {
 }
 
 export async function updateTaaruf(id: number, body: TTaarufUpdate) {
-  await assertToErr(
+  await tryCatch(
     "Failed to update Taaruf",
     db
       .update(taarufTable)
@@ -256,7 +252,7 @@ export async function updateTaaruf(id: number, body: TTaarufUpdate) {
 }
 
 export async function deleteTaaruf({ id }: TDelete) {
-  await assertToErr(
+  await tryCatch(
     "Failed to delete Taaruf",
     db.delete(taarufTable).where(inArray(taarufTable.id, id)),
   );

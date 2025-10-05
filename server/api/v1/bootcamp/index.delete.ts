@@ -1,4 +1,4 @@
-import { deleteBootcampService } from "~~/server/services/bootcamp.service";
+import { deleteBootcampService } from "~~/server/modules/bootcamp";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

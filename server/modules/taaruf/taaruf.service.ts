@@ -1,24 +1,62 @@
-import type { TTaarufCreate, TTaarufUpdate } from "../api/v1/taaruf/_dto";
-import { getAnggotaById } from "../repository/anggota.repo";
+import type { TSearchPagination } from "~~/server/utils/dto";
+import { getAnggotaByIdService } from "../anggota";
+import type { TTaarufCreate, TTaarufUpdate } from "./taaruf.dto";
 import {
   createTaaruf,
   deleteTaaruf,
+  getAllTaaruf,
   getCountTaarufUser,
   getTaarufById,
+  getUserTaaruf,
   updateTaaruf,
   updateUserStatus,
-} from "../repository/taaruf.repo";
+} from "./taaruf.repo";
 
 async function refreshUserAvailability(userId: number) {
   const count = await getCountTaarufUser(userId);
   await updateUserStatus(userId, count < 3);
 }
 
+export async function getAllTaarufService(query: TSearchPagination) {
+  const data = await getAllTaaruf(query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getUserTaarufService(
+  id: number,
+  query: TSearchPagination,
+) {
+  const data = await getUserTaaruf(id, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
 export async function createTaarufService(
   user: UserWithId,
   body: TTaarufCreate,
 ) {
-  const dituju = await getAnggotaById(body.idDituju);
+  const dituju = await getAnggotaByIdService(body.idDituju);
 
   if (!user.isAvailable || !dituju?.isAvailable) {
     throw createError({

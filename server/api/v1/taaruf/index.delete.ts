@@ -1,4 +1,4 @@
-import { deleteTaarufService } from "~~/server/services/taaruf.service";
+import { deleteTaarufService } from "~~/server/modules/taaruf";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

@@ -1,5 +1,5 @@
-import { createTaarufService } from "~~/server/services/taaruf.service";
-import { OTaarufCreate } from "./_dto";
+import { createTaarufService } from "~~/server/modules/taaruf";
+import { OTaarufCreate } from "~~/server/modules/taaruf/taaruf.dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
