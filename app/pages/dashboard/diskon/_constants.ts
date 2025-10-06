@@ -41,7 +41,9 @@ export const columns: TableColumn<any>[] = [
 
 export const schema = z.object({
   id: z.optional(z.number()),
-  persen: z.number().check(z.minimum(0), z.maximum(100)),
+  persen: z
+    .number()
+    .check(z.minimum(0, "Minimal 0"), z.maximum(100, "Maximal 100")),
   kode: z.string().check(z.minLength(1, "Required")),
   batasWaktu: z.iso.date(),
   batasPemakai: z.number(),

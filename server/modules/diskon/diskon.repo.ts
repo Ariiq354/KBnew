@@ -1,5 +1,5 @@
 import type { SQL } from "drizzle-orm";
-import { and, desc, eq, inArray, like, lte, or } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, like, lte, or } from "drizzle-orm";
 import { diskonTable } from "~~/server/database/schema/diskon";
 import { db } from "~~/server/database";
 import type { TDiskonCreate, TDiskonDipakai } from "./diskon.dto";
@@ -44,7 +44,7 @@ export async function getDiskonByKode(kode: string) {
     eq(diskonTable.kode, kode),
     eq(diskonTable.status, true),
     lte(diskonTable.jumlahDipakai, diskonTable.batasPemakai),
-    lte(diskonTable.batasWaktu, today),
+    gte(diskonTable.batasWaktu, today),
   ];
 
   return await tryCatch(

@@ -206,7 +206,11 @@ export async function deleteBootcamp({ id }: TDelete) {
 
 export async function createUserBootcamp(
   userId: number,
-  body: TUserBootcampCreate,
+  body: TUserBootcampCreate & {
+    harga: number;
+    status?: "Belum Dibayar" | "Sudah Dibayar" | "Sudah Diverif";
+    kode?: string;
+  },
 ) {
   return await tryCatch(
     "Failed to insert user Bootcamp",

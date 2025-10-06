@@ -52,7 +52,6 @@
         method: "POST",
         body: {
           idBootcamp: id,
-          harga: item.value.harga,
           ...(diskon && { diskon: ticketCode.value }),
         },
       });
@@ -105,7 +104,13 @@
   >
     <template #body>
       <div class="flex flex-col">
-        <div class="my-4 grid grid-cols-1 gap-4">
+        <div
+          v-if="price === 0"
+          class="text-primary text-center text-xl font-bold"
+        >
+          Tiket anda sudah terbeli, silahkan melihat kode di dashboard
+        </div>
+        <div v-else class="my-4 grid grid-cols-1 gap-4">
           <div class="flex flex-col gap-1">
             <div class="flex justify-between">
               <NuxtImg src="bca-logo.png" class="h-6" />
@@ -158,7 +163,7 @@
               {{ numToRupiah(price) }}
             </p>
           </div>
-          <div class="mt-8 flex flex-col gap-2 md:flex-row">
+          <div v-if="price !== 0" class="mt-8 flex flex-col gap-2 md:flex-row">
             <UButton class="flex w-full justify-center" @click="onSelesai">
               Sudah Bayar
             </UButton>

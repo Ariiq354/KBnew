@@ -14,6 +14,7 @@ import {
 } from "./bootcamp.repo";
 import { getDiskonByKodeService, updateDiskonByKodeService } from "../diskon";
 import type { TSearchPagination } from "~~/server/utils/dto";
+import { pemilikBootcampTable } from "~~/server/database/schema/bootcamp";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -199,19 +200,28 @@ export async function addUserBootcampService(
   user: UserWithId,
   body: TUserBootcampCreate,
 ) {
-  const newPrice = await getUniquePrice(body.harga);
-
-  const [id] = await createUserBootcamp(user.id, {
-    diskon: body.diskon,
-    harga: newPrice,
-    idBootcamp: body.idBootcamp,
-  });
+  let potonganDiskon = 0;
+  const bootcamp = await getBootcampByIdService(body.idBootcamp);
+  if (!bootcamp) {
+    throw createError({
+      statusCode: 404,
+      message: "Bootcamp tidak ada",
+    });
+  }
 
   if (body.diskon) {
     const diskon = await getDiskonByKodeService(body.diskon);
+    if (!diskon) {
+      throw createError({
+        statusCode: 404,
+        message: "Diskon tidak ada",
+      });
+    }
 
-    const newJumlahDipakai = diskon!.jumlahDipakai + 1;
-    const isLimitReached = newJumlahDipakai === diskon!.batasPemakai;
+    potonganDiskon = (bootcamp.harga * diskon.persen) / 100;
+
+    const newJumlahDipakai = diskon.jumlahDipakai + 1;
+    const isLimitReached = newJumlahDipakai === diskon.batasPemakai;
 
     if (isLimitReached) {
       await updateDiskonByKodeService(body.diskon, {
@@ -225,6 +235,34 @@ export async function addUserBootcampService(
       });
     }
   }
+
+  const hargaBaru = bootcamp.harga - potonganDiskon;
+
+  if (hargaBaru <= 0) {
+    const kode = await generateUniqueCode(
+      pemilikBootcampTable,
+      pemilikBootcampTable.kode,
+      12,
+    );
+
+    const [id] = await createUserBootcamp(user.id, {
+      diskon: body.diskon,
+      harga: hargaBaru,
+      status: "Sudah Diverif",
+      idBootcamp: body.idBootcamp,
+      kode,
+    });
+
+    return { newPrice: hargaBaru, id: id!.id };
+  }
+
+  const newPrice = await getUniquePrice(bootcamp.harga);
+
+  const [id] = await createUserBootcamp(user.id, {
+    diskon: body.diskon,
+    harga: newPrice,
+    idBootcamp: body.idBootcamp,
+  });
 
   return { newPrice, id: id!.id };
 }

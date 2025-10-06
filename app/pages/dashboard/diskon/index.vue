@@ -91,6 +91,8 @@
             <UInput
               v-model="state.persen"
               type="number"
+              min="0"
+              max="100"
               :disabled="isLoading || viewStatus"
             />
           </UFormField>

@@ -16,7 +16,6 @@ export type TBootcampCreate = z.infer<typeof OBootcampCreate>;
 
 export const OUserBootcampCreate = z.object({
   idBootcamp: z.number(),
-  harga: z.number(),
   diskon: z.string(),
 });
 
