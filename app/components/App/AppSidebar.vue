@@ -87,56 +87,6 @@
           },
         ] as NavigationMenuItem[])
       : [],
-    [
-      {
-        label: "Main",
-        type: "label",
-      },
-      {
-        label: "Pencarian Pasangan",
-        to: "/dashboard/member",
-        icon: "i-lucide-user",
-        onSelect: () => {
-          if (!isDesktop.value) {
-            constantStore.toggleSidebar();
-          }
-        },
-      },
-      ...(isActive.value
-        ? ([
-            {
-              label: "Pengajuan Taaruf",
-              to: "/dashboard/pengajuan",
-              icon: "i-lucide-heart",
-              onSelect: () => {
-                if (!isDesktop.value) {
-                  constantStore.toggleSidebar();
-                }
-              },
-            },
-          ] as NavigationMenuItem[])
-        : []),
-      {
-        label: "Identitas Diri",
-        to: "/dashboard/profil",
-        icon: "i-lucide-user-circle",
-        onSelect: () => {
-          if (!isDesktop.value) {
-            constantStore.toggleSidebar();
-          }
-        },
-      },
-      {
-        label: "Paket Saya",
-        to: "/dashboard/paket-saya",
-        icon: "i-lucide-package",
-        onSelect: () => {
-          if (!isDesktop.value) {
-            constantStore.toggleSidebar();
-          }
-        },
-      },
-    ],
   ];
 </script>
 
@@ -199,36 +149,47 @@
     </USlideover>
     <div
       v-if="!isDesktop"
-      class="border-primary fixed bottom-0 z-10 flex h-20 w-full justify-center gap-12 border-t-2 bg-white"
+      class="fixed bottom-0 z-10 flex h-20 w-full justify-center gap-12 rounded-t-2xl bg-white shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]"
     >
       <NuxtLink
         to="/dashboard/member"
-        class="flex flex-col items-center justify-center"
+        class="relative flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-user" size="32" />
-        <p class="text-muted text-sm">Pasangan</p>
+        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
       </NuxtLink>
       <NuxtLink
+        v-if="isActive"
         to="/dashboard/pengajuan"
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-heart" size="32" />
-        <p class="text-muted text-sm">Taaruf</p>
+        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/profil"
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-user-circle" size="32" />
-        <p class="text-muted text-sm">Profil</p>
+        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/paket-saya"
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-package" size="32" />
-        <p class="text-muted text-sm">Paket</p>
+        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
       </NuxtLink>
     </div>
   </ClientOnly>
 </template>
+
+<style scoped>
+  .router-link-active {
+    color: var(--color-primary-500);
+  }
+
+  .router-link-active .dot {
+    display: block;
+  }
+</style>

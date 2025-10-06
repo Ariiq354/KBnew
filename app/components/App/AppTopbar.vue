@@ -31,6 +31,7 @@
   <header class="mb-8 flex justify-between">
     <div class="flex items-center gap-8">
       <UButton
+        v-if="authStore.hasPermission({ sidebar: ['admin'] })"
         icon="i-lucide-menu"
         class="hover:bg-primary cursor-pointer rounded-full bg-transparent p-2 text-black transition-all duration-300 hover:text-white dark:bg-transparent dark:text-white"
         aria-label="Sidebar toggle"
