@@ -87,6 +87,58 @@
           },
         ] as NavigationMenuItem[])
       : [],
+    isDesktop.value
+      ? ([
+          {
+            label: "Main",
+            type: "label",
+          },
+          {
+            label: "Pencarian Pasangan",
+            to: "/dashboard/member",
+            icon: "i-lucide-user",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
+          },
+          ...(isActive.value
+            ? ([
+                {
+                  label: "Pengajuan Taaruf",
+                  to: "/dashboard/pengajuan",
+                  icon: "i-lucide-heart",
+                  onSelect: () => {
+                    if (!isDesktop.value) {
+                      constantStore.toggleSidebar();
+                    }
+                  },
+                },
+              ] as NavigationMenuItem[])
+            : []),
+          {
+            label: "Identitas Diri",
+            to: "/dashboard/profil",
+            icon: "i-lucide-user-circle",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
+          },
+          {
+            label: "Paket Saya",
+            to: "/dashboard/paket-saya",
+            icon: "i-lucide-package",
+            onSelect: () => {
+              if (!isDesktop.value) {
+                constantStore.toggleSidebar();
+              }
+            },
+          },
+        ] as NavigationMenuItem[])
+      : [],
   ];
 </script>
 
