@@ -10,6 +10,7 @@
     limit: 4,
   });
 
+  const qrisOpen = ref(false);
   const modalOpen = ref(false);
   const { data, refresh } = await useFetch(`${APIBASE}/transaksi/user`, {
     query,
@@ -46,6 +47,16 @@
 
 <template>
   <Title>Dashboard | Transaksi</Title>
+  <LazyUModal
+    v-model:open="qrisOpen"
+    title="Pembayaran QRIS"
+    description="Scan QR ini untuk membayar"
+    class="md:min-w-2xl"
+  >
+    <template #body>
+      <NuxtImg src="/contohqris.png" class="w-full" />
+    </template>
+  </LazyUModal>
   <LazyUModal
     v-model:open="modalOpen"
     title="Detail Bootcamp"
@@ -116,8 +127,38 @@
             </p>
           </div>
           <div v-else>
-            <p class="text-muted">Silahkan bayar menggunakan qris dibawah</p>
-            <NuxtImg src="/contohqris.png" class="my-4 w-full" />
+            <p class="text-muted">Silahkan bayar menggunakan opsi dibawah</p>
+            <div class="my-4 grid grid-cols-1 gap-4">
+              <div class="flex flex-col gap-1">
+                <div class="flex justify-between">
+                  <NuxtImg src="bca-logo.png" class="h-6" />
+                  <p class="font-bold">1234567890</p>
+                </div>
+                <hr class="border-muted border" />
+                <div class="flex justify-between">
+                  <p class="text-muted text-xs">Bank Central Asia</p>
+                  <p class="text-muted text-xs">A/n John Doe</p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-1">
+                <div class="flex justify-between">
+                  <NuxtImg src="bsi-logo.png" class="h-6" />
+                  <p class="font-bold">1234567890</p>
+                </div>
+                <hr class="border-muted border" />
+                <div class="flex justify-between">
+                  <p class="text-muted text-xs">Bank Syariah Asia</p>
+                  <p class="text-muted text-xs">A/n John Doe</p>
+                </div>
+              </div>
+              <UButton
+                variant="outline"
+                icon="i-lucide-qr-code"
+                @click="qrisOpen = true"
+              >
+                QRIS
+              </UButton>
+            </div>
             <UButton
               class="flex w-full justify-center"
               @click="onSelesai(state!.id)"

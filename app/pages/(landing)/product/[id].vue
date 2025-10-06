@@ -41,7 +41,7 @@
   const item = computed(() => data.value!.data!);
 
   const qrisOpen = ref(false);
-  const modalOpen = ref(true);
+  const modalOpen = ref(false);
   const price = ref(0);
   const idBootcampUser = ref();
   const isLoading = ref(false);
@@ -90,7 +90,7 @@
     v-model:open="qrisOpen"
     title="Pembayaran QRIS"
     description="Scan QR ini untuk membayar"
-    class="md:min-w-2xl"
+    class="z-10 md:min-w-2xl"
   >
     <template #body>
       <NuxtImg src="/contohqris.png" class="w-full" />
@@ -105,18 +105,26 @@
   >
     <template #body>
       <div class="flex flex-col">
-        <div class="grid grid-cols-1 md:grid-cols-3">
-          <div class="flex items-center gap-2">
-            <NuxtImg src="bca-logo.png" class="h-6" />
-            <div>
+        <div class="my-4 grid grid-cols-1 gap-4">
+          <div class="flex flex-col gap-1">
+            <div class="flex justify-between">
+              <NuxtImg src="bca-logo.png" class="h-6" />
               <p class="font-bold">1234567890</p>
+            </div>
+            <hr class="border-muted border" />
+            <div class="flex justify-between">
+              <p class="text-muted text-xs">Bank Central Asia</p>
               <p class="text-muted text-xs">A/n John Doe</p>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <NuxtImg src="bsi-logo.png" class="h-6" />
-            <div>
+          <div class="flex flex-col gap-1">
+            <div class="flex justify-between">
+              <NuxtImg src="bsi-logo.png" class="h-6" />
               <p class="font-bold">1234567890</p>
+            </div>
+            <hr class="border-muted border" />
+            <div class="flex justify-between">
+              <p class="text-muted text-xs">Bank Syariah Asia</p>
               <p class="text-muted text-xs">A/n John Doe</p>
             </div>
           </div>
