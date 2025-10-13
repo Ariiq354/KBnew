@@ -202,6 +202,19 @@
             <p class="text-muted">Tempat:</p>
             <p class="font-semibold">{{ item.tempat }}</p>
           </div>
+          <div class="mt-4 flex items-center gap-2">
+            <UIcon name="i-lucide-map-pin" size="20" />
+            <a
+              :href="
+                'https://www.google.com/maps?q=' +
+                item.googleMap.split(',').reverse().join(',')
+              "
+              class="cursor-pointer font-semibold underline"
+              target="_blank"
+            >
+              Link Google Map
+            </a>
+          </div>
         </div>
       </div>
       <div

@@ -122,11 +122,8 @@
             />
           </UFormField>
           <UFormField label="Google Map" name="googleMap">
-            <MapPicker
-              :url="state.googleMap"
-              class="mb-4"
-              @picked="(e) => (state.googleMap = e)"
-            />
+            <MapLibre v-model="state.googleMap" />
+            {{ state.googleMap }}
           </UFormField>
           <UFormField label="Tanggal & Waktu" name="waktu">
             <UInput v-model="state.waktu" :disabled="isLoading || viewStatus" />

@@ -5,4 +5,6 @@
   constantStore.setTitle("Dashboard");
 </script>
 
-<template>Hello Dashboard</template>
+<template>
+  <div>Hello Dashboard</div>
+</template>
