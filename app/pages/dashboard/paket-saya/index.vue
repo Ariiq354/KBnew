@@ -224,6 +224,7 @@
               Detail
             </UButton>
             <UButton
+              v-if="item.status === 'Belum Dibayar'"
               class="flex w-full justify-center"
               color="error"
               @click="onDelete(item.id)"

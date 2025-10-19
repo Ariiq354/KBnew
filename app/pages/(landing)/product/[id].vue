@@ -75,6 +75,7 @@
       });
 
       modalOpen.value = false;
+      navigateTo("/dashboard/paket-saya");
       useToastSuccess("Berhasil", "Status Pembelian sudah diupdate");
     } catch (err: any) {
       useToastError("Submit Failed", err);

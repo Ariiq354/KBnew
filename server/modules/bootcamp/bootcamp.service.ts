@@ -256,7 +256,7 @@ export async function addUserBootcampService(
     return { newPrice: hargaBaru, id: id!.id };
   }
 
-  const newPrice = await getUniquePrice(bootcamp.harga);
+  const newPrice = await getUniquePrice(hargaBaru);
 
   const [id] = await createUserBootcamp(user.id, {
     diskon: body.diskon,
