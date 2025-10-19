@@ -219,17 +219,17 @@
         <div class="dot absolute bottom-1 hidden">&#x2022;</div>
       </NuxtLink>
       <NuxtLink
-        to="/dashboard/profil"
-        class="flex flex-col items-center justify-center"
-      >
-        <UIcon name="i-lucide-user-circle" size="32" />
-        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
-      </NuxtLink>
-      <NuxtLink
         to="/dashboard/paket-saya"
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-package" size="32" />
+        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
+      </NuxtLink>
+      <NuxtLink
+        to="/dashboard/profil"
+        class="flex flex-col items-center justify-center"
+      >
+        <UIcon name="i-lucide-user-circle" size="32" />
         <div class="dot absolute bottom-1 hidden">&#x2022;</div>
       </NuxtLink>
     </div>
