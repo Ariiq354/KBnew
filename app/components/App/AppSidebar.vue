@@ -208,7 +208,7 @@
         class="relative flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-user" size="32" />
-        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
+        <p class="text-xs">Jodoh</p>
       </NuxtLink>
       <NuxtLink
         v-if="isActive"
@@ -216,21 +216,21 @@
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-heart" size="32" />
-        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
+        <p class="text-xs">Ta'aruf</p>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/paket-saya"
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-package" size="32" />
-        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
+        <p class="text-xs">Event</p>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/profil"
         class="flex flex-col items-center justify-center"
       >
         <UIcon name="i-lucide-user-circle" size="32" />
-        <div class="dot absolute bottom-1 hidden">&#x2022;</div>
+        <p class="text-xs">Profil</p>
       </NuxtLink>
     </div>
   </ClientOnly>
