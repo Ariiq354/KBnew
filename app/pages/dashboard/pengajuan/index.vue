@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
-  import { columns, columnsPenuju } from "./_constants";
   import { useAuthStore } from "~/stores/auth";
+  import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
+  import { columns, columnsPenuju } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -141,9 +141,7 @@
       </template>
     </UModal>
     <UCard class="w-full">
-      <div
-        class="flex justify-between border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="border-accented flex justify-between border-b py-3.5">
         <h1 class="font-bold">Tabel Dituju</h1>
       </div>
       <AppTable
@@ -168,9 +166,7 @@
       </AppTable>
     </UCard>
     <UCard class="w-full">
-      <div
-        class="flex justify-between border-b border-(--ui-border-accented) py-3.5"
-      >
+      <div class="border-accented flex justify-between border-b py-3.5">
         <h1 class="font-bold">Tabel Penuju</h1>
       </div>
       <AppTable

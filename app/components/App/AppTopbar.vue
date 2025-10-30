@@ -39,7 +39,7 @@
         @click="constantStore.toggleSidebar"
       />
       <ClientOnly>
-        <h1 class="font-semibold text-(--ui-text-muted)">
+        <h1 class="text-muted font-semibold">
           {{ constantStore.topbarTitle }}
         </h1>
       </ClientOnly>

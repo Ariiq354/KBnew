@@ -1,6 +1,12 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
+  import { useSubmit } from "~/composables/function";
+  import { useToastError, useToastSuccess } from "~/composables/toast";
+  import { useWilayah } from "~/composables/wilayah";
+  import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
+  import { APIBASE } from "~/utils";
+  import type { Schema } from "./_constants";
   import {
     genderOptions,
     getInitialFormData,
@@ -9,12 +15,6 @@
     schema,
     statusKawinOptions,
   } from "./_constants";
-  import type { Schema } from "./_constants";
-  import { useAuthStore } from "~/stores/auth";
-  import { useWilayah } from "~/composables/wilayah";
-  import { useSubmit } from "~/composables/function";
-  import { APIBASE } from "~/utils";
-  import { useToastError, useToastSuccess } from "~/composables/toast";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -206,7 +206,7 @@
             <UFormField label="Pekerjaan" name="pekerjaan">
               <UInput v-model="state.pekerjaan" :disabled="isLoading" />
             </UFormField>
-            <UFormField label="Gaji per bulan" name="pekerjaan">
+            <UFormField label="Gaji per bulan" name="gaji">
               <UInput
                 v-model="state.gaji"
                 type="number"
