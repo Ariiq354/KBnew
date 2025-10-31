@@ -55,6 +55,8 @@ export async function getAllAnggota({
         instagram: userDtlTable.instagram,
         kriteria: userDtlTable.kriteria,
         deskripsi: userDtlTable.deskripsi,
+        gaji: userDtlTable.gaji,
+        perokok: userDtlTable.perokok,
         foto: userDtlTable.foto,
       },
     })

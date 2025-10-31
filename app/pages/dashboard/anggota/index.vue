@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
   import { APIBASE, type ExtractObjectType } from "~/utils";
+  import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Anggota");
@@ -17,12 +17,12 @@
     query,
   });
 
-  const state = ref();
+  const state = ref<ExtractObjectType<typeof data.value>>();
 
   const modalOpen = ref(false);
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
-    state.value = itemData.detail;
+    state.value = itemData;
   }
 </script>
 
@@ -32,68 +32,85 @@
     <LazyUModal v-model:open="modalOpen" title="Detail User" fullscreen>
       <template #body>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <UFormField label="Foto">
-            <AppUploadImage v-model:foto="state.foto" disabled />
+          <UFormField label="Foto" class="md:col-span-2 lg:col-span-4">
+            <AppUploadImage v-model:foto="state!.detail!.foto" disabled />
           </UFormField>
-          <UFormField label="Kode User">
-            <UInput :model-value="state?.kodeUser" disabled />
-          </UFormField>
-          <UFormField label="Anak ke">
-            <UInput :model-value="state?.anakKe" disabled />
-          </UFormField>
-          <UFormField label="Nama Ayah">
-            <UInput :model-value="state?.namaAyah" disabled />
+          <UFormField label="Nama User">
+            <UInput :model-value="state?.namaAnggota" disabled />
           </UFormField>
           <UFormField label="Gender">
-            <UInput :model-value="state?.gender" disabled />
+            <UInput :model-value="state?.detail?.gender" disabled />
           </UFormField>
-          <UFormField label="Berat">
-            <UInput :model-value="state?.berat" disabled />
-          </UFormField>
-          <UFormField label="Tinggi">
-            <UInput :model-value="state?.tinggi" disabled />
-          </UFormField>
-          <UFormField label="Pekerjaan">
-            <UInput :model-value="state?.pekerjaan" disabled />
-          </UFormField>
-          <UFormField label="Pendidikan">
-            <UInput :model-value="state?.pendidikan" disabled />
+          <UFormField label="No Telepon">
+            <UInput :model-value="state?.noTelepon" disabled />
           </UFormField>
           <UFormField label="Status Kawin">
-            <UInput :model-value="state?.statusKawin" disabled />
-          </UFormField>
-          <UFormField label="Suku">
-            <UInput :model-value="state?.suku" disabled />
+            <UInput :model-value="state?.detail?.statusKawin" disabled />
           </UFormField>
           <UFormField label="Tanggal Lahir">
-            <UInput :model-value="state?.tanggalLahir" disabled />
+            <UInput :model-value="state?.detail?.tanggalLahir" disabled />
           </UFormField>
-          <UFormField label="Hobi">
-            <UInput :model-value="state?.hobi" disabled />
+          <UFormField label="Nama Ayah">
+            <UInput :model-value="state?.detail?.namaAyah" disabled />
           </UFormField>
-          <UFormField label="Deskripsi">
-            <UInput :model-value="state?.deskripsi" disabled />
+          <div class="grid grid-cols-2 gap-4">
+            <UFormField label="Anak Ke">
+              <UInput :model-value="state?.detail?.anakKe" disabled />
+            </UFormField>
+            <UFormField label="Dari Bersaudara">
+              <UInput :model-value="state?.detail?.dariBersaudara" disabled />
+            </UFormField>
+          </div>
+          <UFormField label="Provinsi">
+            <UInput :model-value="state?.detail?.provinsi" disabled />
           </UFormField>
-          <UFormField label="Jurusan">
-            <UInput :model-value="state?.jurusan" disabled />
-          </UFormField>
-          <UFormField label="Instagram">
-            <UInput :model-value="state?.instagram" disabled />
-          </UFormField>
-          <UFormField label="Kelurahan">
-            <UInput :model-value="state?.kelurahan" disabled />
+          <UFormField label="Kabupaten / Kota">
+            <UInput :model-value="state?.detail?.kota" disabled />
           </UFormField>
           <UFormField label="Kecamatan">
-            <UInput :model-value="state?.kecamatan" disabled />
+            <UInput :model-value="state?.detail?.kecamatan" disabled />
           </UFormField>
-          <UFormField label="Kota">
-            <UInput :model-value="state?.kota" disabled />
+          <UFormField label="Kelurahan / Desa">
+            <UInput :model-value="state?.detail?.kelurahan" disabled />
           </UFormField>
-          <UFormField label="Provinsi">
-            <UInput :model-value="state?.provinsi" disabled />
+          <UFormField label="Suku">
+            <UInput :model-value="state?.detail?.suku" disabled />
+          </UFormField>
+          <UFormField label="Pendidikan Terakhir">
+            <UInput :model-value="state?.detail?.pendidikan" disabled />
+          </UFormField>
+          <UFormField label="Jurusan">
+            <UInput :model-value="state?.detail?.jurusan" disabled />
+          </UFormField>
+          <UFormField label="Pekerjaan">
+            <UInput :model-value="state?.detail?.pekerjaan" disabled />
+          </UFormField>
+          <UFormField label="Gaji Per Bulan">
+            <UInput :model-value="state?.detail?.gaji" disabled />
+          </UFormField>
+          <UFormField label="Tinggi Badan">
+            <UInput :model-value="state?.detail?.tinggi" disabled />
+          </UFormField>
+          <UFormField label="Berat Badan">
+            <UInput :model-value="state?.detail?.berat" disabled />
+          </UFormField>
+          <UFormField label="Perokok">
+            <UInput
+              :model-value="state?.detail?.perokok ? 'Iya' : 'Tidak'"
+              disabled
+            />
+          </UFormField>
+          <UFormField label="Hobi">
+            <UTextarea :model-value="state?.detail?.hobi" disabled />
+          </UFormField>
+          <UFormField label="Deskripsi Singkat">
+            <UTextarea :model-value="state?.detail?.deskripsi" disabled />
+          </UFormField>
+          <UFormField label="Instagram">
+            <UTextarea :model-value="state?.detail?.instagram" disabled />
           </UFormField>
           <UFormField label="Kriteria">
-            <UTextarea :model-value="state?.kriteria" disabled />
+            <UTextarea :model-value="state?.detail?.kriteria" disabled />
           </UFormField>
         </div>
       </template>

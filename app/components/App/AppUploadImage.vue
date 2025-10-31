@@ -9,7 +9,8 @@
 
 <template>
   <div v-if="foto" class="relative w-40">
-    <NuxtImg :src="foto" class="aspect-square w-40 rounded-lg"> </NuxtImg>
+    <NuxtImg :src="foto" class="aspect-square w-40 rounded-lg object-cover">
+    </NuxtImg>
     <UButton
       v-if="!disabled"
       icon="i-lucide-x"

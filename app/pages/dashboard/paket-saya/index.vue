@@ -188,7 +188,10 @@
         :ui="{ body: 'h-full' }"
       >
         <div class="flex h-full flex-col justify-between">
-          <NuxtImg :src="item.bootcamp?.foto" class="rounded-2xl bg-gray-400" />
+          <NuxtImg
+            :src="item.bootcamp?.foto"
+            class="aspect-108/135 max-h-128 rounded-2xl object-cover"
+          />
           <div class="mt-2">
             <h1 class="text-xl font-bold">{{ item.bootcamp?.namaBootcamp }}</h1>
             <p class="text-muted">

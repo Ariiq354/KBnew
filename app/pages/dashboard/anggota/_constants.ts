@@ -33,3 +33,14 @@ export const columns: TableColumn<any>[] = [
     },
   },
 ];
+
+export const perokokOptions = [
+  {
+    label: "Iya",
+    value: true,
+  },
+  {
+    label: "Tidak",
+    value: false,
+  },
+];

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
-  import { pendidikanOptions, statusKawinOptions } from "./_constants";
-  import { useAuthStore } from "~/stores/auth";
-  import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useToastError, useToastSuccess } from "~/composables/toast";
   import { useWilayah } from "~/composables/wilayah";
+  import { useAuthStore } from "~/stores/auth";
+  import { useConstantStore } from "~/stores/constant";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
+  import { pendidikanOptions, statusKawinOptions } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -286,9 +286,12 @@
           <div class="flex gap-4">
             <div>
               <div
-                class="flex aspect-square w-32 items-center justify-center overflow-hidden bg-gray-300 dark:bg-gray-700"
+                class="flex aspect-square w-32 items-center justify-center overflow-hidden rounded-lg bg-gray-300 dark:bg-gray-700"
               >
-                <NuxtImg :src="item.foto!" />
+                <NuxtImg
+                  :src="item.foto!"
+                  class="aspect-square w-40 rounded-lg object-cover"
+                />
               </div>
               <p
                 class="bg-eastern-blue-100 mt-4 rounded-md p-2 text-center text-lg font-bold shadow-lg"

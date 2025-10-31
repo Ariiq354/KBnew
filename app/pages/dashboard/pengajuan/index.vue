@@ -141,7 +141,7 @@
       </template>
     </UModal>
     <UCard class="w-full">
-      <div class="border-accented flex justify-between border-b py-3.5">
+      <div class="flex justify-between py-3.5">
         <h1 class="font-bold">Tabel Dituju</h1>
       </div>
       <AppTable
@@ -166,7 +166,7 @@
       </AppTable>
     </UCard>
     <UCard class="w-full">
-      <div class="border-accented flex justify-between border-b py-3.5">
+      <div class="flex justify-between py-3.5">
         <h1 class="font-bold">Tabel Penuju</h1>
       </div>
       <AppTable

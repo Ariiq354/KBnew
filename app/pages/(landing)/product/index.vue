@@ -32,7 +32,7 @@
             <NuxtImg
               :src="item.foto"
               alt="produk"
-              class="mb-4 aspect-108/135 max-h-128 rounded-2xl bg-gray-400"
+              class="mb-4 aspect-108/135 max-h-128 rounded-2xl bg-gray-400 object-cover"
             />
             <h1 class="text-lg font-bold">
               {{ item.judul }}
