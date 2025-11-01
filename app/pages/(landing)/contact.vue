@@ -1,7 +1,49 @@
 <script setup lang="ts">
+  import { z } from "zod/mini";
+  import type { FormSubmitEvent } from "#ui/types";
+
   definePageMeta({
     layout: "landing",
   });
+
+  const schema = z.object({
+    name: z.string().check(z.minLength(1, "Required")),
+    email: z
+      .string()
+      .check(z.minLength(1, "Required"), z.email("Invalid Email format")),
+    message: z.string().check(z.minLength(1, "Required")),
+  });
+  type Schema = z.infer<typeof schema>;
+
+  const state = ref({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const isLoading = ref(false);
+  async function onSubmit(event: FormSubmitEvent<Schema>) {
+    isLoading.value = true;
+    const newData = {
+      service_id: "service_sa0r5y2",
+      template_id: "template_naeupsn",
+      user_id: "ID-GBxAdlVno7YvFs",
+      template_params: {
+        ...event.data,
+        time: new Date().toLocaleDateString(),
+      },
+    };
+    await $fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      method: "POST",
+      body: newData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(() => useToastSuccess("Submit Sukses", "Email berhasil dikirim"))
+      .catch((error) => useToastError("Submit Gagal", error))
+      .finally(() => (isLoading.value = false));
+  }
 </script>
 
 <template>
@@ -86,14 +128,43 @@
           Anda bisa menghubungi kami melalui layanan email melalui kolom dibawah
           ini.
         </p>
-        <div class="flex gap-4">
-          <UInput placeholder="Nama" />
-          <UInput placeholder="Alamat Email" />
-        </div>
-        <UTextarea placeholder="Pesan" :rows="10" />
-        <div class="flex justify-end">
-          <UButton>Kirim</UButton>
-        </div>
+        <UForm
+          id="email-form"
+          :schema="schema"
+          :state="state"
+          class="space-y-4"
+          @submit="onSubmit"
+        >
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <UFormField name="name">
+              <UInput
+                v-model="state.name"
+                placeholder="Nama"
+                :disabled="isLoading"
+              />
+            </UFormField>
+            <UFormField name="email">
+              <UInput
+                v-model="state.email"
+                placeholder="Email"
+                :disabled="isLoading"
+              />
+            </UFormField>
+          </div>
+          <UFormField name="message">
+            <UTextarea
+              v-model="state.message"
+              placeholder="Pesan"
+              :disabled="isLoading"
+              :rows="10"
+            />
+          </UFormField>
+          <div class="flex w-full justify-end">
+            <UButton :loading="isLoading" type="submit" form="email-form">
+              Kirim
+            </UButton>
+          </div>
+        </UForm>
       </div>
     </div>
   </main>

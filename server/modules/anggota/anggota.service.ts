@@ -1,4 +1,6 @@
 import type { MultiPartData } from "h3";
+import { userDtlTable } from "~~/server/database/schema/auth";
+import type { TSearchPagination } from "~~/server/utils/dto";
 import ENV from "~~/shared/env";
 import { OAnggotaDetailCreate, type TAnggotaPasangan } from "./anggota.dto";
 import {
@@ -8,8 +10,6 @@ import {
   getAnggotaPasangan,
   updateUserActive,
 } from "./anggota.repo";
-import { userDtlTable } from "~~/server/database/schema/auth";
-import type { TSearchPagination } from "~~/server/utils/dto";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -102,7 +102,15 @@ export async function createAnggotaDetailService(
     4,
   );
 
+  const data = await getAnggotaById(user.id);
+
   await createAnggotaDetail(user.id, parsed, kodeUser);
 
-  await updateUserActive(user.id);
+  if (!data?.detail) {
+    await updateUserActive(user.id, true);
+  }
+}
+
+export async function updateUserActiveService(id: number, isActive: boolean) {
+  await updateUserActive(id, isActive);
 }

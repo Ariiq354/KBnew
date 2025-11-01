@@ -43,4 +43,9 @@ export const OAnggotaPasangan = z.object({
   kodeUser: z.optional(z.string()),
 });
 
+export const OToggleActive = z.object({
+  id: z.number(),
+  isActive: z.boolean(),
+});
+
 export type TAnggotaPasangan = z.infer<typeof OAnggotaPasangan>;

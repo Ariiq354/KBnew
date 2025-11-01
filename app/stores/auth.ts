@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       callbackURL: "/dashboard",
       fetchOptions: {
         onError: (body) => {
-          useToastError("Login Failed", body.error.message);
+          useToastError("Login Gagal", body.error.message);
         },
       },
     });
@@ -66,7 +66,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       ...body,
       fetchOptions: {
         onError: (body) => {
-          useToastError("Register Failed", body.error.message);
+          useToastError("Register Gagal", body.error.message);
         },
         onSuccess: () => {
           useToastSuccess("Register Sukses", "Silahkan login untuk masuk");
@@ -105,10 +105,27 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       ...body,
       fetchOptions: {
         onError: (body) => {
-          useToastError("Update Failed", body.error.message);
+          useToastError("Update Gagap", body.error.message);
         },
         onSuccess: () => {
-          useToastSuccess("Update Success", "Your profile has been updated");
+          useToastSuccess("Update Sukses", "Profil anda berhasil diupdate");
+        },
+      },
+    });
+    loading.value = false;
+  }
+
+  async function deleteUser(id: number) {
+    loading.value = true;
+
+    await authClient.admin.removeUser({
+      userId: id,
+      fetchOptions: {
+        onError: (body) => {
+          useToastError("Delete Gagal", body.error.message);
+        },
+        onSuccess: () => {
+          useToastSuccess("Delete Success", "User berhasil di delete");
         },
       },
     });
@@ -125,5 +142,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     hasPermission,
     updateUser,
     session,
+    deleteUser,
   };
 });

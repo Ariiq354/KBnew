@@ -5,6 +5,7 @@
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Anggota");
+  const authStore = useAuthStore();
 
   const query = reactive({
     search: "",
@@ -13,7 +14,7 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/anggota`, {
+  const { data, status, refresh } = await useFetch(`${APIBASE}/anggota`, {
     query,
   });
 
@@ -23,6 +24,33 @@
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     state.value = itemData;
+  }
+
+  async function clickDelete(ids: number[]) {
+    isLoading.value = true;
+    for (const id of ids) {
+      await authStore.deleteUser(id);
+    }
+    isLoading.value = false;
+    await refresh();
+  }
+
+  const { isLoading, execute } = useSubmit();
+  async function toggleActive(id: number, isActive: boolean) {
+    await execute({
+      path: `${APIBASE}/anggota/active`,
+      body: {
+        id,
+        isActive,
+      },
+      method: "POST",
+      onSuccess() {
+        refresh();
+      },
+      onError(error) {
+        useToastError("Submit Failed", error.data.message);
+      },
+    });
   }
 </script>
 
@@ -134,12 +162,14 @@
         v-model:page="query.page"
         :columns="columns"
         :data="data?.data"
-        :loading="status === 'pending'"
+        :loading="status === 'pending' || isLoading"
         :total="data?.metadata.total"
         enumerate
         viewable
         pagination
+        deletable
         @view="clickUpdate"
+        @delete="clickDelete"
       >
         <template #noTelepon-cell="{ row }">
           <NuxtLink
@@ -148,6 +178,16 @@
           >
             {{ row.original.noTelepon }}
           </NuxtLink>
+        </template>
+        <template #status-cell="{ row }">
+          <UButton
+            class="rounded-full"
+            size="xs"
+            :color="row.original.isActive ? 'success' : 'info'"
+            @click="toggleActive(row.original.id, !row.original.isActive)"
+          >
+            {{ row.original.isActive ? "Aktif" : "Tidak Aktif" }}
+          </UButton>
         </template>
       </AppTable>
     </UCard>

@@ -33,6 +33,7 @@ export async function getAllAnggota({
       noTelepon: userTable.noTelepon,
       email: userTable.email,
       role: userTable.role,
+      isActive: userTable.isActive,
       detail: {
         kodeUser: userDtlTable.kodeUser,
         statusKawin: userDtlTable.statusKawin,
@@ -128,7 +129,7 @@ export async function createAnggotaDetail(
   body: TAnggotaDetailCreate,
   kodeUser: string,
 ) {
-  await tryCatch(
+  return await tryCatch(
     "Failed to insert user detail",
     db
       .insert(userDtlTable)
@@ -144,10 +145,10 @@ export async function createAnggotaDetail(
   );
 }
 
-export async function updateUserActive(id: number) {
+export async function updateUserActive(id: number, isActive: boolean) {
   await tryCatch(
     "Failed to update user isActive",
-    db.update(userTable).set({ isActive: true }).where(eq(userTable.id, id)),
+    db.update(userTable).set({ isActive }).where(eq(userTable.id, id)),
   );
 }
 
