@@ -63,6 +63,9 @@
           <UFormField label="Foto" class="md:col-span-2 lg:col-span-4">
             <AppUploadImage v-model:foto="state!.detail!.foto" disabled />
           </UFormField>
+          <UFormField label="Kode User">
+            <UInput :model-value="state?.detail?.kodeUser" disabled />
+          </UFormField>
           <UFormField label="Nama User">
             <UInput :model-value="state?.namaAnggota" disabled />
           </UFormField>
