@@ -118,9 +118,9 @@
               ] as NavigationMenuItem[])
             : []),
           {
-            label: "Profil",
-            to: "/dashboard/profil",
-            icon: "i-lucide-user-circle",
+            label: "Event",
+            to: "/dashboard/paket-saya",
+            icon: "i-lucide-package",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -128,9 +128,9 @@
             },
           },
           {
-            label: "Event",
-            to: "/dashboard/paket-saya",
-            icon: "i-lucide-package",
+            label: "Profil",
+            to: "/dashboard/profil",
+            icon: "i-lucide-user-circle",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();

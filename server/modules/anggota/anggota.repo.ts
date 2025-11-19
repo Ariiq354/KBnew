@@ -84,8 +84,6 @@ export async function getAnggotaById(id: number) {
     .select({
       id: userTable.id,
       namaAnggota: userTable.name,
-      noTelepon: userTable.noTelepon,
-      email: userTable.email,
       role: userTable.role,
       isAvailable: userTable.isAvailable,
       detail: {
@@ -233,7 +231,6 @@ export async function getAnggotaPasangan(id: number, param: TAnggotaPasangan) {
       tinggi: userDtlTable.tinggi,
       berat: userDtlTable.berat,
       hobi: userDtlTable.hobi,
-      instagram: userDtlTable.instagram,
       kriteria: userDtlTable.kriteria,
       deskripsi: userDtlTable.deskripsi,
       foto: userDtlTable.foto,
