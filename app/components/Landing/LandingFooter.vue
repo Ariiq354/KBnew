@@ -3,7 +3,7 @@
     <div
       class="container flex flex-col items-center justify-between gap-4 p-12 md:flex-row"
     >
-      <div class="flex flex-shrink-0 flex-col items-center gap-4">
+      <div class="flex shrink-0 flex-col items-center gap-4">
         <NuxtImg src="/logo.webp" alt="logo" class="w-24" />
         <h1 class="text-xl font-bold">Keluarga Bahagia</h1>
       </div>
@@ -18,7 +18,7 @@
             </li>
             <li class="flex items-center gap-2">
               <UIcon name="i-mdi-gmail" size="{20}" />
-              keluargabahagianews@gmail.com
+              halokeluargabahagia@gmail.com
             </li>
           </ul>
         </div>
