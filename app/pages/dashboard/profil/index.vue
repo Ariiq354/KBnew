@@ -8,6 +8,7 @@
   import { APIBASE } from "~/utils";
   import type { Schema } from "./_constants";
   import {
+    agamaOptions,
     genderOptions,
     getInitialFormData,
     pendidikanOptions,
@@ -191,6 +192,14 @@
             </UFormField>
             <UFormField label="Suku" name="suku">
               <UInput v-model="state.suku" :disabled="isLoading" />
+            </UFormField>
+            <UFormField label="Agama" name="agama">
+              <USelectMenu
+                v-model="state.agama"
+                placeholder="Select Agama"
+                :items="agamaOptions"
+                :disabled="isLoading"
+              />
             </UFormField>
             <UFormField label="Pendidikan Terakhir" name="pendidikan">
               <USelectMenu

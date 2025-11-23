@@ -107,6 +107,10 @@ export async function getAnggotaById(id: number) {
         hobi: userDtlTable.hobi,
         kriteria: userDtlTable.kriteria,
         deskripsi: userDtlTable.deskripsi,
+        agama: userDtlTable.agama,
+        gaji: userDtlTable.gaji,
+        perokok: userDtlTable.perokok,
+        instagram: userDtlTable.instagram,
         foto: userDtlTable.foto,
       },
     })

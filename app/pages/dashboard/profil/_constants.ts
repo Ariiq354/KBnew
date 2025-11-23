@@ -30,6 +30,7 @@ export const schema = z
         ),
     ),
     instagram: z.string().check(z.minLength(1, "Required")),
+    agama: z.string().check(z.minLength(1, "Required")),
     gender: z.enum(["laki", "perempuan"]),
     perokok: z.boolean(),
     gaji: z.number().check(z.minimum(1, "Required")),
@@ -80,6 +81,15 @@ export const perokokOptions = [
   },
 ];
 
+export const agamaOptions = [
+  "Islam",
+  "Protestan",
+  "Katolik",
+  "Hindu",
+  "Buddha",
+  "Konghucu",
+];
+
 export type Schema = z.infer<typeof schema>;
 
 export const getInitialFormData = (): Schema => ({
@@ -102,6 +112,7 @@ export const getInitialFormData = (): Schema => ({
   kriteria: "",
   deskripsi: "",
   foto: "",
+  agama: "",
   instagram: "",
   gender: "laki",
   gaji: 0,

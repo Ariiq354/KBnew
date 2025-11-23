@@ -58,6 +58,7 @@ export const userDtlTable = pgTable("user_dtl", {
   kriteria: text().notNull(),
   perokok: boolean().notNull().default(false),
   gaji: integer().notNull().default(0),
+  agama: text().notNull().default(""),
   deskripsi: text().notNull().default(""),
   foto: text().notNull(),
   ...createdUpdated,
